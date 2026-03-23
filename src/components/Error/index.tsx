@@ -1,12 +1,17 @@
+"use client";
+
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
+import { useI18n } from "@/i18n/provider";
 import Link from "next/link";
 import Image from "next/image";
 
 const Error = () => {
+  const { t } = useI18n();
+
   return (
     <>
-      <Breadcrumb title={"Error"} pages={["error"]} />
+      <Breadcrumb title={t("error.title")} pages={[t("error.title")]} />
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="bg-white rounded-xl shadow-1 px-4 py-10 sm:py-15 lg:py-20 xl:py-25">
@@ -20,12 +25,11 @@ const Error = () => {
               />
 
               <h2 className="font-medium text-dark text-xl sm:text-2xl mb-3">
-                Sorry, the page can’t be found
+                {t("error.heading")}
               </h2>
 
               <p className="max-w-[410px] w-full mx-auto mb-7.5">
-                The page you were looking for appears to have been moved,
-                deleted or does not exist.
+                {t("error.text")}
               </p>
 
               <Link
@@ -45,7 +49,7 @@ const Error = () => {
                     fill=""
                   />
                 </svg>
-                Back to Home
+                {t("common.backToHome")}
               </Link>
             </div>
           </div>

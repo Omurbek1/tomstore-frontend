@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import HeroCarousel from "./HeroCarousel";
 import HeroFeature from "./HeroFeature";
@@ -5,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import type { StorefrontHeroSlide } from "@/storefront/types";
+import { useI18n } from "@/i18n/provider";
 
 type HeroProps = {
   hero: StorefrontHeroSlide & {
@@ -14,6 +17,7 @@ type HeroProps = {
 };
 
 const Hero = ({ hero, featuredProducts }: HeroProps) => {
+  const { t } = useI18n();
   const sideProducts = featuredProducts.slice(0, 2);
 
   return (
@@ -55,7 +59,7 @@ const Hero = ({ hero, featuredProducts }: HeroProps) => {
 
                       <div>
                         <p className="font-medium text-dark-4 text-custom-sm mb-1.5">
-                          {product.availability?.label || "актуальная цена"}
+                          {product.availability?.label || t("home.heroFallbackPrice")}
                         </p>
                         <span className="flex items-center gap-3 flex-wrap">
                           <span className="font-medium text-heading-5 text-red">

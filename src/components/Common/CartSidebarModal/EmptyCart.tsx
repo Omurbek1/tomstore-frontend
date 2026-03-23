@@ -1,9 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
+import { useI18n } from "@/i18n/provider";
 
 const EmptyCart = () => {
   const { closeCartModal } = useCartModalContext();
+  const { t } = useI18n();
 
   return (
     <div className="text-center">
@@ -38,14 +40,14 @@ const EmptyCart = () => {
         </svg>
       </div>
 
-      <p className="pb-6">Your cart is empty!</p>
+      <p className="pb-6">{t("cart.empty")}</p>
 
       <Link
         onClick={() => closeCartModal()}
         href="/shop-with-sidebar"
         className="w-full lg:w-10/12 mx-auto flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
       >
-        Continue Shopping
+        {t("common.continueShopping")}
       </Link>
     </div>
   );

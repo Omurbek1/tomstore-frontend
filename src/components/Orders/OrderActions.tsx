@@ -1,10 +1,14 @@
 import React from "react";
+import { useI18n } from "@/i18n/provider";
 
 const OrderActions = ({ toggleEdit, toggleDetails }: any) => {
+  const { t } = useI18n();
+
   return (
     <>
       <button
         onClick={toggleDetails}
+        aria-label={t("common.view")}
         className="hover:bg-gray-2 rounded-sm p-2"
       >
         <svg
@@ -28,7 +32,11 @@ const OrderActions = ({ toggleEdit, toggleDetails }: any) => {
           />
         </svg>
       </button>
-      <button onClick={toggleEdit} className="hover:bg-gray-2 rounded-sm p-2">
+      <button
+        onClick={toggleEdit}
+        aria-label={t("common.edit")}
+        className="hover:bg-gray-2 rounded-sm p-2"
+      >
         <svg
           width="16"
           height="18"

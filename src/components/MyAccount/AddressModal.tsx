@@ -1,9 +1,16 @@
 import React, { useEffect } from "react";
+import { useI18n } from "@/i18n/provider";
 
 const AddressModal = ({ isOpen, closeModal }) => {
+  const { t } = useI18n();
+
   useEffect(() => {
     // closing modal while clicking outside
-    function handleClickOutside(event) {
+    function handleClickOutside(event: MouseEvent) {
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+
       if (!event.target.closest(".modal-content")) {
         closeModal();
       }
@@ -55,7 +62,7 @@ const AddressModal = ({ isOpen, closeModal }) => {
               <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                 <div className="w-full">
                   <label htmlFor="name" className="block mb-2.5">
-                    Name
+                    {t("common.name")}
                   </label>
 
                   <input
@@ -68,7 +75,7 @@ const AddressModal = ({ isOpen, closeModal }) => {
 
                 <div className="w-full">
                   <label htmlFor="email" className="block mb-2.5">
-                    Email
+                    {t("common.email")}
                   </label>
 
                   <input
@@ -83,7 +90,7 @@ const AddressModal = ({ isOpen, closeModal }) => {
               <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                 <div className="w-full">
                   <label htmlFor="phone" className="block mb-2.5">
-                    Phone
+                    {t("common.phone")}
                   </label>
 
                   <input
@@ -96,7 +103,7 @@ const AddressModal = ({ isOpen, closeModal }) => {
 
                 <div className="w-full">
                   <label htmlFor="address" className="block mb-2.5">
-                    Address
+                    {t("common.address")}
                   </label>
 
                   <input
@@ -112,7 +119,7 @@ const AddressModal = ({ isOpen, closeModal }) => {
                 type="submit"
                 className="inline-flex font-medium text-white bg-blue py-3 px-7 rounded-md ease-out duration-200 hover:bg-blue-dark"
               >
-                Save Changes
+                {t("common.saveChanges")}
               </button>
             </form>
           </div>

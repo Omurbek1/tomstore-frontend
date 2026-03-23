@@ -1,30 +1,34 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
-
-const featureData = [
-  {
-    img: "/images/icons/icon-01.svg",
-    title: "Free Shipping",
-    description: "For all orders $200",
-  },
-  {
-    img: "/images/icons/icon-02.svg",
-    title: "1 & 1 Returns",
-    description: "Cancellation after 1 day",
-  },
-  {
-    img: "/images/icons/icon-03.svg",
-    title: "100% Secure Payments",
-    description: "Gurantee secure payments",
-  },
-  {
-    img: "/images/icons/icon-04.svg",
-    title: "24/7 Dedicated Support",
-    description: "Anywhere & anytime",
-  },
-];
+import { useI18n } from "@/i18n/provider";
 
 const HeroFeature = () => {
+  const { t } = useI18n();
+  const featureData = [
+    {
+      img: "/images/icons/icon-01.svg",
+      title: t("home.freeShipping"),
+      description: t("home.freeShippingDesc"),
+    },
+    {
+      img: "/images/icons/icon-02.svg",
+      title: t("home.returns"),
+      description: t("home.returnsDesc"),
+    },
+    {
+      img: "/images/icons/icon-03.svg",
+      title: t("home.securePayments"),
+      description: t("home.securePaymentsDesc"),
+    },
+    {
+      img: "/images/icons/icon-04.svg",
+      title: t("home.support24"),
+      description: t("home.support24Desc"),
+    },
+  ];
+
   return (
     <div className="max-w-[1060px] w-full mx-auto px-4 sm:px-8 xl:px-0">
       <div className="flex flex-wrap items-center gap-7.5 xl:gap-12.5 mt-10">

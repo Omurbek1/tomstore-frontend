@@ -1,12 +1,17 @@
+"use client";
+
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
+import { useI18n } from "@/i18n/provider";
 import Image from "next/image";
 import Link from "next/link";
 
 const BlogDetails = () => {
+  const { t } = useI18n();
+
   return (
     <>
-      <Breadcrumb title={"Blog Details"} pages={["blog details"]} />
+      <Breadcrumb title={t("blog.blogDetails")} pages={[t("blog.blogDetails")]} />
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[750px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="rounded-[10px] overflow-hidden mb-7.5">
@@ -29,12 +34,12 @@ const BlogDetails = () => {
               <span className="block w-px h-4 bg-gray-4"></span>
 
               <a href="#" className="ease-out duration-200 hover:text-blue">
-                300k Views
+                300k {t("common.views")}
               </a>
             </span>
 
             <h2 className="font-medium text-dark text-xl lg:text-2xl xl:text-custom-4xl mb-4">
-              What information is needed for shipping?
+              {t("blog.shippingInfoTitle")}
             </h2>
 
             <p className="mb-6">
@@ -61,7 +66,7 @@ const BlogDetails = () => {
 
             <div className="mt-7.5">
               <h3 className="font-medium text-dark text-lg xl:text-[26px] xl:leading-[34px] mb-6">
-                Digital marketplace for Ui/Ux designers.
+                {t("blog.designMarketplaceTitle")}
               </h3>
 
               <ul className="list-disc pl-6">
@@ -96,7 +101,7 @@ const BlogDetails = () => {
 
                 <div>
                   <h4 className="text-dark text-custom-sm">Jhon Drineo</h4>
-                  <p className="text-custom-xs">Entroprenor</p>
+                  <p className="text-custom-xs">{t("blog.authorRole")}</p>
                 </div>
               </a>
             </div>
@@ -131,7 +136,7 @@ const BlogDetails = () => {
 
             <div className="flex flex-wrap items-center justify-between gap-10 mt-10">
               <div className="flex flex-wrap items-center gap-5">
-                <p>Popular Tags :</p>
+                <p>{t("blog.popularTags")}</p>
 
                 <ul className="flex flex-wrap items-center gap-3.5">
                   <li>
@@ -139,7 +144,7 @@ const BlogDetails = () => {
                       className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      Desktop
+                      {t("blog.tagDesktop")}
                     </a>
                   </li>
 
@@ -148,7 +153,7 @@ const BlogDetails = () => {
                       className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      Macbook
+                      {t("blog.tagMacbook")}
                     </a>
                   </li>
 
@@ -157,7 +162,7 @@ const BlogDetails = () => {
                       className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      PC
+                      {t("blog.tagPc")}
                     </a>
                   </li>
                 </ul>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useI18n } from "@/i18n/provider";
 import SingleOrder from "./SingleOrder";
 import ordersData from "./ordersData";
 
 const Orders = () => {
   const [orders, setOrders] = useState<any>([]);
+  const { t } = useI18n();
 
   useEffect(() => {
     fetch(`/api/order`)
@@ -24,26 +26,26 @@ const Orders = () => {
           {ordersData.length > 0 && (
             <div className="items-center justify-between py-4.5 px-7.5 hidden md:flex ">
               <div className="min-w-[111px]">
-                <p className="text-custom-sm text-dark">Order</p>
+                <p className="text-custom-sm text-dark">{t("order.order")}</p>
               </div>
               <div className="min-w-[175px]">
-                <p className="text-custom-sm text-dark">Date</p>
+                <p className="text-custom-sm text-dark">{t("order.date")}</p>
               </div>
 
               <div className="min-w-[128px]">
-                <p className="text-custom-sm text-dark">Status</p>
+                <p className="text-custom-sm text-dark">{t("order.status")}</p>
               </div>
 
               <div className="min-w-[213px]">
-                <p className="text-custom-sm text-dark">Title</p>
+                <p className="text-custom-sm text-dark">{t("order.title")}</p>
               </div>
 
               <div className="min-w-[113px]">
-                <p className="text-custom-sm text-dark">Total</p>
+                <p className="text-custom-sm text-dark">{t("order.total")}</p>
               </div>
 
               <div className="min-w-[113px]">
-                <p className="text-custom-sm text-dark">Action</p>
+                <p className="text-custom-sm text-dark">{t("order.action")}</p>
               </div>
             </div>
           )}
@@ -53,7 +55,7 @@ const Orders = () => {
             ))
           ) : (
             <p className="py-9.5 px-4 sm:px-7.5 xl:px-10">
-              You don&apos;t have any orders!
+              {t("order.empty")}
             </p>
           )}
         </div>

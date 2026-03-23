@@ -3,6 +3,8 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import SingleGridItem from "@/components/Shop/SingleGridItem";
 import SingleListItem from "@/components/Shop/SingleListItem";
+import { useI18n } from "@/i18n/provider";
+import { getAvailabilityMessageKey } from "@/i18n/utils";
 import type { Product } from "@/types/product";
 import type {
   StorefrontBrand,
@@ -78,6 +80,7 @@ export default function CatalogView({
   variant,
 }: CatalogViewProps) {
   const router = useRouter();
+  const { t } = useI18n();
   const [productStyle, setProductStyle] = useState(
     query.view === "list" ? "list" : "grid",
   );
@@ -106,18 +109,20 @@ export default function CatalogView({
                 <div className="flex flex-col gap-6 sticky top-28">
                   <div className="bg-white shadow-1 rounded-lg py-4 px-5">
                     <div className="flex items-center justify-between gap-4">
-                      <p>Filters</p>
+                      <p>{t("catalog.filters")}</p>
                       <Link
                         href={pathname}
                         className="text-blue text-custom-sm"
                       >
-                        Clean all
+                        {t("common.cleanAll")}
                       </Link>
                     </div>
                   </div>
 
                   <div className="bg-white shadow-1 rounded-lg py-5 px-6">
-                    <h3 className="font-medium text-dark mb-4">Search</h3>
+                    <h3 className="font-medium text-dark mb-4">
+                      {t("catalog.search")}
+                    </h3>
                     <div className="flex gap-2">
                       <input
                         value={searchValue}
@@ -129,20 +134,22 @@ export default function CatalogView({
                           }
                         }}
                         type="search"
-                        placeholder="Поиск товара"
+                        placeholder={t("catalog.searchPlaceholder")}
                         className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-4 outline-none"
                       />
                       <button
                         onClick={applySearch}
                         className="inline-flex items-center justify-center rounded-md bg-blue px-4 text-white"
                       >
-                        Go
+                        {t("common.go")}
                       </button>
                     </div>
                   </div>
 
                   <div className="bg-white shadow-1 rounded-lg py-5 px-6">
-                    <h3 className="font-medium text-dark mb-4">Categories</h3>
+                    <h3 className="font-medium text-dark mb-4">
+                      {t("catalog.categories")}
+                    </h3>
                     <div className="flex flex-col gap-3">
                       {filters.categories.map((category) => {
                         const href = buildQueryString(pathname, query, {
@@ -174,7 +181,9 @@ export default function CatalogView({
                   </div>
 
                   <div className="bg-white shadow-1 rounded-lg py-5 px-6">
-                    <h3 className="font-medium text-dark mb-4">Brands</h3>
+                    <h3 className="font-medium text-dark mb-4">
+                      {t("catalog.brands")}
+                    </h3>
                     <div className="flex flex-col gap-3">
                       {filters.brands.slice(0, 12).map((brand) => {
                         const href = buildQueryString(pathname, query, {
@@ -202,13 +211,15 @@ export default function CatalogView({
                   </div>
 
                   <div className="bg-white shadow-1 rounded-lg py-5 px-6">
-                    <h3 className="font-medium text-dark mb-4">Availability</h3>
+                    <h3 className="font-medium text-dark mb-4">
+                      {t("catalog.availability")}
+                    </h3>
                     <div className="flex flex-col gap-3">
                       {[
-                        { value: "in_stock", label: "In stock" },
-                        { value: "on_order", label: "On order" },
-                        { value: "in_transit", label: "In transit" },
-                        { value: "out_of_stock", label: "Out of stock" },
+                        { value: "in_stock" },
+                        { value: "on_order" },
+                        { value: "in_transit" },
+                        { value: "out_of_stock" },
                       ].map((item) => (
                         <Link
                           key={item.value}
@@ -225,7 +236,7 @@ export default function CatalogView({
                               : "text-dark"
                           }
                         >
-                          {item.label}
+                          {t(getAvailabilityMessageKey(item.value) || item.value)}
                         </Link>
                       ))}
                     </div>
@@ -250,22 +261,25 @@ export default function CatalogView({
                       }
                       className="rounded-md border border-gray-3 bg-gray-1 px-3 py-2 outline-none"
                     >
-                      <option value="popular">Popular</option>
-                      <option value="newest">Newest</option>
-                      <option value="price_asc">Price: low to high</option>
-                      <option value="price_desc">Price: high to low</option>
-                      <option value="name">Name</option>
+                      <option value="popular">{t("common.popular")}</option>
+                      <option value="newest">{t("common.newest")}</option>
+                      <option value="price_asc">{t("common.priceLowHigh")}</option>
+                      <option value="price_desc">{t("common.priceHighLow")}</option>
+                      <option value="name">{t("common.nameSort")}</option>
                     </select>
 
                     <p>
-                      Showing <span className="text-dark">{products.length}</span> of{" "}
-                      <span className="text-dark">{total}</span> products
+                      {t("common.showingOfProducts", {
+                        shown: products.length,
+                        total,
+                      })}
                     </p>
                   </div>
 
                   <div className="flex items-center gap-2.5">
                     <button
                       onClick={() => setProductStyle("grid")}
+                      aria-label="grid view"
                       className={`flex items-center justify-center w-10.5 h-9 rounded-[5px] border ${
                         productStyle === "grid"
                           ? "bg-blue border-blue text-white"
@@ -276,6 +290,7 @@ export default function CatalogView({
                     </button>
                     <button
                       onClick={() => setProductStyle("list")}
+                      aria-label="list view"
                       className={`flex items-center justify-center w-10.5 h-9 rounded-[5px] border ${
                         productStyle === "list"
                           ? "bg-blue border-blue text-white"

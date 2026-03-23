@@ -1,10 +1,15 @@
+"use client";
+
 import React from "react";
 import SingleItem from "./SingleItem";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
+import { useI18n } from "@/i18n/provider";
 
 const BestSeller = ({ products }: { products: Product[] }) => {
+  const { t } = useI18n();
+
   return (
     <section className="overflow-hidden">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -18,10 +23,10 @@ const BestSeller = ({ products }: { products: Product[] }) => {
                 width={17}
                 height={17}
               />
-              This Month
+              {t("home.thisMonth")}
             </span>
             <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-              Best Sellers
+              {t("home.bestSellers")}
             </h2>
           </div>
         </div>
@@ -38,7 +43,7 @@ const BestSeller = ({ products }: { products: Product[] }) => {
             href="/shop-without-sidebar"
             className="inline-flex font-medium text-custom-sm py-3 px-7 sm:px-12.5 rounded-md border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
           >
-            View All
+            {t("common.viewAll")}
           </Link>
         </div>
       </div>

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useI18n } from "@/i18n/provider";
+import { getOrderStatusMessageKey } from "@/i18n/utils";
 import OrderActions from "./OrderActions";
 import OrderModal from "./OrderModal";
 
 const SingleOrder = ({ orderItem, smallView }: any) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const { t } = useI18n();
 
   const toggleDetails = () => {
     setShowDetails(!showDetails);
@@ -41,10 +44,10 @@ const SingleOrder = ({ orderItem, smallView }: any) => {
                   ? "text-red bg-red-light-6"
                   : orderItem.status === "processing"
                   ? "text-yellow bg-yellow-light-4"
-                  : "Unknown Status"
+                  : ""
               }`}
             >
-              {orderItem.status}
+              {t(getOrderStatusMessageKey(orderItem.status))}
             </p>
           </div>
 
@@ -70,20 +73,20 @@ const SingleOrder = ({ orderItem, smallView }: any) => {
           <div className="py-4.5 px-7.5">
             <div className="">
               <p className="text-custom-sm text-dark">
-                <span className="font-bold pr-2"> Order:</span> #
+                <span className="font-bold pr-2">{t("order.order")}:</span> #
                 {orderItem.orderId.slice(-8)}
               </p>
             </div>
             <div className="">
               <p className="text-custom-sm text-dark">
-                <span className="font-bold pr-2">Date:</span>{" "}
+                <span className="font-bold pr-2">{t("order.date")}:</span>{" "}
                 {orderItem.createdAt}
               </p>
             </div>
 
             <div className="">
               <p className="text-custom-sm text-dark">
-                <span className="font-bold pr-2">Status:</span>{" "}
+                <span className="font-bold pr-2">{t("order.status")}:</span>{" "}
                 <span
                   className={`inline-block text-custom-sm  py-0.5 px-2.5 rounded-[30px] capitalize ${
                     orderItem.status === "delivered"
@@ -92,30 +95,30 @@ const SingleOrder = ({ orderItem, smallView }: any) => {
                       ? "text-red bg-red-light-6"
                       : orderItem.status === "processing"
                       ? "text-yellow bg-yellow-light-4"
-                      : "Unknown Status"
+                      : ""
                   }`}
                 >
-                  {orderItem.status}
+                  {t(getOrderStatusMessageKey(orderItem.status))}
                 </span>
               </p>
             </div>
 
             <div className="">
               <p className="text-custom-sm text-dark">
-                <span className="font-bold pr-2">Title:</span> {orderItem.title}
+                <span className="font-bold pr-2">{t("order.title")}:</span> {orderItem.title}
               </p>
             </div>
 
             <div className="">
               <p className="text-custom-sm text-dark">
-                <span className="font-bold pr-2">Total:</span> $
+                <span className="font-bold pr-2">{t("order.total")}:</span> $
                 {orderItem.total}
               </p>
             </div>
 
             <div className="">
               <p className="text-custom-sm text-dark flex items-center">
-                <span className="font-bold pr-2">Actions:</span>{" "}
+                <span className="font-bold pr-2">{t("order.actions")}:</span>{" "}
                 <OrderActions
                   toggleDetails={toggleDetails}
                   toggleEdit={toggleEdit}

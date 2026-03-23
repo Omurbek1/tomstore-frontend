@@ -1,7 +1,6 @@
-"use client";
-import { useState, useEffect } from "react";
 import "../css/euclid-circular-a-font.css";
 import "../css/style.css";
+import { headers } from "next/headers";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
@@ -14,25 +13,23 @@ import { PreviewSliderProvider } from "../context/PreviewSliderContext";
 import PreviewSliderModal from "@/components/Common/PreviewSlider";
 
 import ScrollToTop from "@/components/Common/ScrollToTop";
-import PreLoader from "@/components/Common/PreLoader";
+import { I18nProvider } from "@/i18n/provider";
+import { detectLocaleFromHeader } from "@/i18n/utils";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
+  const requestHeaders = await headers();
+  const locale = detectLocaleFromHeader(
+    requestHeaders.get("accept-language"),
+  );
 
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang={locale} suppressHydrationWarning={true}>
       <body>
-        {loading ? (
-          <PreLoader />
-        ) : (
+        <I18nProvider initialLocale={locale}>
           <>
             <ReduxProvider>
               <CartModalProvider>
@@ -51,7 +48,7 @@ export default function RootLayout({
             <ScrollToTop />
             <Footer />
           </>
-        )}
+        </I18nProvider>
       </body>
     </html>
   );

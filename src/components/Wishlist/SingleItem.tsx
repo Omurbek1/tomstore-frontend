@@ -4,11 +4,13 @@ import { useDispatch } from "react-redux";
 
 import { removeItemFromWishlist } from "@/redux/features/wishlist-slice";
 import { addItemToCart } from "@/redux/features/cart-slice";
+import { useI18n } from "@/i18n/provider";
 
 import Image from "next/image";
 
 const SingleItem = ({ item }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useI18n();
 
   const handleRemoveFromWishlist = () => {
     dispatch(removeItemFromWishlist(item.id));
@@ -98,7 +100,7 @@ const SingleItem = ({ item }) => {
             />
           </svg>
 
-          <span className="text-red"> Out of Stock </span>
+          <span className="text-red">{t("common.outOfStock")}</span>
         </div>
       </div>
 
@@ -107,7 +109,7 @@ const SingleItem = ({ item }) => {
           onClick={() => handleAddToCart()}
           className="inline-flex text-dark hover:text-white bg-gray-1 border border-gray-3 py-2.5 px-6 rounded-md ease-out duration-200 hover:bg-blue hover:border-gray-3"
         >
-          Add to Cart
+          {t("common.addToCart")}
         </button>
       </div>
     </div>

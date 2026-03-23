@@ -1,12 +1,17 @@
+"use client";
+
 import React from "react";
+import { useI18n } from "@/i18n/provider";
 import Image from "next/image";
 import Link from "next/link";
 
 const LatestProducts = ({ products }) => {
+  const { t } = useI18n();
+
   return (
     <div className="shadow-1 bg-white rounded-xl mt-7.5">
       <div className="px-4 sm:px-6 py-4.5 border-b border-gray-3">
-        <h2 className="font-medium text-lg text-dark">Latest Products</h2>
+        <h2 className="font-medium text-lg text-dark">{t("blog.latestProducts")}</h2>
       </div>
 
       <div className="p-4 sm:p-6">
@@ -24,7 +29,9 @@ const LatestProducts = ({ products }) => {
                     {product.title}
                   </Link>
                 </h3>
-                <p className="text-custom-sm">Price: ${product.discountedPrice}</p>
+                <p className="text-custom-sm">
+                  {t("blog.pricePrefix")} ${product.discountedPrice}
+                </p>
               </div>
             </div>
           ))}

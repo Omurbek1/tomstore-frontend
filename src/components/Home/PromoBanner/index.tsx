@@ -1,7 +1,12 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { useI18n } from "@/i18n/provider";
 
 const PromoBanner = () => {
+  const { t } = useI18n();
+
   return (
     <section className="overflow-hidden py-20">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -13,19 +18,16 @@ const PromoBanner = () => {
             </span>
 
             <h2 className="font-bold text-xl lg:text-heading-4 xl:text-heading-3 text-dark mb-5">
-              UP TO 30% OFF
+              {t("home.promoPrimaryTitle")}
             </h2>
 
-            <p>
-              iPhone 14 has the same superspeedy chip that’s in iPhone 13 Pro,
-              A15 Bionic, with a 5‑core GPU, powers all the latest features.
-            </p>
+            <p>{t("home.promoPrimaryText")}</p>
 
             <a
               href="#"
               className="inline-flex font-medium text-custom-sm text-white bg-blue py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
             >
-              Buy Now
+              {t("home.promoBuyNow")}
             </a>
           </div>
 
@@ -51,22 +53,22 @@ const PromoBanner = () => {
 
             <div className="text-right">
               <span className="block text-lg text-dark mb-1.5">
-                Foldable Motorised Treadmill
+                {t("home.promoWorkoutSubtitle")}
               </span>
 
               <h2 className="font-bold text-xl lg:text-heading-4 text-dark mb-2.5">
-                Workout At Home
+                {t("home.promoWorkoutTitle")}
               </h2>
 
               <p className="font-semibold text-custom-1 text-teal">
-                Flat 20% off
+                {t("home.promoWorkoutDiscount")}
               </p>
 
               <a
                 href="#"
                 className="inline-flex font-medium text-custom-sm text-white bg-teal py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-teal-dark mt-9"
               >
-                Grab Now
+                {t("home.promoGrabNow")}
               </a>
             </div>
           </div>
@@ -83,23 +85,22 @@ const PromoBanner = () => {
 
             <div>
               <span className="block text-lg text-dark mb-1.5">
-                Apple Watch Ultra
+                {t("home.promoWatchSubtitle")}
               </span>
 
               <h2 className="font-bold text-xl lg:text-heading-4 text-dark mb-2.5">
-                Up to <span className="text-orange">40%</span> off
+                {t("home.promoWatchTitle")}
               </h2>
 
               <p className="max-w-[285px] text-custom-sm">
-                The aerospace-grade titanium case strikes the perfect balance of
-                everything.
+                {t("home.promoWatchText")}
               </p>
 
               <a
                 href="#"
                 className="inline-flex font-medium text-custom-sm text-white bg-orange py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-orange-dark mt-7.5"
               >
-                Buy Now
+                {t("home.promoBuyNow")}
               </a>
             </div>
           </div>

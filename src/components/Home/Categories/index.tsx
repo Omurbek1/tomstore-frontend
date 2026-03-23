@@ -2,6 +2,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useCallback, useRef, useEffect } from "react";
 import type { Category } from "@/types/category";
+import { useI18n } from "@/i18n/provider";
 
 // Import Swiper styles
 import "swiper/css/navigation";
@@ -9,6 +10,7 @@ import "swiper/css";
 import SingleItem from "./SingleItem";
 
 const Categories = ({ categories }: { categories: Category[] }) => {
+  const { t } = useI18n();
   const sliderRef = useRef(null);
 
   const handlePrev = useCallback(() => {
@@ -69,10 +71,10 @@ const Categories = ({ categories }: { categories: Category[] }) => {
                     </clipPath>
                   </defs>
                 </svg>
-                Categories
+                {t("home.categories")}
               </span>
               <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-                Browse by Category
+                {t("home.browseByCategory")}
               </h2>
             </div>
 

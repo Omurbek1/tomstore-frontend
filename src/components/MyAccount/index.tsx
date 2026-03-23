@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import Image from "next/image";
+import { useI18n } from "@/i18n/provider";
 import AddressModal from "./AddressModal";
 import Orders from "../Orders";
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [addressModal, setAddressModal] = useState(false);
+  const { t } = useI18n();
 
   const openAddressModal = () => {
     setAddressModal(true);
@@ -19,7 +21,7 @@ const MyAccount = () => {
 
   return (
     <>
-      <Breadcrumb title={"My Account"} pages={["my account"]} />
+      <Breadcrumb title={t("account.title")} pages={[t("account.title")]} />
 
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -41,7 +43,7 @@ const MyAccount = () => {
                     <p className="font-medium text-dark mb-0.5">
                       James Septimus
                     </p>
-                    <p className="text-custom-xs">Member Since Sep 2020</p>
+                    <p className="text-custom-xs">{t("account.memberSince")}</p>
                   </div>
                 </div>
 
@@ -88,7 +90,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Dashboard
+                      {t("account.dashboard")}
                     </button>
                     <button
                       onClick={() => setActiveTab("orders")}
@@ -125,7 +127,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Orders
+                      {t("account.orders")}
                     </button>
 
                     <button
@@ -153,7 +155,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Downloads
+                      {t("account.downloads")}
                     </button>
 
                     <button
@@ -183,7 +185,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Addresses
+                      {t("account.addresses")}
                     </button>
 
                     <button
@@ -215,7 +217,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Account Details
+                      {t("account.accountDetails")}
                     </button>
 
                     <button
@@ -243,7 +245,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Logout
+                      {t("account.logout")}
                     </button>
                   </div>
                 </div>
@@ -261,20 +263,18 @@ const MyAccount = () => {
               }`}
             >
               <p className="text-dark">
-                Hello Annie (not Annie?
+                {t("account.helloUser")} ({t("account.notUser")}
                 <a
                   href="#"
                   className="text-red ease-out duration-200 hover:underline"
                 >
-                  Log Out
+                  {t("account.logOutLink")}
                 </a>
                 )
               </p>
 
               <p className="text-custom-sm mt-4">
-                From your account dashboard you can view your recent orders,
-                manage your shipping and billing addresses, and edit your
-                password and account details.
+                {t("account.dashboardText")}
               </p>
             </div>
             {/* <!-- dashboard tab content end -->
@@ -295,7 +295,7 @@ const MyAccount = () => {
                 activeTab === "downloads" ? "block" : "hidden"
               }`}
             >
-              <p>You don&apos;t have any download</p>
+              <p>{t("account.noDownloads")}</p>
             </div>
             {/* <!-- downloads tab content end -->
 
@@ -308,12 +308,13 @@ const MyAccount = () => {
               <div className="xl:max-w-[370px] w-full bg-white shadow-1 rounded-xl">
                 <div className="flex items-center justify-between py-5 px-4 sm:pl-7.5 sm:pr-6 border-b border-gray-3">
                   <p className="font-medium text-xl text-dark">
-                    Shipping Address
+                    {t("account.shippingAddress")}
                   </p>
 
                   <button
                     className="text-dark ease-out duration-200 hover:text-blue"
                     onClick={openAddressModal}
+                    aria-label={t("common.edit")}
                   >
                     <svg
                       className="fill-current"
@@ -357,7 +358,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Name: James Septimus
+                      {t("account.nameLine")}
                     </p>
 
                     <p className="flex items-center gap-2.5 text-custom-sm">
@@ -376,7 +377,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Email: jamse@example.com
+                      {t("account.emailLine")}
                     </p>
 
                     <p className="flex items-center gap-2.5 text-custom-sm">
@@ -405,7 +406,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Phone: 1234 567890
+                      {t("account.phoneLine")}
                     </p>
 
                     <p className="flex gap-2.5 text-custom-sm">
@@ -431,7 +432,7 @@ const MyAccount = () => {
                           </clipPath>
                         </defs>
                       </svg>
-                      Address: 7398 Smoke Ranch RoadLas Vegas, Nevada 89128
+                      {t("account.addressLine")}
                     </p>
                   </div>
                 </div>
@@ -440,12 +441,13 @@ const MyAccount = () => {
               <div className="xl:max-w-[370px] w-full bg-white shadow-1 rounded-xl">
                 <div className="flex items-center justify-between py-5 px-4 sm:pl-7.5 sm:pr-6 border-b border-gray-3">
                   <p className="font-medium text-xl text-dark">
-                    Billing Address
+                    {t("account.billingAddress")}
                   </p>
 
                   <button
                     className="text-dark ease-out duration-200 hover:text-blue"
                     onClick={openAddressModal}
+                    aria-label={t("common.edit")}
                   >
                     <svg
                       className="fill-current"
@@ -489,7 +491,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Name: James Septimus
+                      {t("account.nameLine")}
                     </p>
 
                     <p className="flex items-center gap-2.5 text-custom-sm">
@@ -508,7 +510,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Email: jamse@example.com
+                      {t("account.emailLine")}
                     </p>
 
                     <p className="flex items-center gap-2.5 text-custom-sm">
@@ -537,7 +539,7 @@ const MyAccount = () => {
                           fill=""
                         />
                       </svg>
-                      Phone: 1234 567890
+                      {t("account.phoneLine")}
                     </p>
 
                     <p className="flex gap-2.5 text-custom-sm">
@@ -563,7 +565,7 @@ const MyAccount = () => {
                           </clipPath>
                         </defs>
                       </svg>
-                      Address: 7398 Smoke Ranch RoadLas Vegas, Nevada 89128
+                      {t("account.addressLine")}
                     </p>
                   </div>
                 </div>
@@ -582,14 +584,14 @@ const MyAccount = () => {
                   <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                     <div className="w-full">
                       <label htmlFor="firstName" className="block mb-2.5">
-                        First Name <span className="text-red">*</span>
+                        {t("common.firstName")} <span className="text-red">*</span>
                       </label>
 
                       <input
                         type="text"
                         name="firstName"
                         id="firstName"
-                        placeholder="Jhon"
+                        placeholder={t("contact.placeholderFirstName")}
                         value="Jhon"
                         className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                       />
@@ -597,14 +599,14 @@ const MyAccount = () => {
 
                     <div className="w-full">
                       <label htmlFor="lastName" className="block mb-2.5">
-                        Last Name <span className="text-red">*</span>
+                        {t("common.lastName")} <span className="text-red">*</span>
                       </label>
 
                       <input
                         type="text"
                         name="lastName"
                         id="lastName"
-                        placeholder="Deo"
+                        placeholder={t("contact.placeholderLastName")}
                         value="Deo"
                         className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                       />
@@ -613,14 +615,14 @@ const MyAccount = () => {
 
                   <div className="mb-5">
                     <label htmlFor="countryName" className="block mb-2.5">
-                      Country/ Region <span className="text-red">*</span>
+                      {t("checkout.countryRegion")} <span className="text-red">*</span>
                     </label>
 
                     <div className="relative">
                       <select className="w-full bg-gray-1 rounded-md border border-gray-3 text-dark-4 py-3 pl-5 pr-9 duration-200 appearance-none outline-none focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20">
-                        <option value="0">Australia</option>
-                        <option value="1">America</option>
-                        <option value="2">England</option>
+                        <option value="0">{t("checkout.australia")}</option>
+                        <option value="1">{t("checkout.america")}</option>
+                        <option value="2">{t("checkout.england")}</option>
                       </select>
 
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-4">
@@ -647,23 +649,22 @@ const MyAccount = () => {
                     type="submit"
                     className="inline-flex font-medium text-white bg-blue py-3 px-7 rounded-md ease-out duration-200 hover:bg-blue-dark"
                   >
-                    Save Changes
+                    {t("common.saveChanges")}
                   </button>
                 </div>
 
                 <p className="text-custom-sm mt-5 mb-9">
-                  This will be how your name will be displayed in the account
-                  section and in reviews
+                  {t("account.displayNameHelp")}
                 </p>
 
                 <p className="font-medium text-xl sm:text-2xl text-dark mb-7">
-                  Password Change
+                  {t("account.passwordChange")}
                 </p>
 
                 <div className="bg-white shadow-1 rounded-xl p-4 sm:p-8.5">
                   <div className="mb-5">
                     <label htmlFor="oldPassword" className="block mb-2.5">
-                      Old Password
+                      {t("account.oldPassword")}
                     </label>
 
                     <input
@@ -677,7 +678,7 @@ const MyAccount = () => {
 
                   <div className="mb-5">
                     <label htmlFor="newPassword" className="block mb-2.5">
-                      New Password
+                      {t("account.newPassword")}
                     </label>
 
                     <input
@@ -694,7 +695,7 @@ const MyAccount = () => {
                       htmlFor="confirmNewPassword"
                       className="block mb-2.5"
                     >
-                      Confirm New Password
+                      {t("account.confirmNewPassword")}
                     </label>
 
                     <input
@@ -710,7 +711,7 @@ const MyAccount = () => {
                     type="submit"
                     className="inline-flex font-medium text-white bg-blue py-3 px-7 rounded-md ease-out duration-200 hover:bg-blue-dark"
                   >
-                    Change Password
+                    {t("account.changePassword")}
                   </button>
                 </div>
               </form>

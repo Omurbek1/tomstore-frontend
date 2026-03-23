@@ -1,18 +1,22 @@
 import React from "react";
+import { useI18n } from "@/i18n/provider";
+import { getOrderStatusMessageKey } from "@/i18n/utils";
 
 const OrderDetails = ({ orderItem }: any) => {
+  const { t } = useI18n();
+
   return (
     <>
       <div className="items-center justify-between py-4.5 px-7.5 hidden md:flex ">
         <div className="min-w-[113px]">
-          <p className="text-custom-sm text-dark">Order</p>
+          <p className="text-custom-sm text-dark">{t("order.order")}</p>
         </div>
         <div className="min-w-[113px]">
-          <p className="text-custom-sm text-dark">Date</p>
+          <p className="text-custom-sm text-dark">{t("order.date")}</p>
         </div>
 
         <div className="min-w-[113px]">
-          <p className="text-custom-sm text-dark">Status</p>
+          <p className="text-custom-sm text-dark">{t("order.status")}</p>
         </div>
 
         {/* <div className="min-w-[113px]">
@@ -20,7 +24,7 @@ const OrderDetails = ({ orderItem }: any) => {
         </div> */}
 
         <div className="min-w-[113px]">
-          <p className="text-custom-sm text-dark">Total</p>
+          <p className="text-custom-sm text-dark">{t("order.total")}</p>
         </div>
 
         {/* <div className="min-w-[113px]">
@@ -49,10 +53,10 @@ const OrderDetails = ({ orderItem }: any) => {
                 ? "text-red bg-red-light-6"
                 : orderItem.status === "processing"
                 ? "text-yellow bg-yellow-light-4"
-                : "Unknown Status"
+                : ""
             }`}
           >
-            {orderItem.status}
+            {t(getOrderStatusMessageKey(orderItem.status))}
           </p>
         </div>
 
@@ -67,7 +71,7 @@ const OrderDetails = ({ orderItem }: any) => {
         </div>
       </div>
       <div className="px-7.5 w-full">
-        <p className="font-bold">Shipping Address:</p>{" "}
+        <p className="font-bold">{t("order.shippingAddress")}</p>{" "}
         <p>942 Aspen Road Encino, CA 91316</p>
       </div>
     </>

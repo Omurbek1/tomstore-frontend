@@ -2,27 +2,29 @@
 import React from "react";
 import Discount from "./Discount";
 import OrderSummary from "./OrderSummary";
+import { useI18n } from "@/i18n/provider";
 import { useAppSelector } from "@/redux/store";
 import SingleItem from "./SingleItem";
 import Breadcrumb from "../Common/Breadcrumb";
 import Link from "next/link";
 
 const Cart = () => {
+  const { t } = useI18n();
   const cartItems = useAppSelector((state) => state.cartReducer.items);
 
   return (
     <>
       {/* <!-- ===== Breadcrumb Section Start ===== --> */}
       <section>
-        <Breadcrumb title={"Cart"} pages={["Cart"]} />
+        <Breadcrumb title={t("cart.title")} pages={[t("cart.title")]} />
       </section>
       {/* <!-- ===== Breadcrumb Section End ===== --> */}
       {cartItems.length > 0 ? (
         <section className="overflow-hidden py-20 bg-gray-2">
           <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
             <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
-              <h2 className="font-medium text-dark text-2xl">Your Cart</h2>
-              <button className="text-blue">Clear Shopping Cart</button>
+              <h2 className="font-medium text-dark text-2xl">{t("cart.yourCart")}</h2>
+              <button className="text-blue">{t("cart.clearShoppingCart")}</button>
             </div>
 
             <div className="bg-white rounded-[10px] shadow-1">
@@ -31,23 +33,23 @@ const Cart = () => {
                   {/* <!-- table header --> */}
                   <div className="flex items-center py-5.5 px-7.5">
                     <div className="min-w-[400px]">
-                      <p className="text-dark">Product</p>
+                      <p className="text-dark">{t("common.product")}</p>
                     </div>
 
                     <div className="min-w-[180px]">
-                      <p className="text-dark">Price</p>
+                      <p className="text-dark">{t("common.price")}</p>
                     </div>
 
                     <div className="min-w-[275px]">
-                      <p className="text-dark">Quantity</p>
+                      <p className="text-dark">{t("common.quantity")}</p>
                     </div>
 
                     <div className="min-w-[200px]">
-                      <p className="text-dark">Subtotal</p>
+                      <p className="text-dark">{t("common.subtotal")}</p>
                     </div>
 
                     <div className="min-w-[50px]">
-                      <p className="text-dark text-right">Action</p>
+                      <p className="text-dark text-right">{t("common.action")}</p>
                     </div>
                   </div>
 
@@ -100,13 +102,13 @@ const Cart = () => {
               </svg>
             </div>
 
-            <p className="pb-6">Your cart is empty!</p>
+            <p className="pb-6">{t("cart.empty")}</p>
 
             <Link
               href="/shop-with-sidebar"
               className="w-96 mx-auto flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
             >
-              Continue Shopping
+              {t("common.continueShopping")}
             </Link>
           </div>
         </>

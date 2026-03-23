@@ -1,7 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
+import { useI18n } from "@/i18n/provider";
 
-const Breadcrumb = ({ title, pages }) => {
+const Breadcrumb = ({
+  title,
+  pages,
+}: {
+  title: string;
+  pages: string[];
+}) => {
+  const { t } = useI18n();
+
   return (
     <div className="overflow-hidden shadow-breadcrumb pt-[209px] sm:pt-[155px] lg:pt-[95px] xl:pt-[165px]">
       <div className="border-t border-gray-3">
@@ -13,7 +24,7 @@ const Breadcrumb = ({ title, pages }) => {
 
             <ul className="flex items-center gap-2">
               <li className="text-custom-sm hover:text-blue">
-                <Link href="/">Home /</Link>
+                <Link href="/">{t("common.home")} /</Link>
               </li>
 
               {pages.length > 0 &&

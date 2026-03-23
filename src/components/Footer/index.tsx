@@ -1,8 +1,12 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { useI18n } from "@/i18n/provider";
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const { t } = useI18n();
 
   return (
     <footer className="overflow-hidden">
@@ -11,7 +15,7 @@ const Footer = () => {
         <div className="flex flex-wrap xl:flex-nowrap gap-10 xl:gap-19 xl:justify-between pt-17.5 xl:pt-22.5 pb-10 xl:pb-15">
           <div className="max-w-[330px] w-full">
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
-              Help & Support
+              {t("footer.helpSupport")}
             </h2>
 
             <ul className="flex flex-col gap-3">
@@ -198,33 +202,33 @@ const Footer = () => {
 
           <div className="w-full sm:w-auto">
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
-              Account
+              {t("footer.account")}
             </h2>
 
             <ul className="flex flex-col gap-3.5">
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  My Account
+                  {t("menu.myAccount")}
                 </a>
               </li>
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  Login / Register
+                  {t("footer.loginRegister")}
                 </a>
               </li>
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  Cart
+                  {t("menu.cart")}
                 </a>
               </li>
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  Wishlist
+                  {t("menu.wishlist")}
                 </a>
               </li>
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  Shop
+                  {t("menu.shop")}
                 </a>
               </li>
             </ul>
@@ -232,33 +236,33 @@ const Footer = () => {
 
           <div className="w-full sm:w-auto">
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
-              Quick Link
+              {t("footer.quickLink")}
             </h2>
 
             <ul className="flex flex-col gap-3">
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  Privacy Policy
+                  {t("footer.privacyPolicy")}
                 </a>
               </li>
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  Refund Policy
+                  {t("footer.refundPolicy")}
                 </a>
               </li>
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  Terms of Use
+                  {t("footer.termsOfUse")}
                 </a>
               </li>
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  FAQ’s
+                  {t("footer.faqs")}
                 </a>
               </li>
               <li>
                 <a className="ease-out duration-200 hover:text-blue" href="#">
-                  Contact
+                  {t("menu.contact")}
                 </a>
               </li>
             </ul>
@@ -266,11 +270,11 @@ const Footer = () => {
 
           <div className="w-full sm:w-auto">
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark lg:text-right">
-              Download App
+              {t("footer.downloadApp")}
             </h2>
 
             <p className="lg:text-right text-custom-sm mb-4">
-              Save $3 With App & New User only
+              {t("footer.saveWithApp")}
             </p>
 
             <ul className="flex flex-col lg:items-end gap-3">
@@ -295,9 +299,9 @@ const Footer = () => {
 
                   <div>
                     <span className="block text-custom-xs">
-                      Download on the
+                      {t("footer.downloadOnThe")}
                     </span>
-                    <p className="font-medium">App Store</p>
+                    <p className="font-medium">{t("footer.appStore")}</p>
                   </div>
                 </a>
               </li>
@@ -322,8 +326,10 @@ const Footer = () => {
                   </svg>
 
                   <div>
-                    <span className="block text-custom-xs"> Get in On </span>
-                    <p className="font-medium">Google Play</p>
+                    <span className="block text-custom-xs">
+                      {t("footer.getItOn")}
+                    </span>
+                    <p className="font-medium">{t("footer.googlePlay")}</p>
                   </div>
                 </a>
               </li>
@@ -338,11 +344,11 @@ const Footer = () => {
         <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex gap-5 flex-wrap items-center justify-between">
             <p className="text-dark font-medium">
-              &copy; {year}. All rights reserved by PimjoLabs.
+              &copy; {year}. {t("footer.allRightsReserved")}
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
-              <p className="font-medium">We Accept:</p>
+              <p className="font-medium">{t("footer.weAccept")}</p>
 
               <div className="flex flex-wrap items-center gap-6">
                 <a href="#" aria-label="payment system with visa card">

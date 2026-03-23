@@ -1,18 +1,23 @@
+"use client";
+
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import SearchForm from "../Blog/SearchForm";
 import LatestPosts from "../Blog/LatestPosts";
 import LatestProducts from "../Blog/LatestProducts";
+import { useI18n } from "@/i18n/provider";
 import blogData from "../BlogGrid/blogData";
 import Image from "next/image";
 import shopData from "../Shop/shopData"; 
 
 const BlogDetailsWithSidebar = () => {
+  const { t } = useI18n();
+
   return (
     <>
       <Breadcrumb
-        title={"Blog Details With Sidebar"}
-        pages={["blog details sidebar"]}
+        title={t("blog.blogDetailsSidebar")}
+        pages={[t("blog.blogDetailsSidebar")]}
       />
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -39,12 +44,12 @@ const BlogDetailsWithSidebar = () => {
                   <span className="block w-px h-4 bg-gray-4"></span>
 
                   <a href="#" className="ease-out duration-200 hover:text-blue">
-                    300k Views
+                    300k {t("common.views")}
                   </a>
                 </span>
 
                 <h2 className="font-medium text-dark text-xl lg:text-2xl xl:text-custom-4xl mb-4">
-                  What information is needed for shipping?
+                  {t("blog.shippingInfoTitle")}
                 </h2>
 
                 <p className="mb-6">
@@ -73,7 +78,7 @@ const BlogDetailsWithSidebar = () => {
 
                 <div className="mt-7.5">
                   <h3 className="font-medium text-dark text-lg xl:text-[26px] xl:leading-[34px] mb-6">
-                    Digital marketplace for Ui/Ux designers.
+                    {t("blog.designMarketplaceTitle")}
                   </h3>
 
                   <ul className="list-disc pl-6">
@@ -108,7 +113,7 @@ const BlogDetailsWithSidebar = () => {
 
                     <div>
                       <h4 className="text-dark text-custom-sm">Jhon Drineo</h4>
-                      <p className="text-custom-xs">Entroprenor</p>
+                      <p className="text-custom-xs">{t("blog.authorRole")}</p>
                     </div>
                   </a>
                 </div>
@@ -145,7 +150,7 @@ const BlogDetailsWithSidebar = () => {
 
                 <div className="flex flex-wrap items-center justify-between gap-10 mt-10">
                   <div className="flex flex-wrap items-center gap-5">
-                    <p>Popular Tags :</p>
+                    <p>{t("blog.popularTags")}</p>
 
                     <ul className="flex flex-wrap items-center gap-3.5">
                       <li>
@@ -278,63 +283,63 @@ const BlogDetailsWithSidebar = () => {
               <div className="shadow-1 bg-white rounded-xl mt-7.5">
                 <div className="px-4 sm:px-6 py-4.5 border-b border-gray-3">
                   <h2 className="font-medium text-lg text-dark">
-                    Popular Category
+                    {t("blog.popularCategory")}
                   </h2>
                 </div>
 
                 <div className="p-4 sm:p-6">
                   <div className="flex flex-col gap-3">
                     <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Desktop
+                      {t("header.categoryDesktop")}
                       <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
                         12
                       </span>
                     </button>
 
                     <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Laptop
+                      {t("header.categoryLaptop")}
                       <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
                         25
                       </span>
                     </button>
 
                     <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Monitor
+                      {t("header.categoryMonitor")}
                       <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
                         23
                       </span>
                     </button>
 
                     <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      UPS
+                      {t("blog.categoryUps")}
                       <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
                         09
                       </span>
                     </button>
 
                     <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Phone
+                      {t("header.categoryPhone")}
                       <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
                         54
                       </span>
                     </button>
 
                     <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Tablet
+                      {t("header.categoryTablet")}
                       <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
                         21
                       </span>
                     </button>
 
                     <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Watch
+                      {t("header.categoryWatch")}
                       <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
                         17
                       </span>
                     </button>
 
                     <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Mouse
+                      {t("header.categoryMouse")}
                       <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
                         08
                       </span>
@@ -346,7 +351,7 @@ const BlogDetailsWithSidebar = () => {
               {/* <!-- Tags box --> */}
               <div className="shadow-1 bg-white rounded-xl mt-7.5">
                 <div className="px-4 sm:px-6 py-4.5 border-b border-gray-3">
-                  <h2 className="font-medium text-lg text-dark">Tags</h2>
+                  <h2 className="font-medium text-lg text-dark">{t("blog.tags")}</h2>
                 </div>
 
                 <div className="p-4 sm:p-6">
@@ -355,56 +360,56 @@ const BlogDetailsWithSidebar = () => {
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      Desktop
+                      {t("blog.tagDesktop")}
                     </a>
 
                     <a
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      Macbook
+                      {t("blog.tagMacbook")}
                     </a>
 
                     <a
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      PC
+                      {t("blog.tagPc")}
                     </a>
 
                     <a
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      Watch
+                      {t("blog.tagWatch")}
                     </a>
 
                     <a
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      USB Cable
+                      {t("blog.tagUsbCable")}
                     </a>
 
                     <a
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      Mouse
+                      {t("blog.tagMouse")}
                     </a>
 
                     <a
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      Windows PC
+                      {t("blog.tagWindowsPc")}
                     </a>
 
                     <a
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                       href="#"
                     >
-                      Monitor
+                      {t("blog.tagMonitor")}
                     </a>
                   </div>
                 </div>

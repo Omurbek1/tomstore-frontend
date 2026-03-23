@@ -1,9 +1,14 @@
+"use client";
+
 import React from "react";
 import { BlogItem } from "@/types/blogItem";
+import { useI18n } from "@/i18n/provider";
 import Image from "next/image";
 import Link from "next/link";
 
 const BlogItem = ({ blog }: { blog: BlogItem }) => {
+  const { t } = useI18n();
+
   return (
     <div className="shadow-1 bg-white rounded-xl px-4 sm:px-5 pt-5 pb-4">
       <Link href="/blogs/blog-details" className="rounded-md overflow-hidden">
@@ -32,7 +37,7 @@ const BlogItem = ({ blog }: { blog: BlogItem }) => {
             href="#"
             className="text-custom-sm ease-out duration-200 hover:text-blue"
           >
-            {blog.views} Views
+            {blog.views} {t("common.views")}
           </a>
         </span>
 
@@ -44,7 +49,7 @@ const BlogItem = ({ blog }: { blog: BlogItem }) => {
           href="/blogs/blog-details"
           className="text-custom-sm inline-flex items-center gap-2 py-2 ease-out duration-200 hover:text-blue"
         >
-          Read More
+          {t("common.readMore")}
           <svg
             className="fill-current"
             width="18"

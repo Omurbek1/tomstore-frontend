@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
+import { useI18n } from "@/i18n/provider";
 import BlogItem from "../Blog/BlogItem";
 import blogData from "../BlogGrid/blogData"; 
 import SearchForm from "../Blog/SearchForm"; 
@@ -9,36 +12,40 @@ import Categories from "../Blog/Categories";
 import shopData from "../Shop/shopData"; 
  
 const BlogGridWithSidebar = () => {
+  const { t } = useI18n();
   const categories = [
     {
-      name: "Desktop",
+      name: t("header.categoryDesktop"),
       products: 10,
     },
     {
-      name: "Laptop",
+      name: t("header.categoryLaptop"),
       products: 12,
     },
     {
-      name: "Monitor",
+      name: t("header.categoryMonitor"),
       products: 30,
     },
     {
-      name: "UPS",
+      name: t("blog.categoryUps"),
       products: 23,
     },
     {
-      name: "Phone",
+      name: t("header.categoryPhone"),
       products: 10,
     },
     {
-      name: "Watch",
+      name: t("header.categoryWatch"),
       products: 13,
     },
   ];
 
   return (
     <>
-      <Breadcrumb title={"Blog Grid Sidebar"} pages={["blog grid sidebar"]} />
+      <Breadcrumb
+        title={t("blog.blogGridSidebar")}
+        pages={[t("blog.blogGridSidebar")]}
+      />
 
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -187,7 +194,7 @@ const BlogGridWithSidebar = () => {
               {/* <!-- Tags box --> */}
               <div className="shadow-1 bg-white rounded-xl mt-7.5">
                 <div className="px-4 sm:px-6 py-4.5 border-b border-gray-3">
-                  <h2 className="font-medium text-lg text-dark">Tags</h2>
+                  <h2 className="font-medium text-lg text-dark">{t("blog.tags")}</h2>
                 </div>
 
                 <div className="p-4 sm:p-6">

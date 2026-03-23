@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useI18n } from "@/i18n/provider";
 
 const Login = () => {
   const [dropdown, setDropdown] = useState(false);
+  const { t } = useI18n();
 
   return (
     <div className="bg-white shadow-1 rounded-[10px]">
@@ -11,9 +13,9 @@ const Login = () => {
           dropdown && "border-b border-gray-3"
         }`}
       >
-        Returning customer?
+        {t("checkout.returningCustomer")}
         <span className="flex items-center gap-2.5 pl-1 font-medium text-dark">
-          Click here to login
+          {t("checkout.loginPrompt")}
           <svg
             className={`${
               dropdown && "rotate-180"
@@ -41,12 +43,12 @@ const Login = () => {
         } pt-7.5 pb-8.5 px-4 sm:px-8.5`}
       >
         <p className="text-custom-sm mb-6">
-          If you didn&apos;t Logged in, Please Log in first.
+          {t("checkout.loginPrompt")}
         </p>
 
         <div className="mb-5">
           <label htmlFor="name" className="block mb-2.5">
-            Username or Email
+            {t("common.usernameOrEmail")}
           </label>
 
           <input
@@ -59,7 +61,7 @@ const Login = () => {
 
         <div className="mb-5">
           <label htmlFor="password" className="block mb-2.5">
-            Password
+            {t("auth.password")}
           </label>
 
           <input
@@ -75,7 +77,7 @@ const Login = () => {
           type="submit"
           className="inline-flex font-medium text-white bg-blue py-3 px-10.5 rounded-md ease-out duration-200 hover:bg-blue-dark"
         >
-          Login
+          {t("checkout.login")}
         </button>
       </div>
     </div>

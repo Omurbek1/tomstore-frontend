@@ -1,18 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import CustomSelect from "./CustomSelect";
-import { menuData } from "./menuData";
+import { getMenuData } from "./menuData";
 import Dropdown from "./Dropdown";
 import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
+import { useI18n } from "@/i18n/provider";
 
 const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const { t } = useI18n();
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
@@ -48,18 +51,20 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
-  });
+    return () => window.removeEventListener("scroll", handleStickyMenu);
+  }, []);
 
   const options = [
-    { label: "All Categories", value: "0" },
-    { label: "Desktop", value: "1" },
-    { label: "Laptop", value: "2" },
-    { label: "Monitor", value: "3" },
-    { label: "Phone", value: "4" },
-    { label: "Watch", value: "5" },
-    { label: "Mouse", value: "6" },
-    { label: "Tablet", value: "7" },
+    { label: t("header.categoryAll"), value: "0" },
+    { label: t("header.categoryDesktop"), value: "1" },
+    { label: t("header.categoryLaptop"), value: "2" },
+    { label: t("header.categoryMonitor"), value: "3" },
+    { label: t("header.categoryPhone"), value: "4" },
+    { label: t("header.categoryWatch"), value: "5" },
+    { label: t("header.categoryMouse"), value: "6" },
+    { label: t("header.categoryTablet"), value: "7" },
   ];
+  const menuData = getMenuData(t);
 
   return (
     <header
@@ -99,7 +104,7 @@ const Header = () => {
                       type="search"
                       name="search"
                       id="search"
-                      placeholder="I am shopping for..."
+                      placeholder={t("header.searchPlaceholder")}
                       autoComplete="off"
                       className="custom-search w-full rounded-r-[5px] bg-gray-1 !border-l-0 border border-gray-3 py-2.5 pl-4 pr-10 outline-none ease-in duration-200"
                     />
@@ -107,7 +112,7 @@ const Header = () => {
                     <button
                       type="submit"
                       id="search-btn"
-                      aria-label="Search"
+                      aria-label={t("header.searchAria")}
                       className="flex items-center justify-center absolute right-3 top-1/2 -translate-y-1/2 ease-in duration-200 hover:text-blue"
                     >
                       <svg
@@ -160,7 +165,7 @@ const Header = () => {
 
               <div>
                 <span className="block text-2xs text-dark-4 uppercase">
-                  24/7 SUPPORT
+                  {t("header.support")}
                 </span>
                 <p className="font-medium text-custom-sm text-dark">
                   (+965) 7492-3477
@@ -197,10 +202,10 @@ const Header = () => {
 
                   <div>
                     <span className="block text-2xs text-dark-4 uppercase">
-                      account
+                      {t("header.account")}
                     </span>
                     <p className="font-medium text-custom-sm text-dark">
-                      Sign In
+                      {t("header.signIn")}
                     </p>
                   </div>
                 </Link>
@@ -248,7 +253,7 @@ const Header = () => {
 
                   <div>
                     <span className="block text-2xs text-dark-4 uppercase">
-                      cart
+                      {t("header.cart")}
                     </span>
                     <p className="font-medium text-custom-sm text-dark">
                       ${totalPrice}
@@ -260,7 +265,7 @@ const Header = () => {
               {/* <!-- Hamburger Toggle BTN --> */}
               <button
                 id="Toggle"
-                aria-label="Toggler"
+                aria-label={t("header.toggleAria")}
                 className="xl:hidden block"
                 onClick={() => setNavigationOpen(!navigationOpen)}
               >
@@ -331,9 +336,9 @@ const Header = () => {
                       >
                         <Link
                           href={menuItem.path}
-                          className={`hover:text-blue text-custom-sm font-medium text-dark flex ${
-                            stickyMenu ? "xl:py-4" : "xl:py-6"
-                          }`}
+                          className={`hover:text-blue text-custom-sm font-medium flex ${
+                            pathname === menuItem.path ? "text-blue" : "text-dark"
+                          } ${stickyMenu ? "xl:py-4" : "xl:py-6"}`}
                         >
                           {menuItem.title}
                         </Link>
@@ -371,7 +376,7 @@ const Header = () => {
                         fill=""
                       />
                     </svg>
-                    Recently Viewed
+                    {t("common.recentlyViewed")}
                   </a>
                 </li>
 
@@ -393,7 +398,7 @@ const Header = () => {
                         fill=""
                       />
                     </svg>
-                    Wishlist
+                    {t("wishlist.title")}
                   </Link>
                 </li>
               </ul>

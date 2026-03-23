@@ -7,9 +7,11 @@ import {
 } from "@/redux/features/cart-slice";
 
 import Image from "next/image";
+import { useI18n } from "@/i18n/provider";
 
 const SingleItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
+  const { t } = useI18n();
 
   const dispatch = useDispatch<AppDispatch>();
 

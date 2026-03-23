@@ -2,9 +2,11 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Image from "next/image";
+import { useI18n } from "@/i18n/provider";
 
 const SingleItem = ({ item, removeItemFromCart }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useI18n();
 
   const handleRemoveFromCart = () => {
     dispatch(removeItemFromCart(item.id));
@@ -21,7 +23,9 @@ const SingleItem = ({ item, removeItemFromCart }) => {
           <h3 className="font-medium text-dark mb-1 ease-out duration-200 hover:text-blue">
             <a href="#"> {item.title} </a>
           </h3>
-          <p className="text-custom-sm">Price: ${item.discountedPrice}</p>
+          <p className="text-custom-sm">
+            {t("common.price")}: ${item.discountedPrice}
+          </p>
         </div>
       </div>
 
