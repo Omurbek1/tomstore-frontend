@@ -88,7 +88,9 @@ const Header = () => {
       value: category.slug,
     })),
   ];
-  const menuData = getMenuData(t);
+  const menuData = getMenuData(t, {
+    showBlogMenu: storefrontConfig?.storefrontBlogEnabled === true,
+  });
 
   return (
     <header
@@ -228,9 +230,7 @@ const Header = () => {
             <div className="flex w-full flex-wrap items-center justify-between gap-4 sm:w-auto sm:justify-end sm:gap-5">
               <div className="flex flex-wrap items-center gap-4 sm:gap-5">
                 <label className="flex items-center gap-2 rounded-md border border-gray-3 bg-gray-1 px-3 py-2">
-                  <span className="text-2xs font-medium uppercase text-dark-4">
-                    {t("header.language")}
-                  </span>
+                
                   <select
                     value={localePreference}
                     onChange={(event) =>
@@ -249,9 +249,7 @@ const Header = () => {
                 </label>
 
                 <label className="flex items-center gap-2 rounded-md border border-gray-3 bg-gray-1 px-3 py-2">
-                  <span className="text-2xs font-medium uppercase text-dark-4">
-                    {t("header.currency")}
-                  </span>
+                
                   <select
                     value={currencyPreference}
                     onChange={(event) =>

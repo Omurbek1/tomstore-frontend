@@ -2,18 +2,28 @@ import { queryOptions } from "@tanstack/react-query";
 import { getBackendUrl } from "./site";
 import {
   storefrontQueryKeys,
+  toStorefrontBlogApiParams,
   toStorefrontCatalogApiParams,
+  type StorefrontBlogApiParams,
+  type StorefrontBlogRouteQuery,
   type StorefrontCatalogApiParams,
   type StorefrontCatalogRouteQuery,
 } from "./query-keys";
 import type {
+  StorefrontBlogListResponse,
+  StorefrontBlogPostDetails,
   StorefrontCatalogResponse,
   StorefrontConfig,
   StorefrontHomeResponse,
   StorefrontProductDetails,
 } from "./types";
 
-export type { StorefrontCatalogApiParams, StorefrontCatalogRouteQuery } from "./query-keys";
+export type {
+  StorefrontBlogApiParams,
+  StorefrontBlogRouteQuery,
+  StorefrontCatalogApiParams,
+  StorefrontCatalogRouteQuery,
+} from "./query-keys";
 export { storefrontQueryKeys } from "./query-keys";
 
 type StorefrontRequestInit = RequestInit & {
@@ -45,6 +55,23 @@ const buildStorefrontCatalogPath = (
 
   const query = searchParams.toString();
   return `/storefront/catalog${query ? `?${query}` : ""}`;
+};
+
+const buildStorefrontBlogsPath = (
+  params: StorefrontBlogApiParams = {},
+) => {
+  const searchParams = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === "" || value === "all") {
+      continue;
+    }
+
+    searchParams.set(key, String(value));
+  }
+
+  const query = searchParams.toString();
+  return `/storefront/blogs${query ? `?${query}` : ""}`;
 };
 
 const fetchStorefrontJson = async <T>(
@@ -122,6 +149,23 @@ export const storefrontHomeQueryOptions = () =>
       }),
   });
 
+export const storefrontBlogsQueryOptions = (
+  query: StorefrontBlogRouteQuery = {},
+) => {
+  const params = toStorefrontBlogApiParams(query);
+
+  return queryOptions({
+    queryKey: storefrontQueryKeys.blogs(params),
+    queryFn: () =>
+      fetchRequiredStorefrontJson<StorefrontBlogListResponse>(
+        buildStorefrontBlogsPath(params),
+        {
+          revalidate: 120,
+        },
+      ),
+  });
+};
+
 export const storefrontCatalogQueryOptions = (
   query: StorefrontCatalogRouteQuery,
 ) => {
@@ -150,4 +194,14 @@ export const storefrontProductQueryOptions = (slug: string) =>
           revalidate: 120,
         },
       ),
+  });
+
+export const storefrontBlogQueryOptions = (slug: string) =>
+  queryOptions({
+    queryKey: storefrontQueryKeys.blog(slug),
+    queryFn: () =>
+      fetchStorefrontJson<StorefrontBlogPostDetails>(`/storefront/blogs/${slug}`, {
+        allowNotFound: true,
+        revalidate: 120,
+      }),
   });

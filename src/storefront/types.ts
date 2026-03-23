@@ -116,11 +116,58 @@ export type StorefrontHomeResponse = {
   }>;
 };
 
+export type StorefrontBlogCategory = {
+  name: string;
+  slug: string;
+  totalPosts: number;
+};
+
+export type StorefrontBlogTag = {
+  name: string;
+  slug: string;
+  totalPosts: number;
+};
+
+export type StorefrontBlogPostSummary = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  coverImageUrl?: string;
+  category?: string;
+  tags: string[];
+  authorName?: string;
+  authorRole?: string;
+  publishedAt: string;
+  views: number;
+};
+
+export type StorefrontBlogListResponse = {
+  enabled: boolean;
+  items: StorefrontBlogPostSummary[];
+  recentPosts: StorefrontBlogPostSummary[];
+  featuredProducts: StorefrontProductCard[];
+  categories: StorefrontBlogCategory[];
+  tags: StorefrontBlogTag[];
+  total: number;
+  query?: string;
+  selectedCategory?: string;
+  selectedTag?: string;
+};
+
+export type StorefrontBlogPostDetails = StorefrontBlogPostSummary & {
+  content: string;
+  recentPosts: StorefrontBlogPostSummary[];
+  featuredProducts: StorefrontProductCard[];
+  categories: StorefrontBlogCategory[];
+  availableTags: StorefrontBlogTag[];
+};
+
 export type StorefrontConfig = {
   companyName: string;
   companyLogoUrl?: string;
   storefrontDefaultCurrency: CurrencyCode;
   storefrontUsdExchangeRate: number;
+  storefrontBlogEnabled: boolean;
   siteUrl: string;
   whatsappPhone?: string;
   supportPhone?: string;

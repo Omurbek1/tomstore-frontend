@@ -16,6 +16,14 @@ export type StorefrontCatalogApiParams = Omit<
   pageSize?: string | number;
 };
 
+export type StorefrontBlogRouteQuery = {
+  q?: string;
+  category?: string;
+  tag?: string;
+};
+
+export type StorefrontBlogApiParams = StorefrontBlogRouteQuery;
+
 export const normalizeStorefrontCatalogParams = (
   params: StorefrontCatalogApiParams = {},
 ): StorefrontCatalogApiParams =>
@@ -38,11 +46,34 @@ export const toStorefrontCatalogApiParams = (
     page: query.page,
   });
 
+export const normalizeStorefrontBlogParams = (
+  params: StorefrontBlogApiParams = {},
+): StorefrontBlogApiParams =>
+  Object.fromEntries(
+    Object.entries(params).filter(
+      ([, value]) => value !== undefined && value !== "",
+    ),
+  ) as StorefrontBlogApiParams;
+
+export const toStorefrontBlogApiParams = (query: StorefrontBlogRouteQuery) =>
+  normalizeStorefrontBlogParams({
+    q: query.q,
+    category: query.category,
+    tag: query.tag,
+  });
+
 export const storefrontQueryKeys = {
   all: ["storefront"] as const,
   config: () => [...storefrontQueryKeys.all, "config"] as const,
   categories: () => [...storefrontQueryKeys.all, "categories"] as const,
   home: () => [...storefrontQueryKeys.all, "home"] as const,
+  blogs: (params: StorefrontBlogApiParams = {}) =>
+    [
+      ...storefrontQueryKeys.all,
+      "blogs",
+      normalizeStorefrontBlogParams(params),
+    ] as const,
+  blog: (slug: string) => [...storefrontQueryKeys.all, "blog", slug] as const,
   catalog: (params: StorefrontCatalogApiParams = {}) =>
     [
       ...storefrontQueryKeys.all,

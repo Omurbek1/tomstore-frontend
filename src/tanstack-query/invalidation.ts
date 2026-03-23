@@ -14,6 +14,14 @@ export const queryInvalidation = {
       }),
     home: (queryClient: QueryClient) =>
       queryClient.invalidateQueries({ queryKey: storefrontQueryKeys.home() }),
+    blogs: (queryClient: QueryClient) =>
+      queryClient.invalidateQueries({
+        queryKey: [...storefrontQueryKeys.all, "blogs"],
+      }),
+    blog: (queryClient: QueryClient, slug: string) =>
+      queryClient.invalidateQueries({
+        queryKey: storefrontQueryKeys.blog(slug),
+      }),
     catalog: (queryClient: QueryClient) =>
       queryClient.invalidateQueries({
         queryKey: [...storefrontQueryKeys.all, "catalog"],
