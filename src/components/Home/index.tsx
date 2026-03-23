@@ -7,15 +7,34 @@ import BestSeller from "./BestSeller";
 import CounDown from "./Countdown";
 import Testimonials from "./Testimonials";
 import Newsletter from "../Common/Newsletter";
+import type { Category } from "@/types/category";
+import type { Product } from "@/types/product";
+import type { StorefrontHeroSlide } from "@/storefront/types";
 
-const Home = () => {
+type HomeProps = {
+  hero: StorefrontHeroSlide & {
+    slides?: StorefrontHeroSlide[];
+  };
+  categories: Category[];
+  newProducts: Product[];
+  popularProducts: Product[];
+  recommendedProducts: Product[];
+};
+
+const Home = ({
+  hero,
+  categories,
+  newProducts,
+  popularProducts,
+  recommendedProducts,
+}: HomeProps) => {
   return (
     <main>
-      <Hero />
-      <Categories />
-      <NewArrival />
+      <Hero hero={hero} featuredProducts={recommendedProducts} />
+      <Categories categories={categories} />
+      <NewArrival products={newProducts} />
       <PromoBanner />
-      <BestSeller />
+      <BestSeller products={popularProducts} />
       <CounDown />
       <Testimonials />
       <Newsletter />

@@ -81,12 +81,14 @@ const SingleItem = ({ item }: { item: Product }) => {
           </div>
 
           <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
-            <Link href="/shop-details"> {item.title} </Link>
+            <Link href={`/shop-details/${item.slug}`}> {item.title} </Link>
           </h3>
 
           <span className="flex items-center justify-center gap-2 font-medium text-lg">
             <span className="text-dark">${item.discountedPrice}</span>
-            <span className="text-dark-4 line-through">${item.price}</span>
+            {item.price > item.discountedPrice ? (
+              <span className="text-dark-4 line-through">${item.price}</span>
+            ) : null}
           </span>
         </div>
 
