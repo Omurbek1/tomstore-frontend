@@ -10,7 +10,7 @@ import Image from "next/image";
 
 const SingleItem = ({ item }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
 
   const handleRemoveFromWishlist = () => {
     dispatch(removeItemFromWishlist(item.id));
@@ -72,7 +72,7 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[205px]">
-        <p className="text-dark">${item.discountedPrice}</p>
+        <p className="text-dark">{formatPrice(item.discountedPrice)}</p>
       </div>
 
       <div className="min-w-[265px]">

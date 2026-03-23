@@ -11,7 +11,7 @@ import { useI18n } from "@/i18n/provider";
 
 const SingleItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -52,7 +52,7 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[180px]">
-        <p className="text-dark">${item.discountedPrice}</p>
+        <p className="text-dark">{formatPrice(item.discountedPrice)}</p>
       </div>
 
       <div className="min-w-[275px]">
@@ -108,7 +108,9 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[200px]">
-        <p className="text-dark">${item.discountedPrice * quantity}</p>
+        <p className="text-dark">
+          {formatPrice(item.discountedPrice * quantity)}
+        </p>
       </div>
 
       <div className="min-w-[50px] flex justify-end">

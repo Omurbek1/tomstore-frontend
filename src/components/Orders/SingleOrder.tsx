@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { useI18n } from "@/i18n/provider";
 import { getOrderStatusMessageKey } from "@/i18n/utils";
+import type { OrderListItem } from "@/orders/api";
 import OrderActions from "./OrderActions";
 import OrderModal from "./OrderModal";
 
-const SingleOrder = ({ orderItem, smallView }: any) => {
+const SingleOrder = ({
+  orderItem,
+  smallView,
+}: {
+  orderItem: OrderListItem;
+  smallView: boolean;
+}) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const { t } = useI18n();

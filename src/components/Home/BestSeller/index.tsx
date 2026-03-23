@@ -7,7 +7,17 @@ import Link from "next/link";
 import type { Product } from "@/types/product";
 import { useI18n } from "@/i18n/provider";
 
-const BestSeller = ({ products }: { products: Product[] }) => {
+const BestSeller = ({
+  products,
+  eyebrowKey = "home.thisMonth",
+  titleKey = "home.bestSellers",
+  viewAllHref = "/shop-with-sidebar?label=hit",
+}: {
+  products: Product[];
+  eyebrowKey?: string;
+  titleKey?: string;
+  viewAllHref?: string;
+}) => {
   const { t } = useI18n();
 
   return (
@@ -23,10 +33,10 @@ const BestSeller = ({ products }: { products: Product[] }) => {
                 width={17}
                 height={17}
               />
-              {t("home.thisMonth")}
+              {t(eyebrowKey)}
             </span>
             <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-              {t("home.bestSellers")}
+              {t(titleKey)}
             </h2>
           </div>
         </div>
@@ -40,7 +50,7 @@ const BestSeller = ({ products }: { products: Product[] }) => {
 
         <div className="text-center mt-12.5">
           <Link
-            href="/shop-without-sidebar"
+            href={viewAllHref}
             className="inline-flex font-medium text-custom-sm py-3 px-7 sm:px-12.5 rounded-md border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
           >
             {t("common.viewAll")}

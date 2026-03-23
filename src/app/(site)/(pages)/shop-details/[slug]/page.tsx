@@ -1,9 +1,7 @@
 import ProductDetailsView from "@/components/Storefront/ProductDetailsView";
-import { getStorefrontProduct } from "@/storefront/api";
-import {
-  mapStorefrontProductToProduct,
-  mapStorefrontProductsToProducts,
-} from "@/storefront/mappers";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { storefrontProductQueryOptions } from "@/storefront/query-options";
+import { makeQueryClient } from "@/tanstack-query/query-client";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -13,7 +11,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getStorefrontProduct(slug);
+  const queryClient = makeQueryClient();
+  const product = await queryClient.fetchQuery(storefrontProductQueryOptions(slug));
 
   if (!product) {
     return {
@@ -30,22 +29,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ShopDetailsSlugPage({ params }: Props) {
   const { slug } = await params;
-  const product = await getStorefrontProduct(slug);
+  const queryClient = makeQueryClient();
+  const product = await queryClient.fetchQuery(storefrontProductQueryOptions(slug));
 
   if (!product) {
     notFound();
   }
 
-  const relatedProducts = mapStorefrontProductsToProducts(product.relatedProducts);
-  const recommendedProducts = mapStorefrontProductsToProducts(
-    product.recommendedProducts,
-  );
-
   return (
-    <ProductDetailsView
-      product={product}
-      relatedProducts={relatedProducts}
-      recommendedProducts={recommendedProducts}
-    />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ProductDetailsView slug={slug} />
+    </HydrationBoundary>
   );
 }

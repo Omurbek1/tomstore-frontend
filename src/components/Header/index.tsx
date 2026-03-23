@@ -10,16 +10,36 @@ import { useSelector } from "react-redux";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
-import { useI18n } from "@/i18n/provider";
+import { type LocalePreference, useI18n } from "@/i18n/provider";
+import type { CurrencyPreference } from "@/i18n/currency";
+import { useStorefrontCategoriesQuery, useStorefrontConfigQuery } from "@/storefront/hooks";
+
+const getPhoneHref = (value?: string) => {
+  const normalized = String(value || "").replace(/[^\d+]/g, "");
+  return normalized ? `tel:${normalized}` : "#";
+};
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { t } = useI18n();
+  const {
+    localePreference,
+    setLocalePreference,
+    currencyPreference,
+    setCurrencyPreference,
+    formatPrice,
+    t,
+  } = useI18n();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
   const { openCartModal } = useCartModalContext();
+  const { data: storefrontConfig } = useStorefrontConfigQuery();
+  const { data: categories = [] } = useStorefrontCategoriesQuery();
+  const companyName = storefrontConfig?.companyName || "TOMSTORE";
+  const companyLogoUrl = storefrontConfig?.companyLogoUrl;
+  const supportPhone = storefrontConfig?.supportPhone;
 
   const product = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
@@ -32,12 +52,19 @@ const Header = () => {
     event.preventDefault();
 
     const query = searchQuery.trim();
-    if (!query) {
-      router.push("/shop-with-sidebar");
-      return;
+    const searchParams = new URLSearchParams();
+
+    if (query) {
+      searchParams.set("q", query);
     }
 
-    router.push(`/shop-with-sidebar?q=${encodeURIComponent(query)}`);
+    if (selectedCategory) {
+      searchParams.set("category", selectedCategory);
+    }
+
+    const nextQuery = searchParams.toString();
+
+    router.push(`/shop-with-sidebar${nextQuery ? `?${nextQuery}` : ""}`);
   };
 
   // Sticky menu
@@ -55,14 +82,11 @@ const Header = () => {
   }, []);
 
   const options = [
-    { label: t("header.categoryAll"), value: "0" },
-    { label: t("header.categoryDesktop"), value: "1" },
-    { label: t("header.categoryLaptop"), value: "2" },
-    { label: t("header.categoryMonitor"), value: "3" },
-    { label: t("header.categoryPhone"), value: "4" },
-    { label: t("header.categoryWatch"), value: "5" },
-    { label: t("header.categoryMouse"), value: "6" },
-    { label: t("header.categoryTablet"), value: "7" },
+    { label: t("header.categoryAll"), value: "" },
+    ...categories.map((category) => ({
+      label: category.name,
+      value: category.slug,
+    })),
   ];
   const menuData = getMenuData(t);
 
@@ -75,27 +99,46 @@ const Header = () => {
       <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
         {/* <!-- header top start --> */}
         <div
-          className={`flex flex-col lg:flex-row gap-5 items-end lg:items-center xl:justify-between ease-out duration-200 ${
+          className={`flex flex-col gap-5 ease-out duration-200 xl:flex-row xl:flex-wrap xl:items-center xl:justify-between 2xl:flex-nowrap ${
             stickyMenu ? "py-4" : "py-6"
           }`}
         >
           {/* <!-- header top left --> */}
-          <div className="xl:w-auto flex-col sm:flex-row w-full flex sm:justify-between sm:items-center gap-5 sm:gap-10">
-            <Link className="flex-shrink-0" href="/">
-              <Image
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={219}
-                height={36}
-              />
+          <div className="flex w-full min-w-0 flex-col gap-5 sm:gap-6 xl:min-w-0 xl:flex-1 xl:flex-row xl:items-center xl:gap-6">
+            <Link
+              className="flex w-full min-w-0 max-w-full items-center gap-3 xl:w-auto xl:max-w-[320px] 2xl:max-w-[360px]"
+              href="/"
+            >
+              {companyLogoUrl ? (
+                <img
+                  src={companyLogoUrl}
+                  alt={companyName}
+                  className="h-9 w-auto max-w-[140px] flex-shrink-0 object-contain sm:max-w-[180px]"
+                />
+              ) : (
+                <Image
+                  src="/images/logo/logo.svg"
+                  alt={companyName}
+                  width={164}
+                  height={36}
+                  className="h-auto w-auto max-w-[140px] flex-shrink-0 sm:max-w-[164px]"
+                />
+              )}
+              <span className="min-w-0 truncate text-sm font-semibold uppercase tracking-[0.28em] text-dark sm:text-base">
+                {companyName}
+              </span>
             </Link>
 
-            <div className="max-w-[475px] w-full">
+            <div className="w-full xl:min-w-0 xl:max-w-[475px] xl:flex-1">
               <form onSubmit={handleSearchSubmit}>
                 <div className="flex items-center">
-                  <CustomSelect options={options} />
+                  <CustomSelect
+                    options={options}
+                    value={selectedCategory}
+                    onChange={(option) => setSelectedCategory(option.value)}
+                  />
 
-                  <div className="relative max-w-[333px] sm:min-w-[333px] w-full">
+                  <div className="relative min-w-0 flex-1">
                     {/* <!-- divider --> */}
                     <span className="absolute left-0 top-1/2 -translate-y-1/2 inline-block w-px h-5.5 bg-gray-4"></span>
                     <input
@@ -136,9 +179,10 @@ const Header = () => {
           </div>
 
           {/* <!-- header top right --> */}
-          <div className="flex w-full lg:w-auto items-center gap-7.5">
-            <div className="hidden xl:flex items-center gap-3.5">
+          <div className="flex w-full flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between xl:w-auto xl:flex-none xl:justify-end xl:gap-5 2xl:flex-nowrap 2xl:gap-7.5">
+            <div className="hidden min-w-0 items-start gap-3 xl:flex xl:max-w-[220px]">
               <svg
+                className="shrink-0"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -163,21 +207,67 @@ const Header = () => {
                 />
               </svg>
 
-              <div>
+              <div className="min-w-0">
                 <span className="block text-2xs text-dark-4 uppercase">
                   {t("header.support")}
                 </span>
-                <p className="font-medium text-custom-sm text-dark">
-                  (+965) 7492-3477
-                </p>
+                {supportPhone ? (
+                  <a
+                    href={getPhoneHref(supportPhone)}
+                    className="block break-words font-medium leading-tight text-custom-sm text-dark hover:text-blue"
+                  >
+                    {supportPhone}
+                  </a>
+                ) : null}
               </div>
             </div>
 
             {/* <!-- divider --> */}
             <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
 
-            <div className="flex w-full lg:w-auto justify-between items-center gap-5">
-              <div className="flex items-center gap-5">
+            <div className="flex w-full flex-wrap items-center justify-between gap-4 sm:w-auto sm:justify-end sm:gap-5">
+              <div className="flex flex-wrap items-center gap-4 sm:gap-5">
+                <label className="flex items-center gap-2 rounded-md border border-gray-3 bg-gray-1 px-3 py-2">
+                  <span className="text-2xs font-medium uppercase text-dark-4">
+                    {t("header.language")}
+                  </span>
+                  <select
+                    value={localePreference}
+                    onChange={(event) =>
+                      setLocalePreference(
+                        event.target.value as LocalePreference,
+                      )
+                    }
+                    aria-label={t("header.language")}
+                    className="min-w-[112px] bg-transparent text-custom-sm font-medium text-dark outline-none"
+                  >
+                    <option value="auto">{t("header.languageSystem")}</option>
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                    <option value="ky">Кыргызча</option>
+                  </select>
+                </label>
+
+                <label className="flex items-center gap-2 rounded-md border border-gray-3 bg-gray-1 px-3 py-2">
+                  <span className="text-2xs font-medium uppercase text-dark-4">
+                    {t("header.currency")}
+                  </span>
+                  <select
+                    value={currencyPreference}
+                    onChange={(event) =>
+                      setCurrencyPreference(
+                        event.target.value as CurrencyPreference,
+                      )
+                    }
+                    aria-label={t("header.currency")}
+                    className="min-w-[110px] bg-transparent text-custom-sm font-medium text-dark outline-none"
+                  >
+                    <option value="default">{t("header.currencyDefault")}</option>
+                    <option value="KGS">{t("header.currencyKgs")}</option>
+                    <option value="USD">{t("header.currencyUsd")}</option>
+                  </select>
+                </label>
+
                 <Link href="/signin" className="flex items-center gap-2.5">
                   <svg
                     width="24"
@@ -256,7 +346,7 @@ const Header = () => {
                       {t("header.cart")}
                     </span>
                     <p className="font-medium text-custom-sm text-dark">
-                      ${totalPrice}
+                      {formatPrice(totalPrice)}
                     </p>
                   </div>
                 </button>

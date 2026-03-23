@@ -6,7 +6,17 @@ import ProductItem from "@/components/Common/ProductItem";
 import type { Product } from "@/types/product";
 import { useI18n } from "@/i18n/provider";
 
-const NewArrival = ({ products }: { products: Product[] }) => {
+const NewArrival = ({
+  products,
+  eyebrowKey = "home.thisWeek",
+  titleKey = "home.newArrivals",
+  viewAllHref = "/shop-with-sidebar?label=new",
+}: {
+  products: Product[];
+  eyebrowKey?: string;
+  titleKey?: string;
+  viewAllHref?: string;
+}) => {
   const { t } = useI18n();
 
   return (
@@ -35,15 +45,15 @@ const NewArrival = ({ products }: { products: Product[] }) => {
                   strokeLinecap="round"
                 />
               </svg>
-              {t("home.thisWeek")}
+              {t(eyebrowKey)}
             </span>
             <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-              {t("home.newArrivals")}
+              {t(titleKey)}
             </h2>
           </div>
 
           <Link
-            href="/shop-with-sidebar"
+            href={viewAllHref}
             className="inline-flex font-medium text-custom-sm py-2.5 px-7 rounded-md border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
           >
             {t("common.viewAll")}

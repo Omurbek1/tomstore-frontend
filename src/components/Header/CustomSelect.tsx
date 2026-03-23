@@ -1,21 +1,43 @@
 import React, { useEffect, useState } from "react";
 
-type SelectOption = {
+export type SelectOption = {
   label: string;
   value: string;
 };
 
-const CustomSelect = ({ options }: { options: SelectOption[] }) => {
+const EMPTY_OPTION: SelectOption = {
+  label: "",
+  value: "",
+};
+
+const CustomSelect = ({
+  options,
+  value,
+  onChange,
+}: {
+  options: SelectOption[];
+  value?: string;
+  onChange?: (option: SelectOption) => void;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [internalValue, setInternalValue] = useState(options[0]?.value ?? "");
+  const resolvedValue = value ?? internalValue;
+  const selectedOption =
+    options.find((option) => option.value === resolvedValue) ||
+    options[0] ||
+    EMPTY_OPTION;
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
   const handleOptionClick = (option: SelectOption) => {
-    setSelectedOption(option);
-    toggleDropdown();
+    if (value === undefined) {
+      setInternalValue(option.value);
+    }
+
+    onChange?.(option);
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -39,6 +61,12 @@ const CustomSelect = ({ options }: { options: SelectOption[] }) => {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!options.some((option) => option.value === resolvedValue)) {
+      setInternalValue(options[0]?.value ?? "");
+    }
+  }, [options, resolvedValue]);
+
   return (
     <div
       className="dropdown-content custom-select relative"
@@ -53,17 +81,19 @@ const CustomSelect = ({ options }: { options: SelectOption[] }) => {
         {selectedOption.label}
       </div>
       <div className={`select-items ${isOpen ? "" : "select-hide"}`}>
-        {options.slice(1, -1).map((option, index) => (
-          <div
-            key={index}
-            onClick={() => handleOptionClick(option)}
-            className={`select-item ${
-              selectedOption === option ? "same-as-selected" : ""
-            }`}
-          >
-            {option.label}
-          </div>
-        ))}
+        {options
+          .filter((option) => option.value !== selectedOption.value)
+          .map((option) => (
+            <div
+              key={option.value}
+              onClick={() => handleOptionClick(option)}
+              className={`select-item ${
+                selectedOption === option ? "same-as-selected" : ""
+              }`}
+            >
+              {option.label}
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const OrderSummary = () => {
   const cartItems = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
 
   return (
     <div className="lg:max-w-[455px] w-full">
@@ -36,7 +36,7 @@ const OrderSummary = () => {
               </div>
               <div>
                 <p className="text-dark text-right">
-                  ${item.discountedPrice * item.quantity}
+                  {formatPrice(item.discountedPrice * item.quantity)}
                 </p>
               </div>
             </div>
@@ -49,7 +49,7 @@ const OrderSummary = () => {
             </div>
             <div>
               <p className="font-medium text-lg text-dark text-right">
-                ${totalPrice}
+                {formatPrice(totalPrice)}
               </p>
             </div>
           </div>

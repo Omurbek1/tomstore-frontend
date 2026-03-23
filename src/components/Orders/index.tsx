@@ -1,29 +1,43 @@
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React from "react";
+import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import { useI18n } from "@/i18n/provider";
+import { useOrdersQuery } from "@/orders/hooks";
 import SingleOrder from "./SingleOrder";
-import ordersData from "./ordersData";
 
 const Orders = () => {
-  const [orders, setOrders] = useState<any>([]);
   const { t } = useI18n();
-
-  useEffect(() => {
-    fetch(`/api/order`)
-      .then((res) => res.json())
-      .then((data) => {
-        setOrders(data.orders);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, []);
+  const { data: orders = [], isPending, isError, refetch } = useOrdersQuery();
 
   return (
     <>
+      {isPending && orders.length === 0 ? (
+        <QueryStatusCard
+          state="loading"
+          title={t("order.loading")}
+          description={t("common.loadingHint")}
+          className="mb-6"
+        />
+      ) : null}
+
+      {isError && orders.length === 0 ? (
+        <QueryStatusCard
+          state="error"
+          title={t("order.error")}
+          description={t("common.errorHint")}
+          actionLabel={t("common.retry")}
+          onAction={() => {
+            void refetch();
+          }}
+          className="mb-6"
+        />
+      ) : null}
+
       <div className="w-full overflow-x-auto">
         <div className="min-w-[770px]">
           {/* <!-- order item --> */}
-          {ordersData.length > 0 && (
+          {orders.length > 0 && (
             <div className="items-center justify-between py-4.5 px-7.5 hidden md:flex ">
               <div className="min-w-[111px]">
                 <p className="text-custom-sm text-dark">{t("order.order")}</p>
@@ -49,8 +63,8 @@ const Orders = () => {
               </div>
             </div>
           )}
-          {ordersData.length > 0 ? (
-            ordersData.map((orderItem, key) => (
+          {orders.length > 0 ? (
+            orders.map((orderItem, key) => (
               <SingleOrder key={key} orderItem={orderItem} smallView={false} />
             ))
           ) : (
@@ -60,8 +74,8 @@ const Orders = () => {
           )}
         </div>
 
-        {ordersData.length > 0 &&
-          ordersData.map((orderItem, key) => (
+        {orders.length > 0 &&
+          orders.map((orderItem, key) => (
             <SingleOrder key={key} orderItem={orderItem} smallView={true} />
           ))}
       </div>

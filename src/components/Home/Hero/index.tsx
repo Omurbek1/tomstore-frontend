@@ -8,6 +8,7 @@ import Link from "next/link";
 import type { Product } from "@/types/product";
 import type { StorefrontHeroSlide } from "@/storefront/types";
 import { useI18n } from "@/i18n/provider";
+import ProductLabelBadges from "@/components/Common/ProductLabelBadges";
 
 type HeroProps = {
   hero: StorefrontHeroSlide & {
@@ -17,7 +18,7 @@ type HeroProps = {
 };
 
 const Hero = ({ hero, featuredProducts }: HeroProps) => {
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
   const sideProducts = featuredProducts.slice(0, 2);
 
   return (
@@ -48,6 +49,10 @@ const Hero = ({ hero, featuredProducts }: HeroProps) => {
                 >
                   <div className="flex items-center gap-6">
                     <div className="min-w-0 flex-1">
+                      <ProductLabelBadges
+                        labels={product.labels}
+                        className="mb-4"
+                      />
                       <h2 className="max-w-[190px] font-semibold text-dark text-xl mb-8">
                         <Link
                           href={`/shop-details/${product.slug}`}
@@ -63,11 +68,11 @@ const Hero = ({ hero, featuredProducts }: HeroProps) => {
                         </p>
                         <span className="flex items-center gap-3 flex-wrap">
                           <span className="font-medium text-heading-5 text-red">
-                            ${product.discountedPrice}
+                            {formatPrice(product.discountedPrice)}
                           </span>
                           {product.price > product.discountedPrice ? (
                             <span className="font-medium text-2xl text-dark-4 line-through">
-                              ${product.price}
+                              {formatPrice(product.price)}
                             </span>
                           ) : null}
                         </span>

@@ -9,10 +9,13 @@ import { addItemToCart } from "@/redux/features/cart-slice";
 import Image from "next/image";
 import Link from "next/link";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
+import { useI18n } from "@/i18n/provider";
+import ProductLabelBadges from "@/components/Common/ProductLabelBadges";
 
 const SingleItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const dispatch = useDispatch<AppDispatch>();
+  const { t, formatPrice } = useI18n();
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
@@ -43,6 +46,10 @@ const SingleItem = ({ item }: { item: Product }) => {
     <div className="group">
       <div className="relative overflow-hidden rounded-lg bg-[#F6F7FB] min-h-[403px]">
         <div className="text-center px-4 py-7.5">
+          <ProductLabelBadges
+            labels={item.labels}
+            className="mb-4 justify-center"
+          />
           <div className="flex items-center justify-center gap-2.5 mb-2">
             <div className="flex items-center gap-1">
               <Image
@@ -77,7 +84,9 @@ const SingleItem = ({ item }: { item: Product }) => {
               />
             </div>
 
-            <p className="text-custom-sm">({item.reviews})</p>
+            <p className="text-custom-sm">
+              {t("common.reviewsLabel", { count: item.reviews })}
+            </p>
           </div>
 
           <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
@@ -85,9 +94,11 @@ const SingleItem = ({ item }: { item: Product }) => {
           </h3>
 
           <span className="flex items-center justify-center gap-2 font-medium text-lg">
-            <span className="text-dark">${item.discountedPrice}</span>
+            <span className="text-dark">{formatPrice(item.discountedPrice)}</span>
             {item.price > item.discountedPrice ? (
-              <span className="text-dark-4 line-through">${item.price}</span>
+              <span className="text-dark-4 line-through">
+                {formatPrice(item.price)}
+              </span>
             ) : null}
           </span>
         </div>

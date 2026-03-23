@@ -11,10 +11,11 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 import { useI18n } from "@/i18n/provider";
+import ProductLabelBadges from "./ProductLabelBadges";
 
 const ProductItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -50,6 +51,10 @@ const ProductItem = ({ item }: { item: Product }) => {
   return (
     <div className="group">
       <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB] min-h-[270px] mb-4">
+        <ProductLabelBadges
+          labels={item.labels}
+          className="absolute left-3 top-3 z-10"
+        />
         <Image src={item.imgs.previews[0]} alt="" width={250} height={250} />
 
         <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
@@ -162,9 +167,11 @@ const ProductItem = ({ item }: { item: Product }) => {
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-lg">
-        <span className="text-dark">${item.discountedPrice}</span>
+        <span className="text-dark">{formatPrice(item.discountedPrice)}</span>
         {item.price > item.discountedPrice ? (
-          <span className="text-dark-4 line-through">${item.price}</span>
+          <span className="text-dark-4 line-through">
+            {formatPrice(item.price)}
+          </span>
         ) : null}
       </span>
     </div>

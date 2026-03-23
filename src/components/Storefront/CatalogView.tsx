@@ -1,10 +1,14 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
+import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import SingleGridItem from "@/components/Shop/SingleGridItem";
 import SingleListItem from "@/components/Shop/SingleListItem";
 import { useI18n } from "@/i18n/provider";
 import { getAvailabilityMessageKey } from "@/i18n/utils";
+import { useStorefrontCatalogQuery } from "@/storefront/hooks";
+import { type StorefrontCatalogRouteQuery } from "@/storefront/query-keys";
+import { mapStorefrontProductsToProducts } from "@/storefront/mappers";
 import type { Product } from "@/types/product";
 import type {
   StorefrontBrand,
@@ -14,36 +18,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
-type CatalogQuery = {
-  q?: string;
-  category?: string;
-  brand?: string;
-  availability?: string;
-  label?: string;
-  sort?: string;
-  page?: string;
-  view?: string;
-};
-
 type CatalogViewProps = {
   title: string;
   pathname: string;
-  products: Product[];
-  total: number;
-  page: number;
-  totalPages: number;
-  filters: {
-    categories: StorefrontCategory[];
-    brands: StorefrontBrand[];
-  };
-  query: CatalogQuery;
+  query: StorefrontCatalogRouteQuery;
   variant: "sidebar" | "full";
 };
 
 const buildQueryString = (
   pathname: string,
-  query: CatalogQuery,
-  overrides: Partial<CatalogQuery> = {},
+  query: StorefrontCatalogRouteQuery,
+  overrides: Partial<StorefrontCatalogRouteQuery> = {},
 ) => {
   const nextQuery = { ...query, ...overrides };
   const searchParams = new URLSearchParams();
@@ -71,20 +56,28 @@ const buildPages = (currentPage: number, totalPages: number) => {
 export default function CatalogView({
   title,
   pathname,
-  products,
-  total,
-  page,
-  totalPages,
-  filters,
   query,
   variant,
 }: CatalogViewProps) {
   const router = useRouter();
   const { t } = useI18n();
+  const { data, isPending, isError, isFetching, refetch } =
+    useStorefrontCatalogQuery(query);
   const [productStyle, setProductStyle] = useState(
     query.view === "list" ? "list" : "grid",
   );
   const [searchValue, setSearchValue] = useState(query.q || "");
+  const products = useMemo(
+    () => mapStorefrontProductsToProducts(data?.items || []),
+    [data?.items],
+  );
+  const total = data?.total || 0;
+  const page = data?.page || 1;
+  const totalPages = data?.totalPages || 1;
+  const filters = data?.filters || {
+    categories: [] as StorefrontCategory[],
+    brands: [] as StorefrontBrand[],
+  };
 
   const pages = useMemo(() => buildPages(page, totalPages), [page, totalPages]);
 
@@ -103,6 +96,28 @@ export default function CatalogView({
 
       <section className="overflow-hidden relative pb-20 pt-5 lg:pt-20 xl:pt-28 bg-[#f3f4f6]">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+          {isPending && !data ? (
+            <QueryStatusCard
+              state="loading"
+              title={t("catalog.loading")}
+              description={t("common.loadingHint")}
+              className="mb-6"
+            />
+          ) : null}
+
+          {isError && !data ? (
+            <QueryStatusCard
+              state="error"
+              title={t("catalog.error")}
+              description={t("common.errorHint")}
+              actionLabel={t("common.retry")}
+              onAction={() => {
+                void refetch();
+              }}
+              className="mb-6"
+            />
+          ) : null}
+
           <div className="flex gap-7.5 items-start">
             {variant === "sidebar" ? (
               <aside className="hidden xl:block max-w-[270px] w-full">
@@ -267,6 +282,12 @@ export default function CatalogView({
                       <option value="price_desc">{t("common.priceHighLow")}</option>
                       <option value="name">{t("common.nameSort")}</option>
                     </select>
+
+                    {isFetching && data ? (
+                      <span className="inline-flex rounded-full bg-gray-2 px-3 py-2 text-custom-xs font-medium text-dark-4">
+                        {t("common.refreshing")}
+                      </span>
+                    ) : null}
 
                     <p>
                       {t("common.showingOfProducts", {

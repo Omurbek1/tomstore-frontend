@@ -1,7 +1,11 @@
 import { Metadata } from "next";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import CatalogView from "@/components/Storefront/CatalogView";
-import { getStorefrontCatalog } from "@/storefront/api";
-import { mapStorefrontProductsToProducts } from "@/storefront/mappers";
+import {
+  storefrontCatalogQueryOptions,
+  type StorefrontCatalogRouteQuery,
+} from "@/storefront/query-options";
+import { makeQueryClient } from "@/tanstack-query/query-client";
 
 export const metadata: Metadata = {
   title: "Shop | TOMSTORE",
@@ -23,8 +27,7 @@ const ShopWithSidebarPage = async ({ searchParams }: Props) => {
   const sort = typeof params.sort === "string" ? params.sort : undefined;
   const page = typeof params.page === "string" ? params.page : undefined;
   const view = typeof params.view === "string" ? params.view : undefined;
-
-  const data = await getStorefrontCatalog({
+  const query: StorefrontCatalogRouteQuery = {
     q,
     category,
     brand,
@@ -32,31 +35,22 @@ const ShopWithSidebarPage = async ({ searchParams }: Props) => {
     label,
     sort,
     page,
-  });
+    view,
+  };
+  const queryClient = makeQueryClient();
+  await queryClient.prefetchQuery(storefrontCatalogQueryOptions(query));
 
   return (
-    <main>
-      <CatalogView
-        title="Explore All Products"
-        pathname="/shop-with-sidebar"
-        products={mapStorefrontProductsToProducts(data.items)}
-        total={data.total}
-        page={data.page}
-        totalPages={data.totalPages}
-        filters={data.filters}
-        query={{
-          q,
-          category,
-          brand,
-          availability,
-          label,
-          sort,
-          page,
-          view,
-        }}
-        variant="sidebar"
-      />
-    </main>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <main>
+        <CatalogView
+          title="Explore All Products"
+          pathname="/shop-with-sidebar"
+          query={query}
+          variant="sidebar"
+        />
+      </main>
+    </HydrationBoundary>
   );
 };
 

@@ -1,3 +1,5 @@
+import type { CurrencyCode } from "@/i18n/currency";
+
 export type StorefrontProductLabel = "hit" | "new" | "sale";
 
 export type StorefrontAvailability = {
@@ -116,6 +118,9 @@ export type StorefrontHomeResponse = {
 
 export type StorefrontConfig = {
   companyName: string;
+  companyLogoUrl?: string;
+  storefrontDefaultCurrency: CurrencyCode;
+  storefrontUsdExchangeRate: number;
   siteUrl: string;
   whatsappPhone?: string;
   supportPhone?: string;

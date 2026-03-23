@@ -6,6 +6,8 @@ import {
   messages,
 } from "./messages";
 
+export const LOCALE_COOKIE_NAME = "tomstore_locale_preference";
+
 const AVAILABILITY_KEY_BY_STATUS = {
   in_stock: "common.inStock",
   on_order: "common.onOrder",
@@ -14,9 +16,9 @@ const AVAILABILITY_KEY_BY_STATUS = {
 } as const;
 
 const PRODUCT_LABEL_KEY_BY_STATUS = {
-  hit: "common.popular",
-  new: "common.newest",
-  sale: "common.saleOff",
+  hit: "common.labelHit",
+  new: "common.labelNew",
+  sale: "common.labelSale",
 } as const;
 
 const ORDER_STATUS_KEY_BY_STATUS = {

@@ -12,11 +12,7 @@ const HeroFeature = () => {
       title: t("home.freeShipping"),
       description: t("home.freeShippingDesc"),
     },
-    {
-      img: "/images/icons/icon-02.svg",
-      title: t("home.returns"),
-      description: t("home.returnsDesc"),
-    },
+    
     {
       img: "/images/icons/icon-03.svg",
       title: t("home.securePayments"),

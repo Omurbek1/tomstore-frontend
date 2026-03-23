@@ -6,7 +6,7 @@ import { useI18n } from "@/i18n/provider";
 
 const SingleItem = ({ item, removeItemFromCart }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
 
   const handleRemoveFromCart = () => {
     dispatch(removeItemFromCart(item.id));
@@ -24,7 +24,7 @@ const SingleItem = ({ item, removeItemFromCart }) => {
             <a href="#"> {item.title} </a>
           </h3>
           <p className="text-custom-sm">
-            {t("common.price")}: ${item.discountedPrice}
+            {t("common.price")}: {formatPrice(item.discountedPrice)}
           </p>
         </div>
       </div>

@@ -3,28 +3,75 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Newsletter from "@/components/Common/Newsletter";
 import ProductItem from "@/components/Common/ProductItem";
+import ProductLabelBadges from "@/components/Common/ProductLabelBadges";
+import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import { useI18n } from "@/i18n/provider";
+import { useStorefrontProductQuery } from "@/storefront/hooks";
+import { mapStorefrontProductsToProducts } from "@/storefront/mappers";
 import {
   getAvailabilityMessageKey,
-  getProductLabelMessageKey,
 } from "@/i18n/utils";
-import type { Product } from "@/types/product";
-import type { StorefrontProductDetails } from "@/storefront/types";
 import Image from "next/image";
 import Link from "next/link";
 
 type ProductDetailsViewProps = {
-  product: StorefrontProductDetails;
-  relatedProducts: Product[];
-  recommendedProducts: Product[];
+  slug: string;
 };
 
-export default function ProductDetailsView({
-  product,
-  relatedProducts,
-  recommendedProducts,
-}: ProductDetailsViewProps) {
-  const { t } = useI18n();
+export default function ProductDetailsView({ slug }: ProductDetailsViewProps) {
+  const { t, formatPrice } = useI18n();
+  const { data: product, isPending, isError, refetch } =
+    useStorefrontProductQuery(slug);
+
+  if (isPending && !product) {
+    return (
+      <main>
+        <Breadcrumb title={t("product.loading")} pages={[t("common.shop")]} />
+        <section className="overflow-hidden relative pb-20 pt-5 lg:pt-20 xl:pt-28">
+          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+            <QueryStatusCard
+              state="loading"
+              title={t("product.loading")}
+              description={t("common.loadingHint")}
+            />
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (isError && !product) {
+    return (
+      <main>
+        <Breadcrumb
+          title={t("product.notFoundTitle")}
+          pages={[t("common.shop")]}
+        />
+        <section className="overflow-hidden relative pb-20 pt-5 lg:pt-20 xl:pt-28">
+          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+            <QueryStatusCard
+              state="error"
+              title={t("product.error")}
+              description={t("common.errorHint")}
+              actionLabel={t("common.retry")}
+              onAction={() => {
+                void refetch();
+              }}
+            />
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (!product) {
+    return null;
+  }
+
+  const relatedProducts = mapStorefrontProductsToProducts(product.relatedProducts);
+  const recommendedProducts = mapStorefrontProductsToProducts(
+    product.recommendedProducts,
+  );
 
   return (
     <main>
@@ -59,14 +106,7 @@ export default function ProductDetailsView({
 
             <div>
               <div className="flex flex-wrap items-center gap-3 mb-4">
-                {product.labels.map((label) => (
-                  <span
-                    key={label}
-                    className="inline-flex rounded-full bg-blue px-3 py-1 text-custom-xs font-medium uppercase tracking-wide text-white"
-                  >
-                    {t(getProductLabelMessageKey(label) || label)}
-                  </span>
-                ))}
+                <ProductLabelBadges labels={product.labels} />
                 <span className="inline-flex rounded-full bg-gray-2 px-3 py-1 text-custom-xs">
                   {t(
                     getAvailabilityMessageKey(product.availability.status) ||
@@ -83,11 +123,11 @@ export default function ProductDetailsView({
 
               <div className="flex items-center gap-3 mb-6">
                 <span className="font-semibold text-dark text-2xl">
-                  ${product.price}
+                  {formatPrice(product.price)}
                 </span>
                 {product.oldPrice && product.oldPrice > product.price ? (
                   <span className="text-dark-4 line-through text-lg">
-                    ${product.oldPrice}
+                    {formatPrice(product.oldPrice)}
                   </span>
                 ) : null}
               </div>

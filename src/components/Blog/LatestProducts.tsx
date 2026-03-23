@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const LatestProducts = ({ products }) => {
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
 
   return (
     <div className="shadow-1 bg-white rounded-xl mt-7.5">
@@ -30,7 +30,7 @@ const LatestProducts = ({ products }) => {
                   </Link>
                 </h3>
                 <p className="text-custom-sm">
-                  {t("blog.pricePrefix")} ${product.discountedPrice}
+                  {t("blog.pricePrefix")} {formatPrice(product.discountedPrice)}
                 </p>
               </div>
             </div>

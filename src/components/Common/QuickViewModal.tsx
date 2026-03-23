@@ -8,17 +8,14 @@ import { useDispatch } from "react-redux";
 import Image from "next/image";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useI18n } from "@/i18n/provider";
-import {
-  getAvailabilityMessageKey,
-  getProductLabelMessageKey,
-} from "@/i18n/utils";
-import { resetQuickView } from "@/redux/features/quickView-slice";
+import { getAvailabilityMessageKey } from "@/i18n/utils";
 import { updateproductDetails } from "@/redux/features/product-details";
+import ProductLabelBadges from "./ProductLabelBadges";
 
 const QuickViewModal = () => {
   const { isModalOpen, closeModal } = useModalContext();
   const { openPreviewModal } = usePreviewSlider();
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
   const [quantity, setQuantity] = useState(1);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -159,11 +156,7 @@ const QuickViewModal = () => {
             </div>
 
             <div className="max-w-[445px] w-full">
-              {product?.labels?.[0] ? (
-                <span className="inline-block text-custom-xs font-medium text-white py-1 px-3 bg-green mb-6.5">
-                  {t(getProductLabelMessageKey(product.labels[0]) || product.labels[0])}
-                </span>
-              ) : null}
+              <ProductLabelBadges labels={product?.labels} className="mb-6.5" />
 
               <h3 className="font-semibold text-xl xl:text-heading-5 text-dark mb-4">
                 {product.title}
@@ -339,11 +332,13 @@ const QuickViewModal = () => {
 
                   <span className="flex items-center gap-2">
                     <span className="font-semibold text-dark text-xl xl:text-heading-4">
-                      ${product.discountedPrice}
+                      {formatPrice(product.discountedPrice)}
                     </span>
-                    <span className="font-medium text-dark-4 text-lg xl:text-2xl line-through">
-                      ${product.price}
-                    </span>
+                    {product.price > product.discountedPrice ? (
+                      <span className="font-medium text-dark-4 text-lg xl:text-2xl line-through">
+                        {formatPrice(product.price)}
+                      </span>
+                    ) : null}
                   </span>
                 </div>
 

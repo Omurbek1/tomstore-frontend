@@ -11,10 +11,11 @@ import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/i18n/provider";
+import ProductLabelBadges from "@/components/Common/ProductLabelBadges";
 
 const SingleListItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
   const dispatch = useDispatch<AppDispatch>();
 
   // update the QuickView state
@@ -46,6 +47,10 @@ const SingleListItem = ({ item }: { item: Product }) => {
     <div className="group rounded-lg bg-white shadow-1">
       <div className="flex">
         <div className="shadow-list relative overflow-hidden flex items-center justify-center max-w-[270px] w-full sm:min-h-[270px] p-4">
+          <ProductLabelBadges
+            labels={item.labels}
+            className="absolute left-3 top-3 z-10"
+          />
           <Image src={item.imgs.previews[0]} alt="" width={250} height={250} />
 
           <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
@@ -118,9 +123,11 @@ const SingleListItem = ({ item }: { item: Product }) => {
             </h3>
 
             <span className="flex items-center gap-2 font-medium text-lg">
-              <span className="text-dark">${item.discountedPrice}</span>
+              <span className="text-dark">{formatPrice(item.discountedPrice)}</span>
               {item.price > item.discountedPrice ? (
-                <span className="text-dark-4 line-through">${item.price}</span>
+                <span className="text-dark-4 line-through">
+                  {formatPrice(item.price)}
+                </span>
               ) : null}
             </span>
           </div>

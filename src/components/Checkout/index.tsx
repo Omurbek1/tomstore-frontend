@@ -13,7 +13,7 @@ import Billing from "./Billing";
 import { useSelector } from "react-redux";
 
 const Checkout = () => {
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
   const cartItems = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
 
@@ -86,7 +86,7 @@ const Checkout = () => {
                         </div>
                         <div>
                           <p className="text-dark text-right">
-                            ${item.discountedPrice * item.quantity}
+                            {formatPrice(item.discountedPrice * item.quantity)}
                           </p>
                         </div>
                       </div>
@@ -98,7 +98,7 @@ const Checkout = () => {
                         <p className="text-dark">{t("checkout.shippingFee")}</p>
                       </div>
                       <div>
-                        <p className="text-dark text-right">$0.00</p>
+                        <p className="text-dark text-right">{formatPrice(0)}</p>
                       </div>
                     </div>
 
@@ -109,7 +109,7 @@ const Checkout = () => {
                       </div>
                       <div>
                         <p className="font-medium text-lg text-dark text-right">
-                          ${totalPrice}
+                          {formatPrice(totalPrice)}
                         </p>
                       </div>
                     </div>

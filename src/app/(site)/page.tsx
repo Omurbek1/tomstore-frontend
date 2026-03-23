@@ -1,10 +1,8 @@
 import Home from "@/components/Home";
 import { Metadata } from "next";
-import { getStorefrontHome } from "@/storefront/api";
-import {
-  mapStorefrontCategoriesToCategories,
-  mapStorefrontProductsToProducts,
-} from "@/storefront/mappers";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { storefrontHomeQueryOptions } from "@/storefront/query-options";
+import { makeQueryClient } from "@/tanstack-query/query-client";
 
 export const metadata: Metadata = {
   title: "NextCommerce | Nextjs E-commerce template",
@@ -13,19 +11,12 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const home = await getStorefrontHome();
+  const queryClient = makeQueryClient();
+  await queryClient.prefetchQuery(storefrontHomeQueryOptions());
 
   return (
-    <>
-      <Home
-        hero={home.hero}
-        categories={mapStorefrontCategoriesToCategories(home.categories)}
-        newProducts={mapStorefrontProductsToProducts(home.newProducts)}
-        popularProducts={mapStorefrontProductsToProducts(home.popularProducts)}
-        recommendedProducts={mapStorefrontProductsToProducts(
-          home.recommendedProducts,
-        )}
-      />
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Home />
+    </HydrationBoundary>
   );
 }

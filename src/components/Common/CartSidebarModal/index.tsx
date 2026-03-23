@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import {
@@ -15,7 +15,7 @@ import EmptyCart from "./EmptyCart";
 
 const CartSidebarModal = () => {
   const { isCartModalOpen, closeCartModal } = useCartModalContext();
-  const { t } = useI18n();
+  const { t, formatPrice } = useI18n();
   const cartItems = useAppSelector((state) => state.cartReducer.items);
 
   const totalPrice = useSelector(selectTotalPrice);
@@ -101,7 +101,9 @@ const CartSidebarModal = () => {
             <div className="flex items-center justify-between gap-5 mb-6">
               <p className="font-medium text-xl text-dark">{t("common.subtotal")}:</p>
 
-              <p className="font-medium text-xl text-dark">${totalPrice}</p>
+              <p className="font-medium text-xl text-dark">
+                {formatPrice(totalPrice)}
+              </p>
             </div>
 
             <div className="flex items-center gap-4">
