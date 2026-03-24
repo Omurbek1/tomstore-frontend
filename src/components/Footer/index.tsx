@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useI18n } from "@/i18n/provider";
 
 const Footer = () => {
@@ -202,34 +203,49 @@ const Footer = () => {
 
           <div className="w-full sm:w-auto">
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
-              {t("footer.account")}
+              {t("footer.shopNavigation")}
             </h2>
 
             <ul className="flex flex-col gap-3.5">
               <li>
-                <a className="ease-out duration-200 hover:text-blue" href="#">
-                  {t("menu.myAccount")}
-                </a>
-              </li>
-              <li>
-                <a className="ease-out duration-200 hover:text-blue" href="#">
-                  {t("footer.loginRegister")}
-                </a>
-              </li>
-              <li>
-                <a className="ease-out duration-200 hover:text-blue" href="#">
-                  {t("menu.cart")}
-                </a>
-              </li>
-              <li>
-                <a className="ease-out duration-200 hover:text-blue" href="#">
-                  {t("menu.wishlist")}
-                </a>
-              </li>
-              <li>
-                <a className="ease-out duration-200 hover:text-blue" href="#">
+                <Link
+                  className="ease-out duration-200 hover:text-blue"
+                  href="/shop-with-sidebar"
+                >
                   {t("menu.shop")}
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="ease-out duration-200 hover:text-blue"
+                  href="/checkout"
+                >
+                  {t("menu.checkout")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="ease-out duration-200 hover:text-blue"
+                  href="/cart"
+                >
+                  {t("menu.cart")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="ease-out duration-200 hover:text-blue"
+                  href="/wishlist"
+                >
+                  {t("menu.wishlist")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="ease-out duration-200 hover:text-blue"
+                  href="/contact"
+                >
+                  {t("menu.contact")}
+                </Link>
               </li>
             </ul>
           </div>

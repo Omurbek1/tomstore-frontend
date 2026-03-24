@@ -14,10 +14,12 @@ const CustomSelect = ({
   options,
   value,
   onChange,
+  className,
 }: {
   options: SelectOption[];
   value?: string;
   onChange?: (option: SelectOption) => void;
+  className?: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(options[0]?.value ?? "");
@@ -69,8 +71,9 @@ const CustomSelect = ({
 
   return (
     <div
-      className="dropdown-content custom-select relative"
-      style={{ width: "200px" }}
+      className={`dropdown-content custom-select relative ${
+        className || "w-[132px] sm:w-[200px]"
+      }`}
     >
       <div
         className={`select-selected whitespace-nowrap ${

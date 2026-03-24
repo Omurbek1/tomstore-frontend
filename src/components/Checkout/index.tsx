@@ -4,7 +4,6 @@ import Breadcrumb from "../Common/Breadcrumb";
 import { useI18n } from "@/i18n/provider";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
-import Login from "./Login";
 import Shipping from "./Shipping";
 import ShippingMethod from "./ShippingMethod";
 import PaymentMethod from "./PaymentMethod";
@@ -26,8 +25,14 @@ const Checkout = () => {
             <div className="flex flex-col lg:flex-row gap-7.5 xl:gap-11">
               {/* <!-- checkout left --> */}
               <div className="lg:max-w-[670px] w-full">
-                {/* <!-- login box --> */}
-                <Login />
+                <div className="rounded-[10px] bg-white p-4 shadow-1 sm:p-8.5">
+                  <h2 className="text-xl font-medium text-dark">
+                    {t("checkout.whatsappOnlyTitle")}
+                  </h2>
+                  <p className="mt-3 text-custom-sm text-dark-4">
+                    {t("checkout.whatsappOnlyDescription")}
+                  </p>
+                </div>
 
                 {/* <!-- billing details --> */}
                 <Billing />

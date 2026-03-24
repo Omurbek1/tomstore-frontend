@@ -62,24 +62,6 @@ export const getMenuData = (
           path: "/wishlist",
         },
         {
-          id: 67,
-          title: t("menu.signin"),
-          newTab: false,
-          path: "/signin",
-        },
-        {
-          id: 68,
-          title: t("menu.signup"),
-          newTab: false,
-          path: "/signup",
-        },
-        {
-          id: 69,
-          title: t("menu.myAccount"),
-          newTab: false,
-          path: "/my-account",
-        },
-        {
           id: 70,
           title: t("menu.contact"),
           newTab: false,
@@ -104,7 +86,7 @@ export const getMenuData = (
           id: 7,
           title: t("menu.blogs"),
           newTab: false,
-          path: "/",
+          path: "/blogs/blog-grid",
           submenu: [
             {
               id: 73,
@@ -117,18 +99,6 @@ export const getMenuData = (
               title: t("menu.blogGrid"),
               newTab: false,
               path: "/blogs/blog-grid",
-            },
-            {
-              id: 75,
-              title: t("menu.blogDetailsWithSidebar"),
-              newTab: false,
-              path: "/blogs/blog-details-with-sidebar",
-            },
-            {
-              id: 76,
-              title: t("menu.blogDetails"),
-              newTab: false,
-              path: "/blogs/blog-details",
             },
           ],
         }

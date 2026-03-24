@@ -24,8 +24,14 @@ export const useStorefrontCategoriesQuery = () =>
 export const useStorefrontHomeQuery = () =>
   useQuery(storefrontHomeQueryOptions());
 
-export const useStorefrontBlogsQuery = (query: StorefrontBlogRouteQuery = {}) =>
-  useQuery(storefrontBlogsQueryOptions(query));
+export const useStorefrontBlogsQuery = (
+  query: StorefrontBlogRouteQuery = {},
+  options?: { enabled?: boolean },
+) =>
+  useQuery({
+    ...storefrontBlogsQueryOptions(query),
+    enabled: options?.enabled,
+  });
 
 export const useStorefrontCatalogQuery = (
   query: StorefrontCatalogRouteQuery,

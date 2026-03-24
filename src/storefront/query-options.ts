@@ -1,6 +1,11 @@
 import { queryOptions } from "@tanstack/react-query";
 import { getBackendUrl } from "./site";
 import {
+  buildStorefrontAuthorizationValue,
+  getStorefrontAuthScope,
+  readStorefrontAuthTokenFromDocument,
+} from "./auth";
+import {
   storefrontQueryKeys,
   toStorefrontBlogApiParams,
   toStorefrontCatalogApiParams,
@@ -36,7 +41,21 @@ type StorefrontRequestOptions = {
   allowNotFound?: boolean;
   init?: StorefrontRequestInit;
   revalidate?: number;
+  authToken?: string;
 };
+
+export class StorefrontApiError extends Error {
+  status: number;
+
+  constructor(status: number) {
+    super(`Storefront API error: ${status}`);
+    this.name = "StorefrontApiError";
+    this.status = status;
+  }
+}
+
+const resolveStorefrontAuthToken = (token?: string) =>
+  token || readStorefrontAuthTokenFromDocument();
 
 const buildStorefrontUrl = (path: string) => `${getBackendUrl()}${path}`;
 
@@ -80,6 +99,12 @@ const fetchStorefrontJson = async <T>(
 ): Promise<T | null> => {
   const headers = new Headers(options.init?.headers);
   headers.set("Accept", "application/json");
+  const authorization = buildStorefrontAuthorizationValue(
+    resolveStorefrontAuthToken(options.authToken),
+  );
+  if (authorization) {
+    headers.set("Authorization", authorization);
+  }
 
   const response = await fetch(buildStorefrontUrl(path), {
     ...options.init,
@@ -95,7 +120,7 @@ const fetchStorefrontJson = async <T>(
   }
 
   if (!response.ok) {
-    throw new Error(`Storefront API error: ${response.status}`);
+    throw new StorefrontApiError(response.status);
   }
 
   return (await response.json()) as T;
@@ -117,6 +142,8 @@ const fetchRequiredStorefrontJson = async <T>(
 export const storefrontConfigQueryOptions = () =>
   queryOptions({
     queryKey: storefrontQueryKeys.config(),
+    staleTime: 0,
+    refetchOnMount: "always",
     queryFn: () =>
       fetchRequiredStorefrontJson<StorefrontConfig>("/storefront/config", {
         init: {
@@ -151,16 +178,25 @@ export const storefrontHomeQueryOptions = () =>
 
 export const storefrontBlogsQueryOptions = (
   query: StorefrontBlogRouteQuery = {},
+  options: { authToken?: string } = {},
 ) => {
   const params = toStorefrontBlogApiParams(query);
+  const authScope = getStorefrontAuthScope(
+    resolveStorefrontAuthToken(options.authToken),
+  );
 
   return queryOptions({
-    queryKey: storefrontQueryKeys.blogs(params),
+    queryKey: storefrontQueryKeys.blogs(params, authScope),
+    staleTime: 0,
+    refetchOnMount: "always",
     queryFn: () =>
       fetchRequiredStorefrontJson<StorefrontBlogListResponse>(
         buildStorefrontBlogsPath(params),
         {
-          revalidate: 120,
+          authToken: options.authToken,
+          init: {
+            cache: "no-store",
+          },
         },
       ),
   });
@@ -196,12 +232,23 @@ export const storefrontProductQueryOptions = (slug: string) =>
       ),
   });
 
-export const storefrontBlogQueryOptions = (slug: string) =>
+export const storefrontBlogQueryOptions = (
+  slug: string,
+  options: { authToken?: string } = {},
+) =>
   queryOptions({
-    queryKey: storefrontQueryKeys.blog(slug),
+    queryKey: storefrontQueryKeys.blog(
+      slug,
+      getStorefrontAuthScope(resolveStorefrontAuthToken(options.authToken)),
+    ),
+    staleTime: 0,
+    refetchOnMount: "always",
     queryFn: () =>
       fetchStorefrontJson<StorefrontBlogPostDetails>(`/storefront/blogs/${slug}`, {
         allowNotFound: true,
-        revalidate: 120,
+        authToken: options.authToken,
+        init: {
+          cache: "no-store",
+        },
       }),
   });

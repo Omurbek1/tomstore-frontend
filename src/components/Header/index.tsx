@@ -12,12 +12,74 @@ import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
 import { type LocalePreference, useI18n } from "@/i18n/provider";
 import type { CurrencyPreference } from "@/i18n/currency";
+import { isStorefrontBlogPublic } from "@/storefront/auth";
 import { useStorefrontCategoriesQuery, useStorefrontConfigQuery } from "@/storefront/hooks";
 
 const getPhoneHref = (value?: string) => {
   const normalized = String(value || "").replace(/[^\d+]/g, "");
   return normalized ? `tel:${normalized}` : "#";
 };
+
+const getWhatsAppHref = (value?: string) => {
+  const normalized = String(value || "").replace(/\D/g, "");
+  return normalized ? `https://wa.me/${normalized}` : "#";
+};
+
+const CartIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M15.5433 9.5172C15.829 9.21725 15.8174 8.74252 15.5174 8.45686C15.2175 8.17119 14.7428 8.18277 14.4571 8.48272L12.1431 10.9125L11.5433 10.2827C11.2576 9.98277 10.7829 9.97119 10.483 10.2569C10.183 10.5425 10.1714 11.0173 10.4571 11.3172L11.6 12.5172C11.7415 12.6658 11.9378 12.75 12.1431 12.75C12.3483 12.75 12.5446 12.6658 12.6862 12.5172L15.5433 9.5172Z"
+      fill="#3C50E0"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M1.29266 2.7512C1.43005 2.36044 1.8582 2.15503 2.24896 2.29242L2.55036 2.39838C3.16689 2.61511 3.69052 2.79919 4.10261 3.00139C4.54324 3.21759 4.92109 3.48393 5.20527 3.89979C5.48725 4.31243 5.60367 4.76515 5.6574 5.26153C5.66124 5.29706 5.6648 5.33321 5.66809 5.36996L17.1203 5.36996C17.9389 5.36995 18.7735 5.36993 19.4606 5.44674C19.8103 5.48584 20.1569 5.54814 20.4634 5.65583C20.7639 5.76141 21.0942 5.93432 21.3292 6.23974C21.711 6.73613 21.7777 7.31414 21.7416 7.90034C21.7071 8.45845 21.5686 9.15234 21.4039 9.97723L21.3935 10.0295L21.3925 10.0341L20.8836 12.5033C20.7339 13.2298 20.6079 13.841 20.4455 14.3231C20.2731 14.8346 20.0341 15.2842 19.6076 15.6318C19.1811 15.9793 18.6925 16.1226 18.1568 16.1882C17.6518 16.25 17.0278 16.25 16.2862 16.25L10.8804 16.25C9.53464 16.25 8.44479 16.25 7.58656 16.1283C6.69032 16.0012 5.93752 15.7285 5.34366 15.1022C4.79742 14.526 4.50529 13.9144 4.35897 13.0601C4.22191 12.2598 4.20828 11.2125 4.20828 9.75996V7.03832C4.20828 6.29837 4.20726 5.80316 4.16611 5.42295C4.12678 5.0596 4.05708 4.87818 3.96682 4.74609C3.87876 4.61723 3.74509 4.4968 3.44186 4.34802C3.11902 4.18961 2.68026 4.03406 2.01266 3.79934L1.75145 3.7075C1.36068 3.57012 1.15527 3.14197 1.29266 2.7512ZM5.70828 6.86996L5.70828 9.75996C5.70828 11.249 5.72628 12.1578 5.83744 12.8068C5.93933 13.4018 6.11202 13.7324 6.43219 14.0701C6.70473 14.3576 7.08235 14.5418 7.79716 14.6432C8.53783 14.7482 9.5209 14.75 10.9377 14.75H16.2406C17.0399 14.75 17.5714 14.7487 17.9746 14.6993C18.3573 14.6525 18.5348 14.571 18.66 14.469C18.7853 14.3669 18.9009 14.2095 19.024 13.8441C19.1537 13.4592 19.2623 12.9389 19.4237 12.156L19.9225 9.73591L19.9229 9.73369C20.1005 8.84376 20.217 8.2515 20.2444 7.80793C20.2704 7.38648 20.2043 7.23927 20.1429 7.15786C20.1367 7.15259 20.0931 7.11565 19.9661 7.07101C19.8107 7.01639 19.5895 6.97049 19.2939 6.93745C18.6991 6.87096 17.9454 6.86996 17.089 6.86996H5.70828Z"
+      fill="#3C50E0"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M5.2502 19.5C5.2502 20.7426 6.25756 21.75 7.5002 21.75C8.74285 21.75 9.7502 20.7426 9.7502 19.5C9.7502 18.2573 8.74285 17.25 7.5002 17.25C6.25756 17.25 5.2502 18.2573 5.2502 19.5ZM7.5002 20.25C7.08599 20.25 6.7502 19.9142 6.7502 19.5C6.7502 19.0857 7.08599 18.75 7.5002 18.75C7.91442 18.75 8.2502 19.0857 8.2502 19.5C8.2502 19.9142 7.91442 20.25 7.5002 20.25Z"
+      fill="#3C50E0"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M14.25 19.5001C14.25 20.7427 15.2574 21.7501 16.5 21.7501C17.7426 21.7501 18.75 20.7427 18.75 19.5001C18.75 18.2574 17.7426 17.2501 16.5 17.2501C15.2574 17.2501 14.25 18.2574 14.25 19.5001ZM16.5 20.2501C16.0858 20.2501 15.75 19.9143 15.75 19.5001C15.75 19.0859 16.0858 18.7501 16.5 18.7501C16.9142 18.7501 17.25 19.0859 17.25 19.5001C17.25 19.9143 16.9142 20.2501 16.5 20.2501Z"
+      fill="#3C50E0"
+    />
+  </svg>
+);
+
+const WhatsAppIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M12 2.25C6.61522 2.25 2.25 6.61522 2.25 12C2.25 13.7595 2.71774 15.4105 3.53509 16.8342L2.37053 20.8471C2.28167 21.1533 2.36667 21.4834 2.59117 21.708C2.81567 21.9325 3.14584 22.0175 3.45199 21.9286L7.41493 20.7786C8.80748 21.545 10.408 21.75 12 21.75C17.3848 21.75 21.75 17.3848 21.75 12C21.75 6.61522 17.3848 2.25 12 2.25ZM12 3.75C16.5563 3.75 20.25 7.44365 20.25 12C20.25 16.5563 16.5563 20.25 12 20.25C10.5489 20.25 9.09692 19.9232 7.8344 19.3138C7.66453 19.2318 7.46957 19.2153 7.28829 19.2675L4.18836 20.1666L5.09808 17.0312C5.15064 16.85 5.13427 16.6547 5.05219 16.4846C4.38666 15.1052 3.75 13.598 3.75 12C3.75 7.44365 7.44365 3.75 12 3.75Z"
+      fill="#3C50E0"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M8.53293 7.94236C8.88868 7.42071 9.15393 7.41345 9.39993 7.40301C9.60018 7.39452 9.8283 7.39528 10.0568 7.39528C10.239 7.39528 10.5356 7.32654 10.8124 7.9911C11.102 8.68607 11.7977 10.3961 11.866 10.5341C11.9343 10.6722 11.9798 10.8349 11.8833 10.9976C11.7868 11.1603 11.7385 11.2616 11.5938 11.4284C11.4492 11.5951 11.2898 11.8015 11.1597 11.9307C11.0141 12.0754 10.8632 12.232 11.0299 12.5207C11.1967 12.8093 11.7721 13.7517 12.6209 14.508C13.7105 15.4788 14.6298 15.7794 14.9184 15.9461C15.2071 16.1129 15.3756 16.0908 15.5202 15.924C15.6649 15.7573 16.1469 15.1949 16.3154 14.9541C16.4839 14.7133 16.6523 14.7536 16.9409 14.9204C17.2296 15.0871 18.7668 15.8414 19.0796 16.0078C19.3924 16.1742 19.5999 16.2561 19.6723 16.3775C19.7446 16.4989 19.7446 17.0727 19.4132 17.7267C19.0819 18.3807 17.4703 19.02 16.8822 19.0544C16.2941 19.0889 15.7598 19.2206 13.2218 18.2189C10.6838 17.2172 9.0631 14.7688 8.93872 14.5983C8.81434 14.4278 7.34874 12.4718 7.34874 10.4497C7.34874 8.42754 8.17718 8.21137 8.53293 7.94236Z"
+      fill="#3C50E0"
+    />
+  </svg>
+);
 
 const Header = () => {
   const router = useRouter();
@@ -40,6 +102,7 @@ const Header = () => {
   const companyName = storefrontConfig?.companyName || "TOMSTORE";
   const companyLogoUrl = storefrontConfig?.companyLogoUrl;
   const supportPhone = storefrontConfig?.supportPhone;
+  const whatsappPhone = storefrontConfig?.whatsappPhone || supportPhone;
 
   const product = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
@@ -81,6 +144,10 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleStickyMenu);
   }, []);
 
+  useEffect(() => {
+    setNavigationOpen(false);
+  }, [pathname]);
+
   const options = [
     { label: t("header.categoryAll"), value: "" },
     ...categories.map((category) => ({
@@ -88,9 +155,13 @@ const Header = () => {
       value: category.slug,
     })),
   ];
+  const showBlogMenu = isStorefrontBlogPublic(storefrontConfig);
   const menuData = getMenuData(t, {
-    showBlogMenu: storefrontConfig?.storefrontBlogEnabled === true,
+    showBlogMenu,
   });
+  const closeNavigation = () => {
+    setNavigationOpen(false);
+  };
 
   return (
     <header
@@ -99,16 +170,277 @@ const Header = () => {
       }`}
     >
       <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
-        {/* <!-- header top start --> */}
         <div
-          className={`flex flex-col gap-5 ease-out duration-200 xl:flex-row xl:flex-wrap xl:items-center xl:justify-between 2xl:flex-nowrap ${
+          className={`space-y-3 xl:hidden ${stickyMenu ? "py-3" : "py-4"}`}
+        >
+          <div className="flex items-center gap-2.5">
+            <Link
+              className="flex min-w-0 flex-1 items-center gap-3 overflow-hidden rounded-2xl border border-gray-3 bg-white px-3 py-2 shadow-sm"
+              href="/"
+            >
+              {companyLogoUrl ? (
+                <img
+                  src={companyLogoUrl}
+                  alt={companyName}
+                  className="h-8 w-auto max-w-[84px] flex-shrink-0 object-contain"
+                />
+              ) : (
+                <Image
+                  src="/images/logo/logo.svg"
+                  alt={companyName}
+                  width={164}
+                  height={36}
+                  className="h-8 w-auto max-w-[84px] flex-shrink-0 object-contain"
+                />
+              )}
+              <span className="min-w-0 truncate text-sm font-semibold uppercase tracking-[0.18em] text-dark">
+                {companyName}
+              </span>
+            </Link>
+
+            <button
+              onClick={handleOpenCartModal}
+              aria-label={t("header.cart")}
+              className="relative inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-gray-3 bg-white shadow-sm"
+            >
+              <CartIcon />
+              <span className="absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-blue px-1 text-[11px] font-medium text-white">
+                {product.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              aria-label={t("header.toggleAria")}
+              aria-expanded={navigationOpen}
+              className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-gray-3 bg-white shadow-sm"
+              onClick={() => setNavigationOpen((prev) => !prev)}
+            >
+              <span className="block relative cursor-pointer w-5.5 h-5.5">
+                <span className="du-block absolute right-0 w-full h-full">
+                  <span
+                    className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-[0] ${
+                      !navigationOpen && "!w-full delay-300"
+                    }`}
+                  ></span>
+                  <span
+                    className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-150 ${
+                      !navigationOpen && "!w-full delay-400"
+                    }`}
+                  ></span>
+                  <span
+                    className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-200 ${
+                      !navigationOpen && "!w-full delay-500"
+                    }`}
+                  ></span>
+                </span>
+
+                <span className="block absolute right-0 w-full h-full rotate-45">
+                  <span
+                    className={`block bg-dark rounded-sm ease-in-out duration-200 delay-300 absolute left-2.5 top-0 w-0.5 h-full ${
+                      !navigationOpen && "!h-0 delay-[0] "
+                    }`}
+                  ></span>
+                  <span
+                    className={`block bg-dark rounded-sm ease-in-out duration-200 delay-400 absolute left-0 top-2.5 w-full h-0.5 ${
+                      !navigationOpen && "!h-0 dealy-200"
+                    }`}
+                  ></span>
+                </span>
+              </span>
+            </button>
+          </div>
+
+          <form onSubmit={handleSearchSubmit}>
+            <div className="flex items-center overflow-hidden rounded-2xl border border-gray-3 bg-white shadow-sm">
+              <CustomSelect
+                options={options}
+                value={selectedCategory}
+                onChange={(option) => setSelectedCategory(option.value)}
+                className="w-[126px] sm:w-[170px]"
+              />
+
+              <div className="relative min-w-0 flex-1">
+                <span className="absolute left-0 top-1/2 inline-block h-5.5 w-px -translate-y-1/2 bg-gray-4"></span>
+                <input
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchQuery}
+                  type="search"
+                  name="search-mobile"
+                  placeholder={t("header.searchPlaceholder")}
+                  autoComplete="off"
+                  className="w-full border-0 bg-transparent py-3 pl-4 pr-11 text-sm outline-none"
+                />
+
+                <button
+                  type="submit"
+                  aria-label={t("header.searchAria")}
+                  className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center justify-center text-dark transition-colors duration-200 hover:text-blue"
+                >
+                  <svg
+                    className="fill-current"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M17.2687 15.6656L12.6281 11.8969C14.5406 9.28123 14.3437 5.5406 11.9531 3.1781C10.6875 1.91248 8.99995 1.20935 7.19995 1.20935C5.39995 1.20935 3.71245 1.91248 2.44683 3.1781C-0.168799 5.79373 -0.168799 10.0687 2.44683 12.6844C3.71245 13.95 5.39995 14.6531 7.19995 14.6531C8.91558 14.6531 10.5187 14.0062 11.7843 12.8531L16.4812 16.65C16.5937 16.7344 16.7343 16.7906 16.875 16.7906C17.0718 16.7906 17.2406 16.7062 17.3531 16.5656C17.5781 16.2844 17.55 15.8906 17.2687 15.6656ZM7.19995 13.3875C5.73745 13.3875 4.38745 12.825 3.34683 11.7844C1.20933 9.64685 1.20933 6.18748 3.34683 4.0781C4.38745 3.03748 5.73745 2.47498 7.19995 2.47498C8.66245 2.47498 10.0125 3.03748 11.0531 4.0781C13.1906 6.2156 13.1906 9.67498 11.0531 11.7844C10.0406 12.825 8.66245 13.3875 7.19995 13.3875Z"
+                      fill=""
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          {supportPhone ? (
+            <a
+              href={getPhoneHref(supportPhone)}
+              className="flex items-center justify-between rounded-2xl border border-gray-3 bg-gray-1 px-4 py-3"
+            >
+              <span className="text-xs font-medium uppercase tracking-[0.18em] text-dark-4">
+                {t("header.support")}
+              </span>
+              <span className="text-sm font-semibold text-dark">
+                {supportPhone}
+              </span>
+            </a>
+          ) : null}
+
+          <div
+            className={`overflow-hidden transition-all duration-300 ${
+              navigationOpen
+                ? "max-h-[70vh] pb-1 opacity-100"
+                : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="rounded-2xl border border-gray-3 bg-white p-4 shadow-lg">
+              <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl bg-gray-1 px-4 py-3">
+                {whatsappPhone ? (
+                  <a
+                    href={getWhatsAppHref(whatsappPhone)}
+                    onClick={closeNavigation}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex min-w-0 items-center gap-3"
+                  >
+                    <WhatsAppIcon />
+                    <div className="min-w-0">
+                      <span className="block text-[11px] uppercase tracking-[0.18em] text-dark-4">
+                        {t("header.whatsapp")}
+                      </span>
+                      <span className="block truncate text-sm font-medium text-dark">
+                        {whatsappPhone}
+                      </span>
+                    </div>
+                  </a>
+                ) : null}
+
+                <button
+                  onClick={() => {
+                    closeNavigation();
+                    handleOpenCartModal();
+                  }}
+                  className="text-right"
+                >
+                  <span className="block text-[11px] uppercase tracking-[0.18em] text-dark-4">
+                    {t("header.cart")}
+                  </span>
+                  <span className="block text-sm font-semibold text-dark">
+                    {formatPrice(totalPrice)}
+                  </span>
+                </button>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="rounded-2xl border border-gray-3 bg-white px-3 py-2.5">
+                  <span className="mb-1 block text-[11px] uppercase tracking-[0.16em] text-dark-4">
+                    {t("header.language")}
+                  </span>
+                  <select
+                    value={localePreference}
+                    onChange={(event) =>
+                      setLocalePreference(
+                        event.target.value as LocalePreference,
+                      )
+                    }
+                    aria-label={t("header.language")}
+                    className="w-full bg-transparent text-sm font-medium text-dark outline-none"
+                  >
+                    <option value="auto">{t("header.languageSystem")}</option>
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                    <option value="ky">Кыргызча</option>
+                  </select>
+                </label>
+
+                <label className="rounded-2xl border border-gray-3 bg-white px-3 py-2.5">
+                  <span className="mb-1 block text-[11px] uppercase tracking-[0.16em] text-dark-4">
+                    {t("header.currency")}
+                  </span>
+                  <select
+                    value={currencyPreference}
+                    onChange={(event) =>
+                      setCurrencyPreference(
+                        event.target.value as CurrencyPreference,
+                      )
+                    }
+                    aria-label={t("header.currency")}
+                    className="w-full bg-transparent text-sm font-medium text-dark outline-none"
+                  >
+                    <option value="default">
+                      {t("header.currencyDefault")}
+                    </option>
+                    <option value="KGS">{t("header.currencyKgs")}</option>
+                    <option value="USD">{t("header.currencyUsd")}</option>
+                  </select>
+                </label>
+              </div>
+
+              <nav className="mt-4 border-t border-gray-3 pt-4">
+                <ul className="flex flex-col gap-2.5">
+                  {menuData.map((menuItem, i) =>
+                    menuItem.submenu ? (
+                      <Dropdown
+                        key={i}
+                        menuItem={menuItem}
+                        stickyMenu={stickyMenu}
+                        mobile
+                        onNavigate={closeNavigation}
+                      />
+                    ) : (
+                      <li key={i}>
+                        <Link
+                          href={menuItem.path}
+                          onClick={closeNavigation}
+                          className={`flex rounded-xl bg-gray-1 px-4 py-3 text-base font-medium ${
+                            pathname === menuItem.path
+                              ? "text-blue"
+                              : "text-dark"
+                          }`}
+                        >
+                          {menuItem.title}
+                        </Link>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className={`hidden xl:flex xl:flex-row xl:flex-wrap xl:items-center xl:justify-between 2xl:flex-nowrap ${
             stickyMenu ? "py-4" : "py-6"
           }`}
         >
           {/* <!-- header top left --> */}
-          <div className="flex w-full min-w-0 flex-col gap-5 sm:gap-6 xl:min-w-0 xl:flex-1 xl:flex-row xl:items-center xl:gap-6">
+          <div className="flex w-full min-w-0 flex-1 flex-row items-center gap-6">
             <Link
-              className="flex w-full min-w-0 max-w-full items-center gap-3 xl:w-auto xl:max-w-[320px] 2xl:max-w-[360px]"
+              className="flex w-auto min-w-0 max-w-[320px] items-center gap-3 2xl:max-w-[360px]"
               href="/"
             >
               {companyLogoUrl ? (
@@ -131,13 +463,14 @@ const Header = () => {
               </span>
             </Link>
 
-            <div className="w-full xl:min-w-0 xl:max-w-[475px] xl:flex-1">
+            <div className="w-full min-w-0 max-w-[475px] flex-1">
               <form onSubmit={handleSearchSubmit}>
                 <div className="flex items-center">
                   <CustomSelect
                     options={options}
                     value={selectedCategory}
                     onChange={(option) => setSelectedCategory(option.value)}
+                    className="w-[170px] 2xl:w-[200px]"
                   />
 
                   <div className="relative min-w-0 flex-1">
@@ -266,37 +599,24 @@ const Header = () => {
                   </select>
                 </label>
 
-                <Link href="/signin" className="flex items-center gap-2.5">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                {whatsappPhone ? (
+                  <a
+                    href={getWhatsAppHref(whatsappPhone)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2.5"
                   >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M12 1.25C9.37666 1.25 7.25001 3.37665 7.25001 6C7.25001 8.62335 9.37666 10.75 12 10.75C14.6234 10.75 16.75 8.62335 16.75 6C16.75 3.37665 14.6234 1.25 12 1.25ZM8.75001 6C8.75001 4.20507 10.2051 2.75 12 2.75C13.7949 2.75 15.25 4.20507 15.25 6C15.25 7.79493 13.7949 9.25 12 9.25C10.2051 9.25 8.75001 7.79493 8.75001 6Z"
-                      fill="#3C50E0"
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M12 12.25C9.68646 12.25 7.55494 12.7759 5.97546 13.6643C4.4195 14.5396 3.25001 15.8661 3.25001 17.5L3.24995 17.602C3.24882 18.7638 3.2474 20.222 4.52642 21.2635C5.15589 21.7761 6.03649 22.1406 7.22622 22.3815C8.41927 22.6229 9.97424 22.75 12 22.75C14.0258 22.75 15.5808 22.6229 16.7738 22.3815C17.9635 22.1406 18.8441 21.7761 19.4736 21.2635C20.7526 20.222 20.7512 18.7638 20.7501 17.602L20.75 17.5C20.75 15.8661 19.5805 14.5396 18.0246 13.6643C16.4451 12.7759 14.3136 12.25 12 12.25ZM4.75001 17.5C4.75001 16.6487 5.37139 15.7251 6.71085 14.9717C8.02681 14.2315 9.89529 13.75 12 13.75C14.1047 13.75 15.9732 14.2315 17.2892 14.9717C18.6286 15.7251 19.25 16.6487 19.25 17.5C19.25 18.8078 19.2097 19.544 18.5264 20.1004C18.1559 20.4022 17.5365 20.6967 16.4762 20.9113C15.4193 21.1252 13.9742 21.25 12 21.25C10.0258 21.25 8.58075 21.1252 7.5238 20.9113C6.46354 20.6967 5.84413 20.4022 5.4736 20.1004C4.79033 19.544 4.75001 18.8078 4.75001 17.5Z"
-                      fill="#3C50E0"
-                    />
-                  </svg>
-
-                  <div>
-                    <span className="block text-2xs text-dark-4 uppercase">
-                      {t("header.account")}
-                    </span>
-                    <p className="font-medium text-custom-sm text-dark">
-                      {t("header.signIn")}
-                    </p>
-                  </div>
-                </Link>
+                    <WhatsAppIcon />
+                    <div>
+                      <span className="block text-2xs text-dark-4 uppercase">
+                        {t("header.whatsapp")}
+                      </span>
+                      <p className="font-medium text-custom-sm text-dark">
+                        {whatsappPhone}
+                      </p>
+                    </div>
+                  </a>
+                ) : null}
 
                 <button
                   onClick={handleOpenCartModal}
@@ -352,7 +672,6 @@ const Header = () => {
 
               {/* <!-- Hamburger Toggle BTN --> */}
               <button
-                id="Toggle"
                 aria-label={t("header.toggleAria")}
                 className="xl:hidden block"
                 onClick={() => setNavigationOpen(!navigationOpen)}
@@ -394,10 +713,9 @@ const Header = () => {
             </div>
           </div>
         </div>
-        {/* <!-- header top end --> */}
       </div>
 
-      <div className="border-t border-gray-3">
+      <div className="hidden border-t border-gray-3 xl:block">
         <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
           <div className="flex items-center justify-between">
             {/* <!--=== Main Nav Start ===--> */}
@@ -416,6 +734,7 @@ const Header = () => {
                         key={i}
                         menuItem={menuItem}
                         stickyMenu={stickyMenu}
+                        onNavigate={closeNavigation}
                       />
                     ) : (
                       <li

@@ -92,6 +92,7 @@ export const messages: Record<Locale, Record<string, string>> = {
     "header.currencyUsd": "Доллар",
     "header.searchPlaceholder": "Я ищу...",
     "header.support": "Поддержка 24/7",
+    "header.whatsapp": "WhatsApp",
     "header.account": "Аккаунт",
     "header.signIn": "Войти",
     "header.cart": "Корзина",
@@ -128,6 +129,7 @@ export const messages: Record<Locale, Record<string, string>> = {
 
     "footer.helpSupport": "Помощь и поддержка",
     "footer.account": "Аккаунт",
+    "footer.shopNavigation": "Навигация по магазину",
     "footer.quickLink": "Быстрые ссылки",
     "footer.downloadApp": "Скачать приложение",
     "footer.loginRegister": "Вход / Регистрация",
@@ -207,6 +209,13 @@ export const messages: Record<Locale, Record<string, string>> = {
 
     "auth.signinTitle": "Вход в аккаунт",
     "auth.signinIntro": "Введите ваши данные ниже",
+    "auth.staffSigninTitle": "Вход сотрудников CRM",
+    "auth.staffSigninIntro":
+      "Используйте рабочий логин CRM или внутреннюю учётную запись компании.",
+    "auth.staffSigninNote":
+      "Самостоятельная регистрация на сайте отключена. Если доступ нужен, обратитесь к администратору компании.",
+    "auth.staffLoginLabel": "Логин сотрудника",
+    "auth.staffSigninButton": "Войти в закрытый блог",
     "auth.email": "Email",
     "auth.password": "Пароль",
     "auth.enterEmail": "Введите ваш email",
@@ -281,6 +290,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "checkout.processToCheckout": "Подтвердить заказ",
     "checkout.loginPrompt": "Уже есть аккаунт? Нажмите для входа",
     "checkout.returningCustomer": "Постоянный клиент?",
+    "checkout.whatsappOnlyTitle": "Заказ оформляется через WhatsApp",
+    "checkout.whatsappOnlyDescription":
+      "Заполните данные ниже, а менеджер свяжется с вами и подтвердит заказ в WhatsApp.",
     "checkout.login": "Войти",
     "checkout.couponTitle": "Есть купон?",
     "checkout.shippingMethod": "Способ доставки",
@@ -457,6 +469,7 @@ export const messages: Record<Locale, Record<string, string>> = {
     "header.currencyUsd": "US Dollar",
     "header.searchPlaceholder": "I am shopping for...",
     "header.support": "24/7 Support",
+    "header.whatsapp": "WhatsApp",
     "header.account": "Account",
     "header.signIn": "Sign In",
     "header.cart": "Cart",
@@ -493,6 +506,7 @@ export const messages: Record<Locale, Record<string, string>> = {
 
     "footer.helpSupport": "Help & Support",
     "footer.account": "Account",
+    "footer.shopNavigation": "Shop Navigation",
     "footer.quickLink": "Quick Link",
     "footer.downloadApp": "Download App",
     "footer.loginRegister": "Login / Register",
@@ -571,6 +585,13 @@ export const messages: Record<Locale, Record<string, string>> = {
 
     "auth.signinTitle": "Sign In to Your Account",
     "auth.signinIntro": "Enter your detail below",
+    "auth.staffSigninTitle": "CRM Staff Sign In",
+    "auth.staffSigninIntro":
+      "Use your CRM work login or internal company account.",
+    "auth.staffSigninNote":
+      "Self-service registration is disabled on the website. Contact your company administrator if you need access.",
+    "auth.staffLoginLabel": "Staff login",
+    "auth.staffSigninButton": "Sign in to private blog",
     "auth.email": "Email",
     "auth.password": "Password",
     "auth.enterEmail": "Enter your email",
@@ -645,6 +666,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "checkout.processToCheckout": "Process to Checkout",
     "checkout.loginPrompt": "Already have an account? Click here to login",
     "checkout.returningCustomer": "Returning customer?",
+    "checkout.whatsappOnlyTitle": "Orders are processed in WhatsApp",
+    "checkout.whatsappOnlyDescription":
+      "Fill in the details below and our manager will confirm the order with you in WhatsApp.",
     "checkout.login": "Login",
     "checkout.couponTitle": "Have any Coupon Code?",
     "checkout.shippingMethod": "Shipping Method",
@@ -821,6 +845,7 @@ export const messages: Record<Locale, Record<string, string>> = {
     "header.currencyUsd": "Доллар",
     "header.searchPlaceholder": "Эмне издеп жатасыз...",
     "header.support": "24/7 колдоо",
+    "header.whatsapp": "WhatsApp",
     "header.account": "Аккаунт",
     "header.signIn": "Кирүү",
     "header.cart": "Себет",
@@ -857,6 +882,7 @@ export const messages: Record<Locale, Record<string, string>> = {
 
     "footer.helpSupport": "Жардам жана колдоо",
     "footer.account": "Аккаунт",
+    "footer.shopNavigation": "Дүкөн навигациясы",
     "footer.quickLink": "Тез шилтемелер",
     "footer.downloadApp": "Тиркемени жүктөө",
     "footer.loginRegister": "Кирүү / Катталуу",
@@ -936,6 +962,13 @@ export const messages: Record<Locale, Record<string, string>> = {
 
     "auth.signinTitle": "Аккаунтка кирүү",
     "auth.signinIntro": "Маалыматыңызды төмөндө киргизиңиз",
+    "auth.staffSigninTitle": "CRM кызматкери үчүн кирүү",
+    "auth.staffSigninIntro":
+      "CRM жумушчу логиниңизди же компаниянын ички аккаунтун колдонуңуз.",
+    "auth.staffSigninNote":
+      "Сайтта өз алдынча катталуу өчүрүлгөн. Кирүү керек болсо, компаниянын администраторуна кайрылыңыз.",
+    "auth.staffLoginLabel": "Кызматкер логини",
+    "auth.staffSigninButton": "Жабык блогго кирүү",
     "auth.email": "Email",
     "auth.password": "Сырсөз",
     "auth.enterEmail": "Email дарегиңизди киргизиңиз",
@@ -1010,6 +1043,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "checkout.processToCheckout": "Заказды ырастоо",
     "checkout.loginPrompt": "Аккаунтуңуз барбы? Кирүү үчүн басыңыз",
     "checkout.returningCustomer": "Туруктуу кардарсызбы?",
+    "checkout.whatsappOnlyTitle": "Заказ WhatsApp аркылуу кабыл алынат",
+    "checkout.whatsappOnlyDescription":
+      "Төмөнкү маалыматтарды толтуруңуз, менеджер сиз менен WhatsApp аркылуу байланышып заказды ырастайт.",
     "checkout.login": "Кирүү",
     "checkout.couponTitle": "Купон кодуңуз барбы?",
     "checkout.shippingMethod": "Жеткирүү ыкмасы",

@@ -2,10 +2,14 @@ import { Metadata } from "next";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import BlogListView from "@/components/Storefront/BlogListView";
 import {
+  StorefrontApiError,
   storefrontBlogsQueryOptions,
+  storefrontConfigQueryOptions,
   type StorefrontBlogRouteQuery,
 } from "@/storefront/query-options";
 import { makeQueryClient } from "@/tanstack-query/query-client";
+import { isStorefrontBlogPublic } from "@/storefront/auth";
+import { redirect } from "next/navigation";
 export const metadata: Metadata = {
   title: "Blog Grid Page | NextCommerce Nextjs E-commerce template",
   description: "This is Blog Grid Page for NextCommerce Template",
@@ -25,7 +29,21 @@ const BlogGridWithSidebarPage = async ({ searchParams }: Props) => {
     tag: typeof params.tag === "string" ? params.tag : undefined,
   };
   const queryClient = makeQueryClient();
-  await queryClient.prefetchQuery(storefrontBlogsQueryOptions(query));
+  const storefrontConfig = await queryClient.fetchQuery(
+    storefrontConfigQueryOptions(),
+  );
+  if (!isStorefrontBlogPublic(storefrontConfig)) {
+    redirect("/");
+  }
+
+  try {
+    await queryClient.fetchQuery(storefrontBlogsQueryOptions(query));
+  } catch (error) {
+    if (error instanceof StorefrontApiError && error.status === 401) {
+      redirect("/");
+    }
+    throw error;
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

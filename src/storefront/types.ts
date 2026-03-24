@@ -1,6 +1,7 @@
 import type { CurrencyCode } from "@/i18n/currency";
 
 export type StorefrontProductLabel = "hit" | "new" | "sale";
+export type StorefrontBlogAccess = "public" | "private";
 
 export type StorefrontAvailability = {
   status: "in_stock" | "on_order" | "in_transit" | "out_of_stock";
@@ -133,6 +134,7 @@ export type StorefrontBlogPostSummary = {
   title: string;
   excerpt: string;
   coverImageUrl?: string;
+  coverVideoUrl?: string;
   category?: string;
   tags: string[];
   authorName?: string;
@@ -168,6 +170,7 @@ export type StorefrontConfig = {
   storefrontDefaultCurrency: CurrencyCode;
   storefrontUsdExchangeRate: number;
   storefrontBlogEnabled: boolean;
+  storefrontBlogAccess: StorefrontBlogAccess;
   siteUrl: string;
   whatsappPhone?: string;
   supportPhone?: string;

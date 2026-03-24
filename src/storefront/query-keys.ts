@@ -23,6 +23,7 @@ export type StorefrontBlogRouteQuery = {
 };
 
 export type StorefrontBlogApiParams = StorefrontBlogRouteQuery;
+export type StorefrontAuthScope = "public" | "authorized";
 
 export const normalizeStorefrontCatalogParams = (
   params: StorefrontCatalogApiParams = {},
@@ -67,13 +68,18 @@ export const storefrontQueryKeys = {
   config: () => [...storefrontQueryKeys.all, "config"] as const,
   categories: () => [...storefrontQueryKeys.all, "categories"] as const,
   home: () => [...storefrontQueryKeys.all, "home"] as const,
-  blogs: (params: StorefrontBlogApiParams = {}) =>
+  blogs: (
+    params: StorefrontBlogApiParams = {},
+    authScope: StorefrontAuthScope = "public",
+  ) =>
     [
       ...storefrontQueryKeys.all,
       "blogs",
+      authScope,
       normalizeStorefrontBlogParams(params),
     ] as const,
-  blog: (slug: string) => [...storefrontQueryKeys.all, "blog", slug] as const,
+  blog: (slug: string, authScope: StorefrontAuthScope = "public") =>
+    [...storefrontQueryKeys.all, "blog", authScope, slug] as const,
   catalog: (params: StorefrontCatalogApiParams = {}) =>
     [
       ...storefrontQueryKeys.all,

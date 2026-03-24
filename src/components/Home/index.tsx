@@ -7,6 +7,7 @@ import NewArrival from "./NewArrivals";
 import PromoBanner from "./PromoBanner";
 import BestSeller from "./BestSeller";
 import CounDown from "./Countdown";
+import LatestBlogPosts from "./LatestBlogPosts";
 import Testimonials from "./Testimonials";
 import Newsletter from "../Common/Newsletter";
 import QueryStatusCard from "@/components/Common/QueryStatusCard";
@@ -17,7 +18,11 @@ import {
   mapStorefrontProductsToProducts,
 } from "@/storefront/mappers";
 
-const Home = () => {
+const Home = ({
+  canShowBlogPreview = true,
+}: {
+  canShowBlogPreview?: boolean;
+}) => {
   const { t } = useI18n();
   const { data: home, isPending, isError, refetch } = useStorefrontHomeQuery();
 
@@ -89,6 +94,7 @@ const Home = () => {
       ) : null}
       <CounDown />
       <Testimonials />
+      <LatestBlogPosts enabled={canShowBlogPreview} />
       <Newsletter />
     </main>
   );

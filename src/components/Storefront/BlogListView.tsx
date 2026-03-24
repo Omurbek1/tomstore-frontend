@@ -2,6 +2,7 @@
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import QueryStatusCard from "@/components/Common/QueryStatusCard";
+import BlogMedia from "@/components/Storefront/BlogMedia";
 import { useI18n } from "@/i18n/provider";
 import { useStorefrontBlogsQuery } from "@/storefront/hooks";
 import type { StorefrontBlogRouteQuery } from "@/storefront/query-keys";
@@ -138,17 +139,12 @@ export default function BlogListView({
               href={`${detailPath}?slug=${blog.slug}`}
               className="block rounded-md overflow-hidden"
             >
-              {blog.coverImageUrl ? (
-                <img
-                  src={blog.coverImageUrl}
-                  alt={blog.title}
-                  className="h-[210px] w-full rounded-md object-cover"
-                />
-              ) : (
-                <div className="flex h-[210px] w-full items-center justify-center rounded-md bg-gray-1 text-dark-4">
-                  {blog.title}
-                </div>
-              )}
+              <BlogMedia
+                title={blog.title}
+                imageUrl={blog.coverImageUrl}
+                videoUrl={blog.coverVideoUrl}
+                mediaClassName="h-[210px] w-full rounded-md object-cover"
+              />
             </Link>
 
             <div className="mt-5.5">
@@ -234,17 +230,13 @@ export default function BlogListView({
                             href={`${detailPath}?slug=${blog.slug}`}
                             className="max-w-[110px] w-full rounded-[10px] overflow-hidden"
                           >
-                            {blog.coverImageUrl ? (
-                              <img
-                                src={blog.coverImageUrl}
-                                alt={blog.title}
-                                className="h-20 w-full rounded-[10px] object-cover"
-                              />
-                            ) : (
-                              <div className="flex h-20 w-full items-center justify-center rounded-[10px] bg-gray-1 px-3 text-center text-xs text-dark-4">
-                                {blog.title}
-                              </div>
-                            )}
+                            <BlogMedia
+                              title={blog.title}
+                              imageUrl={blog.coverImageUrl}
+                              videoUrl={blog.coverVideoUrl}
+                              mediaClassName="h-20 w-full rounded-[10px] object-cover"
+                              fallbackClassName="flex h-20 w-full items-center justify-center rounded-[10px] bg-gray-1 px-3 text-center text-xs text-dark-4"
+                            />
                           </Link>
 
                           <div>

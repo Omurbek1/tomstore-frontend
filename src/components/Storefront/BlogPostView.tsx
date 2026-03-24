@@ -2,6 +2,7 @@
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import QueryStatusCard from "@/components/Common/QueryStatusCard";
+import BlogMedia from "@/components/Storefront/BlogMedia";
 import { useI18n } from "@/i18n/provider";
 import { useStorefrontBlogQuery } from "@/storefront/hooks";
 import Link from "next/link";
@@ -95,12 +96,14 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
 
   const article = (
     <article className="rounded-[10px] bg-white p-5 shadow-1 sm:p-7.5">
-      {post.coverImageUrl ? (
+      {post.coverImageUrl || post.coverVideoUrl ? (
         <div className="rounded-[10px] overflow-hidden mb-7.5">
-          <img
-            className="h-[420px] w-full rounded-[10px] object-cover"
-            src={post.coverImageUrl}
-            alt={post.title}
+          <BlogMedia
+            title={post.title}
+            imageUrl={post.coverImageUrl}
+            videoUrl={post.coverVideoUrl}
+            detail
+            mediaClassName="h-[420px] w-full rounded-[10px] object-cover"
           />
         </div>
       ) : null}
@@ -139,7 +142,7 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
               <Link
                 key={tag}
                 className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                href={`/blogs/blog-grid-with-sidebar?tag=${encodeURIComponent(tag)}`}
+                href={`${listPath}?tag=${encodeURIComponent(tag)}`}
               >
                 {tag}
               </Link>
@@ -187,17 +190,13 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
                             href={`${detailPath}?slug=${item.slug}`}
                             className="max-w-[110px] w-full rounded-[10px] overflow-hidden"
                           >
-                            {item.coverImageUrl ? (
-                              <img
-                                src={item.coverImageUrl}
-                                alt={item.title}
-                                className="h-20 w-full rounded-[10px] object-cover"
-                              />
-                            ) : (
-                              <div className="flex h-20 w-full items-center justify-center rounded-[10px] bg-gray-1 px-3 text-center text-xs text-dark-4">
-                                {item.title}
-                              </div>
-                            )}
+                            <BlogMedia
+                              title={item.title}
+                              imageUrl={item.coverImageUrl}
+                              videoUrl={item.coverVideoUrl}
+                              mediaClassName="h-20 w-full rounded-[10px] object-cover"
+                              fallbackClassName="flex h-20 w-full items-center justify-center rounded-[10px] bg-gray-1 px-3 text-center text-xs text-dark-4"
+                            />
                           </Link>
 
                           <div>
@@ -266,7 +265,7 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
                       {post.categories.map((category) => (
                         <Link
                           key={category.slug}
-                          href={`/blogs/blog-grid-with-sidebar?category=${category.slug}`}
+                          href={`${listPath}?category=${category.slug}`}
                           className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue"
                         >
                           {category.name}
@@ -288,7 +287,7 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
                       {post.availableTags.map((tag) => (
                         <Link
                           key={tag.slug}
-                          href={`/blogs/blog-grid-with-sidebar?tag=${tag.slug}`}
+                          href={`${listPath}?tag=${tag.slug}`}
                           className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                         >
                           {tag.name}

@@ -67,7 +67,6 @@ export default async function RootLayout({
     currencyPreference === "default"
       ? normalizeCurrencyCode(storefrontConfig?.storefrontDefaultCurrency)
       : currencyPreference;
-
   return (
     <html lang={locale} suppressHydrationWarning={true}>
       <body>
