@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useI18n } from "@/i18n/provider";
 
@@ -9,11 +9,10 @@ const CounDown = () => {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [deadline, setDeadline] = useState<number | null>(null);
 
-  const deadline = "December, 31, 2024";
-
-  const getTime = () => {
-    const time = Date.parse(deadline) - Date.now();
+  const syncTime = (nextDeadline: number) => {
+    const time = Math.max(nextDeadline - Date.now(), 0);
 
     setDays(Math.floor(time / (1000 * 60 * 60 * 24)));
     setHours(Math.floor((time / (1000 * 60 * 60)) % 24));
@@ -22,112 +21,81 @@ const CounDown = () => {
   };
 
   useEffect(() => {
-    // @ts-ignore
-    const interval = setInterval(() => getTime(deadline), 1000);
-
-    return () => clearInterval(interval);
+    const nextDeadline = Date.now() + 4 * 24 * 60 * 60 * 1000;
+    setDeadline(nextDeadline);
+    syncTime(nextDeadline);
   }, []);
 
+  useEffect(() => {
+    if (!deadline) {
+      return;
+    }
+
+    const interval = window.setInterval(() => syncTime(deadline), 1000);
+
+    return () => clearInterval(interval);
+  }, [deadline]);
+
+  const timerItems = [
+    { value: days, label: t("home.countdownDays") },
+    { value: hours, label: t("home.countdownHours") },
+    { value: minutes, label: t("home.countdownMinutes") },
+    { value: seconds, label: t("home.countdownSeconds") },
+  ];
+
   return (
-    <section className="overflow-hidden py-20">
-      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        <div className="relative overflow-hidden z-1 rounded-lg bg-[#D0E9F3] p-4 sm:p-7.5 lg:p-10 xl:p-15">
-          <div className="max-w-[422px] w-full">
-            <span className="block font-medium text-custom-1 text-blue mb-2.5">
+    <section className="overflow-hidden">
+      <div className="mx-auto w-full max-w-[1170px]">
+        <div className="section-shell-dark grid gap-8 px-5 py-7 sm:px-8 sm:py-9 lg:grid-cols-[minmax(0,0.95fr)_minmax(340px,0.85fr)] xl:px-10">
+          <div className="relative z-10 max-w-[470px]">
+            <span className="section-kicker-dark mb-5">
               {t("home.countdownBadge")}
             </span>
 
-            <h2 className="font-bold text-dark text-xl lg:text-heading-4 xl:text-heading-3 mb-3">
+            <h2 className="mb-3 text-3xl font-semibold leading-tight text-white sm:text-[42px]">
               {t("home.countdownTitle")}
             </h2>
 
-            <p>{t("home.countdownText")}</p>
+            <p className="text-sm leading-7 text-white/72 sm:text-base">
+              {t("home.countdownText")}
+            </p>
 
             {/* <!-- Countdown timer --> */}
-            <div
-              className="flex flex-wrap gap-6 mt-6"
-              x-data="timer()"
-              x-init="countdown()"
-            >
-              {/* <!-- timer day --> */}
-              <div>
-                <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
-                  x-text="days"
+            <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {timerItems.map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-[22px] border border-white/10 bg-white/8 px-4 py-4 text-center backdrop-blur-sm"
                 >
-                  {" "}
-                  {days < 10 ? "0" + days : days}{" "}
-                </span>
-                <span className="block text-custom-sm text-dark text-center">
-                  {t("home.countdownDays")}
-                </span>
-              </div>
-
-              {/* <!-- timer hours --> */}
-              <div>
-                <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
-                  x-text="hours"
-                >
-                  {" "}
-                  {hours < 10 ? "0" + hours : hours}{" "}
-                </span>
-                <span className="block text-custom-sm text-dark text-center">
-                  {t("home.countdownHours")}
-                </span>
-              </div>
-
-              {/* <!-- timer minutes --> */}
-              <div>
-                <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
-                  x-text="minutes"
-                >
-                  {minutes < 10 ? "0" + minutes : minutes}{" "}
-                </span>
-                <span className="block text-custom-sm text-dark text-center">
-                  {t("home.countdownMinutes")}
-                </span>
-              </div>
-
-              {/* <!-- timer seconds --> */}
-              <div>
-                <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
-                  x-text="seconds"
-                >
-                  {seconds < 10 ? "0" + seconds : seconds}{" "}
-                </span>
-                <span className="block text-custom-sm text-dark text-center">
-                  {t("home.countdownSeconds")}
-                </span>
-              </div>
+                  <span className="block text-3xl font-semibold text-white">
+                    {item.value < 10 ? `0${item.value}` : item.value}
+                  </span>
+                  <span className="mt-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-white/48">
+                    {item.label}
+                  </span>
+                </div>
+              ))}
             </div>
-            {/* <!-- Countdown timer ends --> */}
 
             <a
-              href="#"
-              className="inline-flex font-medium text-custom-sm text-white bg-blue py-3 px-9.5 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
+              href="/shop-with-sidebar"
+              className="mt-8 inline-flex rounded-full bg-white px-7 py-3 text-sm font-medium text-dark transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue hover:text-white"
             >
               {t("home.checkItOut")}
             </a>
           </div>
 
-          {/* <!-- bg shapes --> */}
-          <Image
-            src="/images/countdown/countdown-bg.png"
-            alt="bg shapes"
-            className="hidden sm:block absolute right-0 bottom-0 -z-1"
-            width={737}
-            height={482}
-          />
-          <Image
-            src="/images/countdown/countdown-01.png"
-            alt="product"
-            className="hidden lg:block absolute right-4 xl:right-33 bottom-4 xl:bottom-10 -z-1"
-            width={411}
-            height={376}
-          />
+          <div className="relative min-h-[320px] overflow-hidden rounded-[28px] border border-white/10 bg-white/6">
+            <div className="soft-grid absolute inset-0 opacity-15" />
+            <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue/20 blur-3xl" />
+            <Image
+              src="/images/countdown/countdown-01.png"
+              alt="product"
+              className="absolute bottom-4 left-1/2 h-auto w-auto max-w-[320px] -translate-x-1/2 drop-shadow-[0_30px_50px_rgba(0,0,0,0.32)] sm:max-w-[360px]"
+              width={360}
+              height={330}
+            />
+          </div>
         </div>
       </div>
     </section>

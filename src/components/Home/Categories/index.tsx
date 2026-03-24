@@ -30,13 +30,14 @@ const Categories = ({ categories }: { categories: Category[] }) => {
   }, []);
 
   return (
-    <section className="overflow-hidden pt-17.5">
-      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 pb-15 border-b border-gray-3">
-        <div className="swiper categories-carousel common-carousel">
+    <section className="overflow-hidden">
+      <div className="mx-auto w-full max-w-[1170px]">
+        <div className="section-shell px-4 py-7 sm:px-8 sm:py-8 xl:px-10 xl:py-10">
+          <div className="swiper categories-carousel common-carousel">
           {/* <!-- section title --> */}
-          <div className="mb-10 flex items-center justify-between">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
+              <span className="section-kicker">
                 <svg
                   width="20"
                   height="20"
@@ -73,13 +74,16 @@ const Categories = ({ categories }: { categories: Category[] }) => {
                 </svg>
                 {t("home.categories")}
               </span>
-              <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
+              <h2 className="section-title mt-4">
                 {t("home.browseByCategory")}
               </h2>
             </div>
 
             <div className="flex items-center gap-3">
-              <button onClick={handlePrev} className="swiper-button-prev">
+              <button
+                onClick={handlePrev}
+                className="swiper-button-prev !h-11 !w-11 rounded-full !border-white !bg-white/80"
+              >
                 <svg
                   className="fill-current"
                   width="24"
@@ -97,7 +101,10 @@ const Categories = ({ categories }: { categories: Category[] }) => {
                 </svg>
               </button>
 
-              <button onClick={handleNext} className="swiper-button-next">
+              <button
+                onClick={handleNext}
+                className="swiper-button-next !h-11 !w-11 rounded-full !border-white !bg-white/80"
+              >
                 <svg
                   className="fill-current"
                   width="24"
@@ -134,6 +141,7 @@ const Categories = ({ categories }: { categories: Category[] }) => {
                 slidesPerView: 6,
               },
             }}
+            className="!overflow-visible"
           >
             {categories.map((item, key) => (
               <SwiperSlide key={key}>
@@ -141,6 +149,7 @@ const Categories = ({ categories }: { categories: Category[] }) => {
               </SwiperSlide>
             ))}
           </Swiper>
+          </div>
         </div>
       </div>
     </section>

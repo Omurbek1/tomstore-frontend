@@ -13,7 +13,15 @@ export type CartItem = Pick<
 
 export type WishlistItem = Pick<
   Product,
-  "id" | "slug" | "title" | "price" | "discountedPrice" | "imgs"
+  | "id"
+  | "slug"
+  | "title"
+  | "price"
+  | "discountedPrice"
+  | "imgs"
+  | "brand"
+  | "availability"
+  | "labels"
 > & {
   quantity: number;
   status?: string;
@@ -64,22 +72,34 @@ const upsertCartItem = (items: CartItem[], item: CartItem) => {
 };
 
 const upsertWishlistItem = (items: WishlistItem[], item: WishlistItem) => {
+  const normalizedItem: WishlistItem = {
+    ...item,
+    quantity: 1,
+    status: item.status || item.availability?.status || "in_stock",
+  };
   const existingItem = items.find((entry) => entry.id === item.id);
 
   if (!existingItem) {
-    return [...items, item];
+    return [...items, normalizedItem];
   }
 
   return items.map((entry) =>
-    entry.id === item.id
+    entry.id === normalizedItem.id
       ? {
           ...entry,
-          quantity: entry.quantity + item.quantity,
-          status: item.status || entry.status,
+          ...normalizedItem,
+          quantity: 1,
+          status: normalizedItem.status || entry.status,
         }
       : entry,
   );
 };
+
+const normalizeWishlistItems = (items: WishlistItem[] = []) =>
+  items.reduce<WishlistItem[]>(
+    (normalized, item) => upsertWishlistItem(normalized, item),
+    [],
+  );
 
 export const useAppStore = create<AppStoreState>()(
   persist(
@@ -141,6 +161,22 @@ export const useAppStore = create<AppStoreState>()(
         wishlistItems: state.wishlistItems,
         productDetails: state.productDetails,
       }),
+      merge: (persistedState, currentState) => {
+        const typedState = persistedState as Partial<AppStoreState> | undefined;
+
+        return {
+          ...currentState,
+          ...typedState,
+          cartItems: typedState?.cartItems || currentState.cartItems,
+          wishlistItems: normalizeWishlistItems(
+            typedState?.wishlistItems || currentState.wishlistItems,
+          ),
+          quickViewProduct:
+            typedState?.quickViewProduct || currentState.quickViewProduct,
+          productDetails:
+            typedState?.productDetails || currentState.productDetails,
+        };
+      },
     },
   ),
 );
@@ -153,3 +189,6 @@ export const selectCartTotalPrice = (state: AppStoreState) =>
 
 export const selectCartItemsCount = (state: AppStoreState) =>
   state.cartItems.length;
+
+export const selectWishlistItemsCount = (state: AppStoreState) =>
+  state.wishlistItems.length;

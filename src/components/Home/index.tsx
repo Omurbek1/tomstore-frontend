@@ -71,11 +71,16 @@ const Home = ({
   );
 
   return (
-    <main>
+    <main className="relative overflow-hidden pb-16 sm:pb-20">
+      <div className="pointer-events-none absolute left-[-12%] top-[8%] h-64 w-64 rounded-full bg-blue/10 blur-3xl" />
+      <div className="pointer-events-none absolute right-[-10%] top-[22%] h-72 w-72 rounded-full bg-sky-300/20 blur-3xl" />
+      <div className="pointer-events-none absolute left-[18%] top-[58%] h-60 w-60 rounded-full bg-indigo-200/20 blur-3xl" />
       <Hero hero={home.hero} featuredProducts={recommendedProducts} />
-      <Categories categories={categories} />
-      <NewArrival products={newProducts} />
-      <PromoBanner />
+      <div className="relative z-10 space-y-6 px-4 sm:px-8 xl:px-0">
+        <Categories categories={categories} />
+        <NewArrival products={newProducts} />
+        <PromoBanner />
+      </div>
       {hitProducts.length > 0 ? (
         <BestSeller
           products={hitProducts}
@@ -92,10 +97,12 @@ const Home = ({
           viewAllHref="/shop-with-sidebar?label=sale"
         />
       ) : null}
-      <CounDown />
-      <Testimonials />
-      <LatestBlogPosts enabled={canShowBlogPreview} />
-      <Newsletter />
+      <div className="relative z-10 space-y-6 px-4 sm:px-8 xl:px-0">
+        <CounDown />
+        <Testimonials />
+        <LatestBlogPosts enabled={canShowBlogPreview} />
+        <Newsletter />
+      </div>
     </main>
   );
 };

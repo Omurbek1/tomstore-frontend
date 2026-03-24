@@ -8,6 +8,7 @@ import { useI18n } from "@/i18n/provider";
 import ProductLabelBadges from "./ProductLabelBadges";
 import { useAppStore } from "@/store/app-store";
 import { useCartToast } from "./useCartToast";
+import { useWishlistToast } from "./useWishlistToast";
 
 const ProductItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
@@ -15,8 +16,15 @@ const ProductItem = ({ item }: { item: Product }) => {
   const setQuickViewProduct = useAppStore((state) => state.setQuickViewProduct);
   const addItemToCart = useAppStore((state) => state.addItemToCart);
   const addItemToWishlist = useAppStore((state) => state.addItemToWishlist);
+  const removeItemFromWishlist = useAppStore(
+    (state) => state.removeItemFromWishlist,
+  );
   const setProductDetails = useAppStore((state) => state.setProductDetails);
+  const isInWishlist = useAppStore((state) =>
+    state.wishlistItems.some((wishlistItem) => wishlistItem.id === item.id),
+  );
   const showCartToast = useCartToast();
+  const showWishlistToast = useWishlistToast();
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
@@ -35,11 +43,27 @@ const ProductItem = ({ item }: { item: Product }) => {
   };
 
   const handleItemToWishList = () => {
-    addItemToWishlist({
+    if (isInWishlist) {
+      removeItemFromWishlist(item.id);
+      showWishlistToast(
+        {
+          ...item,
+          status: item.availability?.status,
+          quantity: 1,
+        },
+        "removed",
+      );
+      return;
+    }
+
+    const wishlistItem = {
       ...item,
-      status: "available",
+      status: item.availability?.status,
       quantity: 1,
-    });
+    };
+
+    addItemToWishlist(wishlistItem);
+    showWishlistToast(wishlistItem, "added");
   };
 
   const handleProductDetails = () => {
@@ -47,15 +71,22 @@ const ProductItem = ({ item }: { item: Product }) => {
   };
 
   return (
-    <div className="group">
-      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F6F7FB] min-h-[270px] mb-4">
+    <div className="group h-full rounded-[28px] border border-white/70 bg-white/90 p-4 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.38)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_34px_66px_-36px_rgba(60,80,224,0.26)]">
+      <div className="relative mb-5 flex min-h-[270px] items-center justify-center overflow-hidden rounded-[24px] bg-[linear-gradient(180deg,#f9fbff_0%,#eef3ff_100%)]">
+        <div className="absolute left-1/2 top-6 h-28 w-28 -translate-x-1/2 rounded-full bg-blue/10 blur-2xl" />
         <ProductLabelBadges
           labels={item.labels}
           className="absolute left-3 top-3 z-10"
         />
-        <Image src={item.imgs.previews[0]} alt="" width={250} height={250} />
+        <Image
+          src={item.imgs.previews[0]}
+          alt={item.title}
+          width={250}
+          height={250}
+          className="relative z-[1] h-auto max-h-[220px] w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+        />
 
-        <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
+        <div className="absolute bottom-4 left-4 right-4 flex translate-y-3 items-center justify-center gap-2.5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
           <button
             onClick={() => {
               openModal();
@@ -63,7 +94,7 @@ const ProductItem = ({ item }: { item: Product }) => {
             }}
             id="newOne"
             aria-label="button for quick view"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/90 text-dark shadow-sm transition-colors duration-200 hover:text-blue"
           >
             <svg
               className="fill-current"
@@ -90,7 +121,7 @@ const ProductItem = ({ item }: { item: Product }) => {
 
           <button
             onClick={() => handleAddToCart()}
-            className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 hover:bg-blue-dark"
+            className="inline-flex rounded-full bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-blue-dark"
           >
             {t("common.addToCart")}
           </button>
@@ -99,7 +130,11 @@ const ProductItem = ({ item }: { item: Product }) => {
             onClick={() => handleItemToWishList()}
             aria-label="button for favorite select"
             id="favOne"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
+            className={`flex h-10 w-10 items-center justify-center rounded-full border shadow-sm transition-colors duration-200 ${
+              isInWishlist
+                ? "border-red/10 bg-red/10 text-red"
+                : "border-white/70 bg-white/90 text-dark hover:text-blue"
+            }`}
           >
             <svg
               className="fill-current"
@@ -113,14 +148,14 @@ const ProductItem = ({ item }: { item: Product }) => {
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M3.74949 2.94946C2.6435 3.45502 1.83325 4.65749 1.83325 6.0914C1.83325 7.55633 2.43273 8.68549 3.29211 9.65318C4.0004 10.4507 4.85781 11.1118 5.694 11.7564C5.89261 11.9095 6.09002 12.0617 6.28395 12.2146C6.63464 12.491 6.94747 12.7337 7.24899 12.9099C7.55068 13.0862 7.79352 13.1667 7.99992 13.1667C8.20632 13.1667 8.44916 13.0862 8.75085 12.9099C9.05237 12.7337 9.3652 12.491 9.71589 12.2146C9.90982 12.0617 10.1072 11.9095 10.3058 11.7564C11.142 11.1118 11.9994 10.4507 12.7077 9.65318C13.5671 8.68549 14.1666 7.55633 14.1666 6.0914C14.1666 4.65749 13.3563 3.45502 12.2503 2.94946C11.1759 2.45832 9.73214 2.58839 8.36016 4.01382C8.2659 4.11175 8.13584 4.16709 7.99992 4.16709C7.864 4.16709 7.73393 4.11175 7.63967 4.01382C6.26769 2.58839 4.82396 2.45832 3.74949 2.94946ZM7.99992 2.97255C6.45855 1.5935 4.73256 1.40058 3.33376 2.03998C1.85639 2.71528 0.833252 4.28336 0.833252 6.0914C0.833252 7.86842 1.57358 9.22404 2.5444 10.3172C3.32183 11.1926 4.2734 11.9253 5.1138 12.5724C5.30431 12.7191 5.48911 12.8614 5.66486 12.9999C6.00636 13.2691 6.37295 13.5562 6.74447 13.7733C7.11582 13.9903 7.53965 14.1667 7.99992 14.1667C8.46018 14.1667 8.88401 13.9903 9.25537 13.7733C9.62689 13.5562 9.99348 13.2691 10.335 12.9999C10.5107 12.8614 10.6955 12.7191 10.886 12.5724C11.7264 11.9253 12.678 11.1926 13.4554 10.3172C14.4263 9.22404 15.1666 7.86842 15.1666 6.0914C15.1666 4.28336 14.1434 2.71528 12.6661 2.03998C11.2673 1.40058 9.54129 1.5935 7.99992 2.97255Z"
-                fill=""
+                fill={isInWishlist ? "currentColor" : ""}
               />
             </svg>
           </button>
         </div>
       </div>
 
-      <div className="flex items-center gap-2.5 mb-2">
+      <div className="mb-2 flex items-center gap-2.5">
         <div className="flex items-center gap-1">
           <Image
             src="/images/icons/icon-star.svg"
@@ -157,11 +192,17 @@ const ProductItem = ({ item }: { item: Product }) => {
         <p className="text-custom-sm">{t("common.reviewsLabel", { count: item.reviews })}</p>
       </div>
 
+      {item.brand ? (
+        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
+          {item.brand}
+        </p>
+      ) : null}
+
       <h3
-        className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5"
+        className="mb-2 min-h-[56px] text-lg font-semibold leading-7 text-dark transition-colors duration-200 hover:text-blue"
         onClick={() => handleProductDetails()}
       >
-        <Link href={`/shop-details/${item.slug}`}> {item.title} </Link>
+        <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-lg">

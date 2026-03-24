@@ -2,7 +2,6 @@
 
 import React from "react";
 import SingleItem from "./SingleItem";
-import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import { useI18n } from "@/i18n/provider";
@@ -22,39 +21,33 @@ const BestSeller = ({
 
   return (
     <section className="overflow-hidden">
-      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+      <div className="mx-auto w-full max-w-[1170px]">
+        <div className="section-shell-dark px-4 py-7 sm:px-8 sm:py-8 xl:px-10 xl:py-10">
         {/* <!-- section title --> */}
-        <div className="mb-10 flex items-center justify-between">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
-              <Image
-                src="/images/icons/icon-07.svg"
-                alt="icon"
-                width={17}
-                height={17}
-              />
+            <span className="section-kicker-dark">
               {t(eyebrowKey)}
             </span>
-            <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
+            <h2 className="mt-4 text-2xl font-semibold text-white sm:text-[34px]">
               {t(titleKey)}
             </h2>
           </div>
+
+          <Link
+            href={viewAllHref}
+            className="inline-flex rounded-full border border-white/12 bg-white/8 px-5 py-3 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-dark"
+          >
+            {t("common.viewAll")}
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7.5">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {/* <!-- Best Sellers item --> */}
           {products.slice(0, 6).map((item, key) => (
             <SingleItem item={item} key={key} />
           ))}
         </div>
-
-        <div className="text-center mt-12.5">
-          <Link
-            href={viewAllHref}
-            className="inline-flex font-medium text-custom-sm py-3 px-7 sm:px-12.5 rounded-md border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
-          >
-            {t("common.viewAll")}
-          </Link>
         </div>
       </div>
     </section>

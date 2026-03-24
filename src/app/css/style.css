@@ -3,16 +3,81 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --site-bg: #f4f7fb;
+    --site-surface: rgba(255, 255, 255, 0.82);
+    --site-border: rgba(255, 255, 255, 0.72);
+    --site-dark: #08111f;
+    --site-accent: #3c50e0;
+    --site-accent-soft: #e7efff;
+  }
+
   html {
     @apply scroll-smooth;
   }
 
   body {
-    @apply font-euclid-circular-a font-normal text-base text-dark-3 relative z-1;
+    @apply font-euclid-circular-a relative z-1 font-normal text-base text-dark-3;
+    background-color: var(--site-bg);
+    background-image:
+      radial-gradient(circle at top left, rgba(60, 80, 224, 0.12), transparent 32%),
+      radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent 28%),
+      linear-gradient(180deg, #f8fbff 0%, #f4f7fb 38%, #edf2fa 100%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: rgba(60, 80, 224, 0.18);
+    color: #08111f;
   }
 }
 
 @layer components {
+  .section-shell {
+    @apply relative overflow-hidden rounded-[30px] border backdrop-blur-xl;
+    background: var(--site-surface);
+    border-color: var(--site-border);
+    box-shadow: 0 30px 80px -42px rgba(15, 23, 42, 0.32);
+  }
+
+  .section-shell-dark {
+    @apply relative overflow-hidden rounded-[32px] border text-white;
+    border-color: rgba(255, 255, 255, 0.1);
+    background:
+      radial-gradient(circle at top left, rgba(96, 165, 250, 0.22), transparent 34%),
+      radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.16), transparent 30%),
+      linear-gradient(145deg, #08111f 0%, #0e1728 52%, #15213b 100%);
+    box-shadow: 0 40px 110px -46px rgba(8, 17, 31, 0.78);
+  }
+
+  .section-kicker {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em];
+    color: var(--site-accent);
+    background: rgba(255, 255, 255, 0.86);
+    border-color: rgba(60, 80, 224, 0.12);
+  }
+
+  .section-kicker-dark {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-white;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold leading-tight text-dark sm:text-[34px];
+  }
+
+  .section-copy {
+    @apply mt-3 max-w-[560px] text-sm leading-7 text-dark-4 sm:text-base;
+  }
+
+  .soft-grid {
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
   .dropdown {
     @apply flex-col gap-0 min-w-max xl:w-[193px] mt-2 lg:mt-0 bg-white shadow-2 ease-in duration-200 py-2.5 rounded-md border border-gray-3 left-0 hidden
     xl:translate-y-10 xl:opacity-0 xl:invisible xl:absolute xl:flex
@@ -119,15 +184,15 @@ input[type='search']::-webkit-search-results-decoration {
 
 
 .hero-carousel .swiper-pagination-bullet {
-  @apply h-1 w-4 rounded-[11px] bg-[#DDD];
+  @apply h-1.5 w-6 rounded-full bg-white/20;
 }
 
 .hero-carousel .swiper-pagination-bullet-active {
-  @apply w-5.5 bg-blue;
+  @apply w-10 bg-white;
 }
 
 .hero-carousel .swiper-pagination {
-  @apply xl:!bottom-5;
+  @apply !bottom-6 !left-6 !right-auto !w-auto sm:!left-10 xl:!left-16;
 }
 
 .common-carousel .swiper-button-next:after,

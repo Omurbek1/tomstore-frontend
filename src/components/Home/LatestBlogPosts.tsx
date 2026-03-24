@@ -37,41 +37,42 @@ export default function LatestBlogPosts({
   }
 
   return (
-    <section className="overflow-hidden bg-white py-18">
-      <div className="mx-auto max-w-[1170px] px-4 sm:px-8 xl:px-0">
+    <section className="overflow-hidden">
+      <div className="mx-auto max-w-[1170px]">
+        <div className="section-shell px-4 py-7 sm:px-8 sm:py-8 xl:px-10 xl:py-10">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <span className="mb-2 block text-sm font-semibold uppercase tracking-[0.24em] text-blue">
+            <span className="section-kicker">
               {t("common.blogs")}
             </span>
-            <h2 className="text-2xl font-semibold text-dark sm:text-[34px]">
+            <h2 className="section-title mt-4">
               {t("common.blogs")}
             </h2>
           </div>
 
           <Link
             href="/blogs/blog-grid"
-            className="inline-flex rounded-md border border-blue px-5 py-3 font-medium text-blue transition-colors duration-200 hover:bg-blue hover:text-white"
+            className="inline-flex rounded-full border border-white bg-white px-5 py-3 text-sm font-medium text-dark transition-all duration-200 hover:-translate-y-0.5 hover:bg-dark hover:text-white"
           >
             {t("common.viewAll")}
           </Link>
         </div>
 
-        <div className="grid gap-7.5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {posts.map((post) => (
             <article
               key={post.slug}
-              className="rounded-xl border border-gray-3 bg-white p-4 shadow-1"
+              className="rounded-[26px] border border-white/80 bg-white/90 p-4 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.34)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_64px_-36px_rgba(60,80,224,0.22)]"
             >
               <Link
                 href={`/blogs/blog-details?slug=${post.slug}`}
-                className="block overflow-hidden rounded-md"
+                className="block overflow-hidden rounded-[20px]"
               >
                 <BlogMedia
                   title={post.title}
                   imageUrl={post.coverImageUrl}
                   videoUrl={post.coverVideoUrl}
-                  mediaClassName="h-[220px] w-full rounded-md object-cover"
+                  mediaClassName="h-[240px] w-full rounded-[20px] object-cover"
                 />
               </Link>
 
@@ -101,6 +102,7 @@ export default function LatestBlogPosts({
               </div>
             </article>
           ))}
+        </div>
         </div>
       </div>
     </section>

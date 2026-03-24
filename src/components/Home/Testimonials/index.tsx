@@ -25,29 +25,26 @@ const Testimonials = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden pb-16.5">
-      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        <div className="">
-          <div className="swiper testimonial-carousel common-carousel p-5">
+    <section className="overflow-hidden">
+      <div className="mx-auto w-full max-w-[1170px]">
+        <div className="section-shell px-4 py-7 sm:px-8 sm:py-8 xl:px-10 xl:py-10">
+          <div className="swiper testimonial-carousel common-carousel">
             {/* <!-- section title --> */}
-            <div className="mb-10 flex items-center justify-between">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
-                  <Image
-                    src="/images/icons/icon-08.svg"
-                    alt="icon"
-                    width={17}
-                    height={17}
-                  />
+                <span className="section-kicker">
                   {t("home.testimonials")}
                 </span>
-                <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
+                <h2 className="section-title mt-4">
                   {t("home.userFeedbacks")}
                 </h2>
               </div>
 
               <div className="flex items-center gap-3">
-                <div onClick={handlePrev} className="swiper-button-prev">
+                <div
+                  onClick={handlePrev}
+                  className="swiper-button-prev !h-11 !w-11 rounded-full !border-white !bg-white/80"
+                >
                   <svg
                     className="fill-current"
                     width="24"
@@ -65,7 +62,10 @@ const Testimonials = () => {
                   </svg>
                 </div>
 
-                <div onClick={handleNext} className="swiper-button-next">
+                <div
+                  onClick={handleNext}
+                  className="swiper-button-next !h-11 !w-11 rounded-full !border-white !bg-white/80"
+                >
                   <svg
                     className="fill-current"
                     width="24"
@@ -103,6 +103,7 @@ const Testimonials = () => {
                   slidesPerView: 3,
                 },
               }}
+              className="!overflow-visible"
             >
               {testimonialsData.map((item, key) => (
                 <SwiperSlide key={key}>

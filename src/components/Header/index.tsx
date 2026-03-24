@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getMenuData } from "./menuData";
@@ -108,6 +108,8 @@ const Header = () => {
   } = useI18n();
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
+  const [supplementaryNavHidden, setSupplementaryNavHidden] = useState(false);
+  const lastScrollYRef = useRef(0);
   const { openCartModal } = useCartModalContext();
   const { data: storefrontConfig } = useStorefrontConfigQuery();
   const companyName = getStorefrontCompanyName(storefrontConfig);
@@ -116,27 +118,46 @@ const Header = () => {
   const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
   const cartItemsCount = useAppStore(selectCartItemsCount);
   const totalPrice = useAppStore(selectCartTotalPrice);
+  const compactHeader = stickyMenu;
 
   const handleOpenCartModal = () => {
     openCartModal();
   };
 
-  // Sticky menu
-  const handleStickyMenu = () => {
-    if (window.scrollY >= 80) {
-      setStickyMenu(true);
-    } else {
-      setStickyMenu(false);
-    }
-  };
-
   useEffect(() => {
-    window.addEventListener("scroll", handleStickyMenu);
-    return () => window.removeEventListener("scroll", handleStickyMenu);
-  }, []);
+    const handleScrollState = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollYRef.current;
+
+      setStickyMenu(currentScrollY >= 80);
+
+      if (navigationOpen) {
+        setSupplementaryNavHidden(false);
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (currentScrollY < 40) {
+        setSupplementaryNavHidden(false);
+      } else if (scrollDelta > 12 && currentScrollY > 120) {
+        setSupplementaryNavHidden(true);
+      } else if (scrollDelta < -12) {
+        setSupplementaryNavHidden(false);
+      }
+
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    lastScrollYRef.current = window.scrollY;
+    handleScrollState();
+
+    window.addEventListener("scroll", handleScrollState, { passive: true });
+    return () => window.removeEventListener("scroll", handleScrollState);
+  }, [navigationOpen]);
 
   useEffect(() => {
     setNavigationOpen(false);
+    setSupplementaryNavHidden(false);
   }, [pathname]);
   const showBlogMenu = isStorefrontBlogPublic(storefrontConfig);
   const menuData = getMenuData(t, {
@@ -183,24 +204,30 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed left-0 top-0 w-full z-9999 bg-white transition-all ease-in-out duration-300 ${
-        stickyMenu && "shadow"
+      className={`fixed left-0 top-0 z-9999 w-full border-b border-white/50 bg-white/74 backdrop-blur-xl transition-all duration-300 ease-in-out ${
+        stickyMenu ? "shadow-[0_18px_50px_-34px_rgba(15,23,42,0.35)]" : ""
       }`}
     >
       <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
         <div
-          className={`space-y-3 xl:hidden ${stickyMenu ? "py-3" : "py-4"}`}
+          className={`xl:hidden ${compactHeader ? "space-y-1.5 py-2" : "space-y-2.5 py-4"}`}
         >
-          <div className="flex items-center gap-2.5">
+          <div className={`flex items-center ${compactHeader ? "gap-2" : "gap-2.5"}`}>
             <Link
-              className="flex min-w-0 flex-1 items-center gap-3 overflow-hidden rounded-2xl border border-gray-3 bg-white px-3 py-2 shadow-sm"
+              className={`flex min-w-0 flex-1 items-center overflow-hidden border border-white/70 bg-white/86 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.26)] transition-all duration-300 ${
+                compactHeader
+                  ? "h-9 gap-2 rounded-[18px] px-2.5"
+                  : "h-11 gap-3 rounded-[24px] px-3.5"
+              }`}
               href="/"
             >
               {companyLogoUrl ? (
                 <img
                   src={companyLogoUrl}
                   alt={companyName}
-                  className="h-8 w-auto max-w-[84px] flex-shrink-0 object-contain"
+                  className={`w-auto flex-shrink-0 object-contain transition-all duration-300 ${
+                    compactHeader ? "h-6 max-w-[62px]" : "h-8 max-w-[84px]"
+                  }`}
                 />
               ) : (
                 <Image
@@ -208,10 +235,18 @@ const Header = () => {
                   alt={companyName}
                   width={164}
                   height={36}
-                  className="h-8 w-auto max-w-[84px] flex-shrink-0 object-contain"
+                  className={`w-auto flex-shrink-0 object-contain transition-all duration-300 ${
+                    compactHeader ? "h-6 max-w-[62px]" : "h-8 max-w-[84px]"
+                  }`}
                 />
               )}
-              <span className="min-w-0 truncate text-sm font-semibold uppercase tracking-[0.18em] text-dark">
+              <span
+                className={`min-w-0 truncate font-semibold uppercase text-dark transition-all duration-300 ${
+                  compactHeader
+                    ? "text-[11px] leading-none tracking-[0.1em]"
+                    : "text-sm leading-none tracking-[0.18em]"
+                }`}
+              >
                 {companyName}
               </span>
             </Link>
@@ -219,7 +254,11 @@ const Header = () => {
             <button
               onClick={handleOpenCartModal}
               aria-label={t("header.cart")}
-              className="relative inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-gray-3 bg-white shadow-sm"
+              className={`relative inline-flex flex-shrink-0 items-center justify-center border border-white/70 bg-white/86 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.26)] transition-all duration-300 ${
+                compactHeader
+                  ? "h-9 w-9 rounded-[18px] [&_svg]:scale-[0.9]"
+                  : "h-11 w-11 rounded-[24px]"
+              }`}
             >
               <CartIcon />
               <span className="absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-blue px-1 text-[11px] font-medium text-white">
@@ -231,10 +270,18 @@ const Header = () => {
               type="button"
               aria-label={navigationOpen ? t("common.close") : t("header.toggleAria")}
               aria-expanded={navigationOpen}
-              className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-gray-3 bg-white shadow-sm"
+              className={`flex flex-shrink-0 items-center justify-center border border-white/70 bg-white/86 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.26)] transition-all duration-300 ${
+                compactHeader
+                  ? "h-9 w-9 rounded-[18px]"
+                  : "h-11 w-11 rounded-[24px]"
+              }`}
               onClick={toggleNavigation}
             >
-              <span className="block relative cursor-pointer w-5.5 h-5.5">
+              <span
+                className={`relative block cursor-pointer transition-all duration-300 ${
+                  compactHeader ? "h-5 w-5" : "h-5.5 w-5.5"
+                }`}
+              >
                 <span className="du-block absolute right-0 w-full h-full">
                   <span
                     className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-[0] ${
@@ -269,20 +316,41 @@ const Header = () => {
             </button>
           </div>
 
-          {supportPhone ? (
-            <a
-              href={getPhoneHref(supportPhone)}
-              className="flex items-center justify-between rounded-2xl border border-gray-3 bg-gray-1 px-4 py-3"
-            >
-              <span className="text-xs font-medium uppercase tracking-[0.18em] text-dark-4">
-                {t("header.support")}
-              </span>
-              <span className="text-sm font-semibold text-dark">
-                {supportPhone}
-              </span>
-            </a>
-          ) : null}
-
+          <div
+            className={`grid overflow-hidden transition-all duration-300 ease-in-out ${
+              supplementaryNavHidden
+                ? "grid-rows-[0fr] opacity-0 -translate-y-2"
+                : "grid-rows-[1fr] opacity-100 translate-y-0"
+            }`}
+          >
+            <div className="overflow-hidden">
+              {supportPhone ? (
+                <a
+                  href={getPhoneHref(supportPhone)}
+                  className={`flex items-center justify-between border border-white/70 bg-white/70 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.2)] transition-all duration-300 ${
+                    compactHeader
+                      ? "h-9 rounded-[18px] px-3"
+                      : "h-11 rounded-[24px] px-4"
+                  }`}
+                >
+                  <span
+                    className={`font-medium uppercase text-dark-4 transition-all duration-300 ${
+                      compactHeader ? "text-[10px] tracking-[0.12em]" : "text-xs tracking-[0.18em]"
+                    }`}
+                  >
+                    {t("header.support")}
+                  </span>
+                  <span
+                    className={`font-semibold text-dark transition-all duration-300 ${
+                      compactHeader ? "text-[13px]" : "text-sm"
+                    }`}
+                  >
+                    {supportPhone}
+                  </span>
+                </a>
+              ) : null}
+            </div>
+          </div>
         </div>
 
         <div
@@ -301,7 +369,7 @@ const Header = () => {
 
           <aside
             aria-hidden={!navigationOpen}
-            className={`absolute right-0 top-0 flex h-dvh w-full max-w-[380px] flex-col bg-white shadow-2 transition-transform duration-300 ${
+            className={`absolute right-0 top-0 flex h-dvh w-full max-w-[380px] flex-col border-l border-white/60 bg-[#f8fbff]/96 shadow-2 backdrop-blur-xl transition-transform duration-300 ${
               navigationOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
@@ -335,7 +403,7 @@ const Header = () => {
                 type="button"
                 aria-label={t("common.close")}
                 onClick={closeNavigation}
-                className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-gray-3 bg-gray-1 text-dark transition-colors duration-200 hover:border-blue hover:text-blue"
+                className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[24px] border border-white/70 bg-white/80 text-dark transition-colors duration-200 hover:border-blue hover:text-blue"
               >
                 <svg
                   width="18"
@@ -361,7 +429,7 @@ const Header = () => {
                     href={getWhatsAppHref(whatsappPhone)}
                     target="_blank"
                     rel="noreferrer"
-                    className={`rounded-2xl border border-gray-3 bg-gray-1 px-4 py-3 ${
+                    className={`rounded-[24px] border border-white/70 bg-white/80 px-4 py-3 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.25)] ${
                       !supportPhone ? "col-span-2" : ""
                     }`}
                   >
@@ -380,7 +448,7 @@ const Header = () => {
                 {supportPhone ? (
                   <a
                     href={getPhoneHref(supportPhone)}
-                    className={`rounded-2xl border border-gray-3 bg-gray-1 px-4 py-3 ${
+                    className={`rounded-[24px] border border-white/70 bg-white/80 px-4 py-3 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.25)] ${
                       !whatsappPhone ? "col-span-2" : ""
                     }`}
                   >
@@ -402,7 +470,7 @@ const Header = () => {
                     closeNavigation();
                     handleOpenCartModal();
                   }}
-                  className="col-span-2 rounded-2xl border border-blue/20 bg-blue/5 px-4 py-3 text-left"
+                  className="col-span-2 rounded-[24px] border border-blue/15 bg-blue/8 px-4 py-3 text-left shadow-[0_18px_36px_-30px_rgba(60,80,224,0.32)]"
                 >
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <span className="flex items-center gap-2.5">
@@ -422,7 +490,7 @@ const Header = () => {
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <label className="rounded-2xl border border-gray-3 bg-white px-3 py-2.5">
+                <label className="rounded-[24px] border border-white/70 bg-white/80 px-3 py-2.5">
                   <span className="mb-1 block text-[11px] uppercase tracking-[0.16em] text-dark-4">
                     {t("header.language")}
                   </span>
@@ -443,7 +511,7 @@ const Header = () => {
                   </select>
                 </label>
 
-                <label className="rounded-2xl border border-gray-3 bg-white px-3 py-2.5">
+                <label className="rounded-[24px] border border-white/70 bg-white/80 px-3 py-2.5">
                   <span className="mb-1 block text-[11px] uppercase tracking-[0.16em] text-dark-4">
                     {t("header.currency")}
                   </span>
@@ -482,7 +550,7 @@ const Header = () => {
                         <Link
                           href={menuItem.path}
                           onClick={closeNavigation}
-                          className={`flex rounded-xl bg-gray-1 px-4 py-3 text-base font-medium ${
+                          className={`flex rounded-[20px] bg-white/80 px-4 py-3 text-base font-medium shadow-[0_18px_36px_-30px_rgba(15,23,42,0.2)] ${
                             pathname === menuItem.path
                               ? "text-blue"
                               : "text-dark"
@@ -501,20 +569,32 @@ const Header = () => {
 
         <div
           className={`hidden xl:flex xl:flex-row xl:flex-wrap xl:items-center xl:justify-between 2xl:flex-nowrap ${
-            stickyMenu ? "py-4" : "py-6"
+            compactHeader ? "py-1.5" : "py-5"
           }`}
         >
           {/* <!-- header top left --> */}
-          <div className="flex w-full min-w-0 flex-1 flex-row items-center gap-6">
+          <div
+            className={`flex w-full min-w-0 flex-1 flex-row items-center transition-all duration-300 ${
+              compactHeader ? "gap-4" : "gap-6"
+            }`}
+          >
             <Link
-              className="flex w-auto min-w-0 max-w-[320px] items-center gap-3 2xl:max-w-[360px]"
+              className={`flex w-auto min-w-0 items-center rounded-full border border-white/70 bg-white/78 shadow-[0_22px_44px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 ${
+                compactHeader
+                  ? "max-w-[280px] gap-2 px-3 py-2 2xl:max-w-[320px]"
+                  : "max-w-[360px] gap-3 px-4 py-3 2xl:max-w-[400px]"
+              }`}
               href="/"
             >
               {companyLogoUrl ? (
                 <img
                   src={companyLogoUrl}
                   alt={companyName}
-                  className="h-9 w-auto max-w-[140px] flex-shrink-0 object-contain sm:max-w-[180px]"
+                  className={`w-auto flex-shrink-0 object-contain transition-all duration-300 ${
+                    compactHeader
+                      ? "h-7 max-w-[104px] sm:max-w-[124px]"
+                      : "h-9 max-w-[140px] sm:max-w-[180px]"
+                  }`}
                 />
               ) : (
                 <Image
@@ -522,18 +602,36 @@ const Header = () => {
                   alt={companyName}
                   width={164}
                   height={36}
-                  className="h-auto w-auto max-w-[140px] flex-shrink-0 sm:max-w-[164px]"
+                  className={`h-auto w-auto flex-shrink-0 transition-all duration-300 ${
+                    compactHeader
+                      ? "max-w-[104px] sm:max-w-[124px]"
+                      : "max-w-[140px] sm:max-w-[164px]"
+                  }`}
                 />
               )}
-              <span className="min-w-0 truncate text-sm font-semibold uppercase tracking-[0.28em] text-dark sm:text-base">
+              <span
+                className={`min-w-0 truncate font-semibold uppercase text-dark transition-all duration-300 ${
+                  compactHeader
+                    ? "text-[11px] tracking-[0.14em] sm:text-[12px]"
+                    : "text-sm tracking-[0.28em] sm:text-base"
+                }`}
+              >
                 {companyName}
               </span>
             </Link>
           </div>
 
           {/* <!-- header top right --> */}
-          <div className="flex w-full flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between xl:w-auto xl:flex-none xl:justify-end xl:gap-5 2xl:flex-nowrap 2xl:gap-7.5">
-            <div className="hidden min-w-0 items-start gap-3 xl:flex xl:max-w-[220px]">
+          <div
+            className={`flex w-full flex-col sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-between xl:w-auto xl:flex-none xl:justify-end 2xl:flex-nowrap transition-all duration-300 ${
+              compactHeader ? "gap-3 xl:gap-3.5 2xl:gap-4" : "gap-4 xl:gap-4 2xl:gap-5"
+            }`}
+          >
+            <div
+              className={`hidden min-w-0 items-center rounded-full border border-white/70 bg-white/78 shadow-[0_22px_44px_-32px_rgba(15,23,42,0.24)] xl:flex xl:max-w-[240px] transition-all duration-300 ${
+                compactHeader ? "h-11 gap-2 px-3" : "h-[52px] gap-3 px-4"
+              }`}
+            >
               <svg
                 className="shrink-0"
                 width="24"
@@ -560,14 +658,14 @@ const Header = () => {
                 />
               </svg>
 
-              <div className="min-w-0">
-                <span className="block text-2xs text-dark-4 uppercase">
+              <div className="min-w-0 leading-none">
+                <span className="block text-2xs uppercase text-dark-4">
                   {t("header.support")}
                 </span>
                 {supportPhone ? (
                   <a
                     href={getPhoneHref(supportPhone)}
-                    className="block break-words font-medium leading-tight text-custom-sm text-dark hover:text-blue"
+                    className="mt-1 block break-words font-medium leading-none text-custom-sm text-dark hover:text-blue"
                   >
                     {supportPhone}
                   </a>
@@ -578,9 +676,21 @@ const Header = () => {
             {/* <!-- divider --> */}
             <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
 
-            <div className="flex w-full flex-wrap items-center justify-between gap-4 sm:w-auto sm:justify-end sm:gap-5">
-              <div className="flex flex-wrap items-center gap-4 sm:gap-5">
-                <label className="flex items-center gap-2 rounded-md border border-gray-3 bg-gray-1 px-3 py-2">
+            <div
+              className={`flex w-full flex-wrap items-center justify-between sm:w-auto sm:justify-end transition-all duration-300 ${
+                compactHeader ? "gap-3 sm:gap-4" : "gap-4 sm:gap-5"
+              }`}
+            >
+              <div
+                className={`flex flex-wrap items-center transition-all duration-300 ${
+                  compactHeader ? "gap-3 sm:gap-4" : "gap-4 sm:gap-5"
+                }`}
+              >
+                <label
+                  className={`flex items-center gap-2 rounded-full border border-white/70 bg-white/78 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.22)] transition-all duration-300 ${
+                    compactHeader ? "h-11 px-2.5" : "h-[52px] px-3.5"
+                  }`}
+                >
                 
                   <select
                     value={localePreference}
@@ -590,7 +700,9 @@ const Header = () => {
                       )
                     }
                     aria-label={t("header.language")}
-                    className="min-w-[112px] bg-transparent text-custom-sm font-medium text-dark outline-none"
+                    className={`h-full bg-transparent font-medium text-dark outline-none transition-all duration-300 ${
+                      compactHeader ? "min-w-[92px] text-xs" : "min-w-[112px] text-custom-sm"
+                    }`}
                   >
                     <option value="auto">{t("header.languageSystem")}</option>
                     <option value="ru">Русский</option>
@@ -599,7 +711,11 @@ const Header = () => {
                   </select>
                 </label>
 
-                <label className="flex items-center gap-2 rounded-md border border-gray-3 bg-gray-1 px-3 py-2">
+                <label
+                  className={`flex items-center gap-2 rounded-full border border-white/70 bg-white/78 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.22)] transition-all duration-300 ${
+                    compactHeader ? "h-11 px-2.5" : "h-[52px] px-3.5"
+                  }`}
+                >
                 
                   <select
                     value={currencyPreference}
@@ -609,7 +725,9 @@ const Header = () => {
                       )
                     }
                     aria-label={t("header.currency")}
-                    className="min-w-[110px] bg-transparent text-custom-sm font-medium text-dark outline-none"
+                    className={`h-full bg-transparent font-medium text-dark outline-none transition-all duration-300 ${
+                      compactHeader ? "min-w-[90px] text-xs" : "min-w-[110px] text-custom-sm"
+                    }`}
                   >
                     <option value="default">{t("header.currencyDefault")}</option>
                     <option value="KGS">{t("header.currencyKgs")}</option>
@@ -622,14 +740,16 @@ const Header = () => {
                     href={getWhatsAppHref(whatsappPhone)}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2.5"
+                    className={`flex items-center rounded-full border border-white/70 bg-white/78 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.22)] transition-all duration-300 ${
+                      compactHeader ? "h-11 gap-2 px-3" : "h-[52px] gap-2.5 px-4"
+                    }`}
                   >
                     <WhatsAppIcon />
-                    <div>
-                      <span className="block text-2xs text-dark-4 uppercase">
+                    <div className="leading-none">
+                      <span className="block text-2xs uppercase text-dark-4">
                         {t("header.whatsapp")}
                       </span>
-                      <p className="font-medium text-custom-sm text-dark">
+                      <p className="mt-1 font-medium leading-none text-custom-sm text-dark">
                         {whatsappPhone}
                       </p>
                     </div>
@@ -638,7 +758,9 @@ const Header = () => {
 
                 <button
                   onClick={handleOpenCartModal}
-                  className="flex items-center gap-2.5"
+                  className={`flex items-center rounded-full border border-white/70 bg-white/78 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.22)] transition-all duration-300 ${
+                    compactHeader ? "h-11 gap-2 px-3" : "h-[52px] gap-2.5 px-4"
+                  }`}
                 >
                   <span className="inline-block relative">
                     <svg
@@ -677,11 +799,11 @@ const Header = () => {
                     </span>
                   </span>
 
-                  <div>
-                    <span className="block text-2xs text-dark-4 uppercase">
+                  <div className="leading-none">
+                    <span className="block text-2xs uppercase text-dark-4">
                       {t("header.cart")}
                     </span>
-                    <p className="font-medium text-custom-sm text-dark">
+                    <p className="mt-1 font-medium leading-none text-custom-sm text-dark">
                       {formatPrice(totalPrice)}
                     </p>
                   </div>
@@ -693,9 +815,15 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="hidden border-t border-gray-3 xl:block">
+      <div
+        className={`hidden overflow-hidden transition-all duration-300 ease-in-out xl:block ${
+          supplementaryNavHidden
+            ? "pointer-events-none max-h-0 -translate-y-3 pb-0 opacity-0"
+            : "max-h-[180px] translate-y-0 pb-4 opacity-100"
+        }`}
+      >
         <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
-          <div className="flex items-center justify-between">
+          <div className="section-shell flex items-center justify-between px-6">
             {/* <!--=== Main Nav Start ===--> */}
             <div
               className={`w-[288px] absolute right-4 top-full xl:static xl:w-auto h-0 xl:h-auto invisible xl:visible xl:flex items-center justify-between ${
@@ -717,13 +845,13 @@ const Header = () => {
                     ) : (
                       <li
                         key={i}
-                        className="group relative before:w-0 before:h-[3px] before:bg-blue before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full "
+                    className="group relative before:absolute before:left-0 before:top-0 before:h-[3px] before:w-0 before:rounded-b-[3px] before:bg-blue before:duration-200 before:ease-out hover:before:w-full"
                       >
                         <Link
                           href={menuItem.path}
                           className={`hover:text-blue text-custom-sm font-medium flex ${
                             pathname === menuItem.path ? "text-blue" : "text-dark"
-                          } ${stickyMenu ? "xl:py-4" : "xl:py-6"}`}
+                          } ${stickyMenu ? "xl:py-4" : "xl:py-5"}`}
                         >
                           {menuItem.title}
                         </Link>
@@ -742,7 +870,7 @@ const Header = () => {
                 <li className="py-4">
                   <a
                     href="#"
-                    className="flex items-center gap-1.5 font-medium text-custom-sm text-dark hover:text-blue"
+                    className="flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 font-medium text-custom-sm text-dark transition-colors duration-200 hover:text-blue"
                   >
                     <svg
                       className="fill-current"
@@ -768,7 +896,7 @@ const Header = () => {
                 <li className="py-4">
                   <Link
                     href="/wishlist"
-                    className="flex items-center gap-1.5 font-medium text-custom-sm text-dark hover:text-blue"
+                    className="flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 font-medium text-custom-sm text-dark transition-colors duration-200 hover:text-blue"
                   >
                     <svg
                       className="fill-current"

@@ -26,19 +26,24 @@ const HeroFeature = () => {
   ];
 
   return (
-    <div className="max-w-[1060px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-      <div className="flex flex-wrap items-center gap-7.5 xl:gap-12.5 mt-10">
+    <div className="grid gap-3 md:grid-cols-3">
         {featureData.map((item, key) => (
-          <div className="flex items-center gap-4" key={key}>
-            <Image src={item.img} alt="icons" width={40} height={41} />
+          <div
+            className="flex items-start gap-4 rounded-[24px] border border-white/10 bg-white/8 px-5 py-4 backdrop-blur-sm"
+            key={key}
+          >
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+              <Image src={item.img} alt="icons" width={24} height={24} />
+            </div>
 
-            <div>
-              <h3 className="font-medium text-lg text-dark">{item.title}</h3>
-              <p className="text-sm">{item.description}</p>
+            <div className="min-w-0">
+              <h3 className="text-base font-semibold text-white">{item.title}</h3>
+              <p className="mt-1 text-sm leading-6 text-white/62">
+                {item.description}
+              </p>
             </div>
           </div>
         ))}
-      </div>
     </div>
   );
 };
