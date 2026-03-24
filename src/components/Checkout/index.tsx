@@ -2,19 +2,17 @@
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import { useI18n } from "@/i18n/provider";
-import { selectTotalPrice } from "@/redux/features/cart-slice";
-import { useAppSelector } from "@/redux/store";
+import { selectCartTotalPrice, useAppStore } from "@/store/app-store";
 import Shipping from "./Shipping";
 import ShippingMethod from "./ShippingMethod";
 import PaymentMethod from "./PaymentMethod";
 import Coupon from "./Coupon";
 import Billing from "./Billing";
-import { useSelector } from "react-redux";
 
 const Checkout = () => {
   const { t, formatPrice } = useI18n();
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
-  const totalPrice = useSelector(selectTotalPrice);
+  const cartItems = useAppStore((state) => state.cartItems);
+  const totalPrice = useAppStore(selectCartTotalPrice);
 
   return (
     <>

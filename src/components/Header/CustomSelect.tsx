@@ -42,6 +42,17 @@ const CustomSelect = ({
     setIsOpen(false);
   };
 
+  const handleTriggerKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setIsOpen((prev) => !prev);
+    }
+
+    if (event.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
   useEffect(() => {
     // closing modal while clicking outside
     function handleClickOutside(event: MouseEvent) {
@@ -80,16 +91,26 @@ const CustomSelect = ({
           isOpen ? "select-arrow-active" : ""
         }`}
         onClick={toggleDropdown}
+        onKeyDown={handleTriggerKeyDown}
+        role="button"
+        tabIndex={0}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
       >
         {selectedOption.label}
       </div>
-      <div className={`select-items ${isOpen ? "" : "select-hide"}`}>
+      <div
+        role="listbox"
+        className={`select-items ${isOpen ? "" : "select-hide"}`}
+      >
         {options
           .filter((option) => option.value !== selectedOption.value)
           .map((option) => (
             <div
               key={option.value}
               onClick={() => handleOptionClick(option)}
+              role="option"
+              aria-selected={selectedOption.value === option.value}
               className={`select-item ${
                 selectedOption === option ? "same-as-selected" : ""
               }`}

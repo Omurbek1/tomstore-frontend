@@ -1,31 +1,71 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
 import Image from "next/image";
+import Link from "next/link";
 import { useI18n } from "@/i18n/provider";
+import {
+  type CartItem,
+  useAppStore,
+} from "@/store/app-store";
+import QuantityControl from "@/components/Cart/QuantityControl";
 
-const SingleItem = ({ item, removeItemFromCart }) => {
-  const dispatch = useDispatch<AppDispatch>();
+type SingleItemProps = {
+  item: CartItem;
+};
+
+const SingleItem = ({ item }: SingleItemProps) => {
   const { t, formatPrice } = useI18n();
+  const removeItemFromCart = useAppStore((state) => state.removeItemFromCart);
+  const updateCartItemQuantity = useAppStore(
+    (state) => state.updateCartItemQuantity,
+  );
 
   const handleRemoveFromCart = () => {
-    dispatch(removeItemFromCart(item.id));
+    removeItemFromCart(item.id);
+  };
+
+  const handleIncreaseQuantity = () => {
+    updateCartItemQuantity({ id: item.id, quantity: item.quantity + 1 });
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (item.quantity === 1) {
+      removeItemFromCart(item.id);
+      return;
+    }
+
+    updateCartItemQuantity({ id: item.id, quantity: item.quantity - 1 });
   };
 
   return (
     <div className="flex items-center justify-between gap-5">
       <div className="w-full flex items-center gap-6">
         <div className="flex items-center justify-center rounded-[10px] bg-gray-3 max-w-[90px] w-full h-22.5">
-          <Image src={item.imgs?.thumbnails[0]} alt="product" width={100} height={100} />
+          <Image
+            src={item.imgs?.thumbnails[0] || "/images/products/product-1-sm-1.png"}
+            alt={item.title}
+            width={100}
+            height={100}
+          />
         </div>
 
-        <div>
+        <div className="min-w-0 flex-1">
           <h3 className="font-medium text-dark mb-1 ease-out duration-200 hover:text-blue">
-            <a href="#"> {item.title} </a>
+            <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>
           </h3>
           <p className="text-custom-sm">
             {t("common.price")}: {formatPrice(item.discountedPrice)}
           </p>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <QuantityControl
+              quantity={item.quantity}
+              onDecrease={handleDecreaseQuantity}
+              onIncrease={handleIncreaseQuantity}
+              size="compact"
+            />
+            <p className="text-custom-sm text-dark">
+              {t("common.subtotal")}: {formatPrice(item.discountedPrice * item.quantity)}
+            </p>
+          </div>
         </div>
       </div>
 

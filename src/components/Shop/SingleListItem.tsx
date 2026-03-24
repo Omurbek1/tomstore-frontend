@@ -3,44 +3,43 @@ import React from "react";
 
 import { Product } from "@/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
-import { updateQuickView } from "@/redux/features/quickView-slice";
-import { addItemToCart } from "@/redux/features/cart-slice";
-import { addItemToWishlist } from "@/redux/features/wishlist-slice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/i18n/provider";
 import ProductLabelBadges from "@/components/Common/ProductLabelBadges";
+import { useAppStore } from "@/store/app-store";
+import { useCartToast } from "@/components/Common/useCartToast";
 
 const SingleListItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t, formatPrice } = useI18n();
-  const dispatch = useDispatch<AppDispatch>();
+  const setQuickViewProduct = useAppStore((state) => state.setQuickViewProduct);
+  const addItemToCart = useAppStore((state) => state.addItemToCart);
+  const addItemToWishlist = useAppStore((state) => state.addItemToWishlist);
+  const showCartToast = useCartToast();
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
-    dispatch(updateQuickView({ ...item }));
+    setQuickViewProduct({ ...item });
   };
 
   // add to cart
   const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...item,
-        quantity: 1,
-      })
-    );
+    const cartItem = {
+      ...item,
+      quantity: 1,
+    };
+
+    addItemToCart(cartItem);
+    showCartToast(cartItem);
   };
 
   const handleItemToWishList = () => {
-    dispatch(
-      addItemToWishlist({
-        ...item,
-        status: "available",
-        quantity: 1,
-      })
-    );
+    addItemToWishlist({
+      ...item,
+      status: "available",
+      quantity: 1,
+    });
   };
 
   return (

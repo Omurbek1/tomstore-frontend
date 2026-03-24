@@ -1,36 +1,39 @@
-import React, { useState } from "react";
-import { AppDispatch } from "@/redux/store";
-import { useDispatch } from "react-redux";
+import React from "react";
 import {
-  removeItemFromCart,
-  updateCartItemQuantity,
-} from "@/redux/features/cart-slice";
-
+  type CartItem,
+} from "@/store/app-store";
 import Image from "next/image";
+import Link from "next/link";
 import { useI18n } from "@/i18n/provider";
+import { useAppStore } from "@/store/app-store";
+import QuantityControl from "./QuantityControl";
 
-const SingleItem = ({ item }) => {
-  const [quantity, setQuantity] = useState(item.quantity);
+type SingleItemProps = {
+  item: CartItem;
+};
+
+const SingleItem = ({ item }: SingleItemProps) => {
   const { t, formatPrice } = useI18n();
-
-  const dispatch = useDispatch<AppDispatch>();
+  const removeItemFromCart = useAppStore((state) => state.removeItemFromCart);
+  const updateCartItemQuantity = useAppStore(
+    (state) => state.updateCartItemQuantity,
+  );
 
   const handleRemoveFromCart = () => {
-    dispatch(removeItemFromCart(item.id));
+    removeItemFromCart(item.id);
   };
 
   const handleIncreaseQuantity = () => {
-    setQuantity(quantity + 1);
-    dispatch(updateCartItemQuantity({ id: item.id, quantity: quantity + 1 }));
+    updateCartItemQuantity({ id: item.id, quantity: item.quantity + 1 });
   };
 
   const handleDecreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-      dispatch(updateCartItemQuantity({ id: item.id, quantity: quantity - 1 }));
-    } else {
+    if (item.quantity === 1) {
+      removeItemFromCart(item.id);
       return;
     }
+
+    updateCartItemQuantity({ id: item.id, quantity: item.quantity - 1 });
   };
 
   return (
@@ -39,13 +42,21 @@ const SingleItem = ({ item }) => {
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div className="flex items-center justify-center rounded-[5px] bg-gray-2 max-w-[80px] w-full h-17.5">
-              <Image width={200} height={200} src={item.imgs?.thumbnails[0]} alt="product" />
+              <Image
+                width={200}
+                height={200}
+                src={item.imgs?.thumbnails[0] || "/images/products/product-1-sm-1.png"}
+                alt={item.title}
+              />
             </div>
 
             <div>
               <h3 className="text-dark ease-out duration-200 hover:text-blue">
-                <a href="#"> {item.title} </a>
+                <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>
               </h3>
+              <p className="mt-1 text-sm text-dark-4">
+                {t("common.quantity")}: {item.quantity}
+              </p>
             </div>
           </div>
         </div>
@@ -56,60 +67,16 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[275px]">
-        <div className="w-max flex items-center rounded-md border border-gray-3">
-          <button
-            onClick={() => handleDecreaseQuantity()}
-            aria-label="button for remove product"
-            className="flex items-center justify-center w-11.5 h-11.5 ease-out duration-200 hover:text-blue"
-          >
-            <svg
-              className="fill-current"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3.33301 10.0001C3.33301 9.53984 3.7061 9.16675 4.16634 9.16675H15.833C16.2932 9.16675 16.6663 9.53984 16.6663 10.0001C16.6663 10.4603 16.2932 10.8334 15.833 10.8334H4.16634C3.7061 10.8334 3.33301 10.4603 3.33301 10.0001Z"
-                fill=""
-              />
-            </svg>
-          </button>
-
-          <span className="flex items-center justify-center w-16 h-11.5 border-x border-gray-4">
-            {quantity}
-          </span>
-
-          <button
-            onClick={() => handleIncreaseQuantity()}
-            aria-label="button for add product"
-            className="flex items-center justify-center w-11.5 h-11.5 ease-out duration-200 hover:text-blue"
-          >
-            <svg
-              className="fill-current"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3.33301 10C3.33301 9.5398 3.7061 9.16671 4.16634 9.16671H15.833C16.2932 9.16671 16.6663 9.5398 16.6663 10C16.6663 10.4603 16.2932 10.8334 15.833 10.8334H4.16634C3.7061 10.8334 3.33301 10.4603 3.33301 10Z"
-                fill=""
-              />
-              <path
-                d="M9.99967 16.6667C9.53944 16.6667 9.16634 16.2936 9.16634 15.8334L9.16634 4.16671C9.16634 3.70647 9.53944 3.33337 9.99967 3.33337C10.4599 3.33337 10.833 3.70647 10.833 4.16671L10.833 15.8334C10.833 16.2936 10.4599 16.6667 9.99967 16.6667Z"
-                fill=""
-              />
-            </svg>
-          </button>
-        </div>
+        <QuantityControl
+          quantity={item.quantity}
+          onDecrease={handleDecreaseQuantity}
+          onIncrease={handleIncreaseQuantity}
+        />
       </div>
 
       <div className="min-w-[200px]">
         <p className="text-dark">
-          {formatPrice(item.discountedPrice * quantity)}
+          {formatPrice(item.discountedPrice * item.quantity)}
         </p>
       </div>
 

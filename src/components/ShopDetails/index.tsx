@@ -5,7 +5,7 @@ import Image from "next/image";
 import Newsletter from "../Common/Newsletter";
 import RecentlyViewdItems from "./RecentlyViewd";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
-import { useAppSelector } from "@/redux/store";
+import { useAppStore } from "@/store/app-store";
 
 const ShopDetails = () => {
   const [activeColor, setActiveColor] = useState("blue");
@@ -76,9 +76,7 @@ const ShopDetails = () => {
   const colors = ["red", "blue", "orange", "pink", "purple"];
 
   const alreadyExist = localStorage.getItem("productDetails");
-  const productFromStorage = useAppSelector(
-    (state) => state.productDetailsReducer.value
-  );
+  const productFromStorage = useAppStore((state) => state.productDetails);
 
   const product = alreadyExist ? JSON.parse(alreadyExist) : productFromStorage;
 

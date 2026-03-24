@@ -3,14 +3,17 @@ import React from "react";
 import Discount from "./Discount";
 import OrderSummary from "./OrderSummary";
 import { useI18n } from "@/i18n/provider";
-import { useAppSelector } from "@/redux/store";
+import { useAppStore } from "@/store/app-store";
 import SingleItem from "./SingleItem";
 import Breadcrumb from "../Common/Breadcrumb";
 import Link from "next/link";
 
 const Cart = () => {
   const { t } = useI18n();
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
+  const cartItems = useAppStore((state) => state.cartItems);
+  const removeAllItemsFromCart = useAppStore(
+    (state) => state.removeAllItemsFromCart,
+  );
 
   return (
     <>
@@ -24,7 +27,13 @@ const Cart = () => {
           <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
             <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
               <h2 className="font-medium text-dark text-2xl">{t("cart.yourCart")}</h2>
-              <button className="text-blue">{t("cart.clearShoppingCart")}</button>
+              <button
+                type="button"
+                onClick={removeAllItemsFromCart}
+                className="text-blue transition-colors duration-200 hover:text-blue-dark"
+              >
+                {t("cart.clearShoppingCart")}
+              </button>
             </div>
 
             <div className="bg-white rounded-[10px] shadow-1">

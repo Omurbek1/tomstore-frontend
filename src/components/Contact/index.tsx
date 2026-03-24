@@ -3,9 +3,22 @@
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import { useI18n } from "@/i18n/provider";
+import {
+  getStorefrontAddress,
+  getStorefrontCompanyName,
+  getStorefrontSupportPhone,
+  getStorefrontWhatsappPhone,
+} from "@/storefront/contact";
+import { useStorefrontConfigQuery } from "@/storefront/hooks";
 
 const Contact = () => {
   const { t } = useI18n();
+  const { data: storefrontConfig } = useStorefrontConfigQuery();
+  const companyName = getStorefrontCompanyName(storefrontConfig);
+  const supportPhone = getStorefrontSupportPhone(storefrontConfig);
+  const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
+  const address = getStorefrontAddress(storefrontConfig);
+  const showSeparateWhatsapp = whatsappPhone !== supportPhone;
 
   return (
     <>
@@ -38,7 +51,7 @@ const Contact = () => {
                         fill="#3C50E0"
                       />
                     </svg>
-                    {t("contact.nameLine")}
+                    {t("common.name")}: {companyName}
                   </p>
 
                   <p className="flex items-center gap-4">
@@ -66,8 +79,34 @@ const Contact = () => {
                         fill="#3C50E0"
                       />
                     </svg>
-                    {t("contact.phoneLine")}
+                    {t("common.phone")}: {supportPhone}
                   </p>
+
+                  {showSeparateWhatsapp ? (
+                    <p className="flex items-center gap-4">
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 22 22"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M11 2.0625C6.09172 2.0625 2.0625 6.09172 2.0625 11C2.0625 12.607 2.48963 14.1142 3.23617 15.4144L2.17277 19.0793C2.0916 19.3591 2.16924 19.6606 2.37449 19.8659C2.57974 20.0711 2.88135 20.1488 3.16104 20.0676L6.77994 19.0171C8.05183 19.7172 9.51413 19.875 11 19.875C15.9083 19.875 19.9375 15.9083 19.9375 11C19.9375 6.09172 15.9083 2.0625 11 2.0625ZM11 3.4375C15.1499 3.4375 18.5625 6.85011 18.5625 11C18.5625 15.1499 15.1499 18.5 11 18.5C9.67725 18.5 8.35448 18.2024 7.2038 17.647C7.04887 17.5722 6.87109 17.5571 6.70562 17.6048L3.87744 18.4252L4.70783 15.5637C4.75582 15.3983 4.74086 15.2201 4.66604 15.0647C4.05996 13.8091 3.4375 12.4485 3.4375 11C3.4375 6.85011 6.85011 3.4375 11 3.4375Z"
+                          fill="#3C50E0"
+                        />
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M7.83494 7.34966C8.15945 6.87353 8.40149 6.86691 8.62581 6.85737C8.80844 6.84964 9.01645 6.85033 9.22496 6.85033C9.39128 6.85033 9.6621 6.78757 9.91482 7.39444C10.1795 8.02962 10.8159 9.59299 10.8784 9.71917C10.9409 9.84535 10.9826 9.99403 10.8944 10.1427C10.8062 10.2914 10.762 10.384 10.6299 10.5364C10.4978 10.6888 10.3523 10.8774 10.2334 10.9955C10.1003 11.1277 9.96241 11.2708 10.1148 11.5345C10.2671 11.7982 10.7925 12.6589 11.5676 13.3499C12.5629 14.2372 13.4028 14.512 13.6665 14.6644C13.9302 14.8167 14.0841 14.7966 14.2163 14.6443C14.3485 14.4919 14.7889 13.9781 14.9429 13.7582C15.0968 13.5383 15.2508 13.5751 15.5145 13.7274C15.7781 13.8798 17.1823 14.5687 17.468 14.7207C17.7537 14.8727 17.9433 14.9474 18.0094 15.0584C18.0754 15.1693 18.0754 15.6937 17.7728 16.2913C17.4701 16.8888 15.998 17.4729 15.4607 17.5043C14.9234 17.5358 14.4352 17.6562 12.1161 16.741C9.79695 15.8258 8.31605 13.5878 8.20243 13.432C8.08881 13.2762 6.75 11.4892 6.75 9.64354C6.75 7.7979 7.50627 7.60061 7.83494 7.34966Z"
+                          fill="#3C50E0"
+                        />
+                      </svg>
+                      {t("header.whatsapp")}: {whatsappPhone}
+                    </p>
+                  ) : null}
 
                   <p className="flex gap-4">
                     <svg
@@ -85,7 +124,7 @@ const Contact = () => {
                         fill="#3C50E0"
                       />
                     </svg>
-                    {t("contact.addressLine")}
+                    {t("common.address")}: {address}
                   </p>
                 </div>
               </div>

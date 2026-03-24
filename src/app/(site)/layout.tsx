@@ -7,11 +7,11 @@ import Footer from "../../components/Footer";
 
 import { ModalProvider } from "../context/QuickViewModalContext";
 import { CartModalProvider } from "../context/CartSidebarModalContext";
-import { ReduxProvider } from "@/redux/provider";
 import QuickViewModal from "@/components/Common/QuickViewModal";
 import CartSidebarModal from "@/components/Common/CartSidebarModal";
 import { PreviewSliderProvider } from "../context/PreviewSliderContext";
 import PreviewSliderModal from "@/components/Common/PreviewSlider";
+import AppToaster from "@/components/Common/AppToaster";
 
 import ScrollToTop from "@/components/Common/ScrollToTop";
 import { I18nProvider } from "@/i18n/provider";
@@ -28,7 +28,6 @@ import {
   LOCALE_COOKIE_NAME,
 } from "@/i18n/utils";
 import {
-  storefrontCategoriesQueryOptions,
   storefrontConfigQueryOptions,
 } from "@/storefront/query-options";
 import type { StorefrontConfig } from "@/storefront/types";
@@ -44,7 +43,6 @@ export default async function RootLayout({
     cookies(),
     headers(),
     queryClient.prefetchQuery(configQueryOptions),
-    queryClient.prefetchQuery(storefrontCategoriesQueryOptions()),
   ]);
   const storefrontConfig =
     queryClient.getQueryData<StorefrontConfig>(configQueryOptions.queryKey);
@@ -80,20 +78,19 @@ export default async function RootLayout({
               usdExchangeRate={storefrontConfig?.storefrontUsdExchangeRate}
             >
               <>
-                <ReduxProvider>
-                  <CartModalProvider>
-                    <ModalProvider>
-                      <PreviewSliderProvider>
-                        <Header />
-                        {children}
+                <CartModalProvider>
+                  <ModalProvider>
+                    <PreviewSliderProvider>
+                      <Header />
+                      {children}
 
-                        <QuickViewModal />
-                        <CartSidebarModal />
-                        <PreviewSliderModal />
-                      </PreviewSliderProvider>
-                    </ModalProvider>
-                  </CartModalProvider>
-                </ReduxProvider>
+                      <QuickViewModal />
+                      <CartSidebarModal />
+                      <PreviewSliderModal />
+                      <AppToaster />
+                    </PreviewSliderProvider>
+                  </ModalProvider>
+                </CartModalProvider>
                 <ScrollToTop />
                 <Footer />
               </>

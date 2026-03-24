@@ -262,6 +262,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "cart.orderSummary": "Сводка заказа",
     "cart.viewCart": "Открыть корзину",
     "cart.cartView": "Корзина",
+    "cart.toastAddedTitle": "Товар добавлен в корзину",
+    "cart.toastQuantity": "Количество: {count}",
+    "cart.toastViewCart": "Перейти в корзину",
 
     "wishlist.title": "Избранное",
     "wishlist.yourWishlist": "Ваш список избранного",
@@ -638,6 +641,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "cart.orderSummary": "Order Summary",
     "cart.viewCart": "View Cart",
     "cart.cartView": "Cart View",
+    "cart.toastAddedTitle": "Item added to cart",
+    "cart.toastQuantity": "Quantity: {count}",
+    "cart.toastViewCart": "Open cart",
 
     "wishlist.title": "Wishlist",
     "wishlist.yourWishlist": "Your Wishlist",
@@ -1015,6 +1021,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "cart.orderSummary": "Заказ жыйынтыгы",
     "cart.viewCart": "Себетти көрүү",
     "cart.cartView": "Себет",
+    "cart.toastAddedTitle": "Товар себетке кошулду",
+    "cart.toastQuantity": "Саны: {count}",
+    "cart.toastViewCart": "Себетти ачуу",
 
     "wishlist.title": "Тандалмалар",
     "wishlist.yourWishlist": "Сиздин тандалмалар",

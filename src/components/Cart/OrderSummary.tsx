@@ -1,12 +1,10 @@
-import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useI18n } from "@/i18n/provider";
-import { useAppSelector } from "@/redux/store";
+import { selectCartTotalPrice, useAppStore } from "@/store/app-store";
 import React from "react";
-import { useSelector } from "react-redux";
 
 const OrderSummary = () => {
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
-  const totalPrice = useSelector(selectTotalPrice);
+  const cartItems = useAppStore((state) => state.cartItems);
+  const totalPrice = useAppStore(selectCartTotalPrice);
   const { t, formatPrice } = useI18n();
 
   return (

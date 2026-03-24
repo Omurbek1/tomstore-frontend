@@ -1,28 +1,30 @@
 import React from "react";
-import { AppDispatch } from "@/redux/store";
-import { useDispatch } from "react-redux";
-
-import { removeItemFromWishlist } from "@/redux/features/wishlist-slice";
-import { addItemToCart } from "@/redux/features/cart-slice";
 import { useI18n } from "@/i18n/provider";
-
 import Image from "next/image";
+import Link from "next/link";
+import { useAppStore, type WishlistItem } from "@/store/app-store";
+import { useCartToast } from "@/components/Common/useCartToast";
 
-const SingleItem = ({ item }) => {
-  const dispatch = useDispatch<AppDispatch>();
+const SingleItem = ({ item }: { item: WishlistItem }) => {
   const { t, formatPrice } = useI18n();
+  const removeItemFromWishlist = useAppStore(
+    (state) => state.removeItemFromWishlist,
+  );
+  const addItemToCart = useAppStore((state) => state.addItemToCart);
+  const showCartToast = useCartToast();
 
   const handleRemoveFromWishlist = () => {
-    dispatch(removeItemFromWishlist(item.id));
+    removeItemFromWishlist(item.id);
   };
 
   const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...item,
-        quantity: 1,
-      })
-    );
+    const cartItem = {
+      ...item,
+      quantity: 1,
+    };
+
+    addItemToCart(cartItem);
+    showCartToast(cartItem);
   };
 
   return (
@@ -59,12 +61,17 @@ const SingleItem = ({ item }) => {
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div className="flex items-center justify-center rounded-[5px] bg-gray-2 max-w-[80px] w-full h-17.5">
-              <Image src={item.imgs?.thumbnails[0]} alt="product" width={200} height={200} />
+              <Image
+                src={item.imgs?.thumbnails[0] || "/images/products/product-1-sm-1.png"}
+                alt={item.title}
+                width={200}
+                height={200}
+              />
             </div>
 
             <div>
               <h3 className="text-dark ease-out duration-200 hover:text-blue">
-                <a href="#"> {item.title} </a>
+                <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>
               </h3>
             </div>
           </div>

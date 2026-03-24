@@ -2,12 +2,15 @@
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import { useI18n } from "@/i18n/provider";
-import { useAppSelector } from "@/redux/store";
+import { useAppStore } from "@/store/app-store";
 import SingleItem from "./SingleItem";
 
 export const Wishlist = () => {
   const { t } = useI18n();
-  const wishlistItems = useAppSelector((state) => state.wishlistReducer.items);
+  const wishlistItems = useAppStore((state) => state.wishlistItems);
+  const removeAllItemsFromWishlist = useAppStore(
+    (state) => state.removeAllItemsFromWishlist,
+  );
 
   return (
     <>
@@ -16,7 +19,13 @@ export const Wishlist = () => {
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
             <h2 className="font-medium text-dark text-2xl">{t("wishlist.yourWishlist")}</h2>
-            <button className="text-blue">{t("wishlist.clearWishlist")}</button>
+            <button
+              type="button"
+              onClick={removeAllItemsFromWishlist}
+              className="text-blue"
+            >
+              {t("wishlist.clearWishlist")}
+            </button>
           </div>
 
           <div className="bg-white rounded-[10px] shadow-1">

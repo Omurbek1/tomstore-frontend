@@ -1,5 +1,5 @@
 import type { Menu } from "@/types/Menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -19,6 +19,17 @@ const Dropdown = ({
   const isActive = Boolean(
     menuItem.submenu?.some((item) => item.path && pathUrl === item.path),
   );
+  const submenuId = `submenu-${menuItem.id}`;
+  const mobileParentPath =
+    mobile && menuItem.path && menuItem.path !== "/" ? menuItem.path : undefined;
+
+  useEffect(() => {
+    if (!mobile) {
+      return;
+    }
+
+    setDropdownToggler(isActive);
+  }, [isActive, mobile]);
 
   return (
     <li
@@ -29,6 +40,8 @@ const Dropdown = ({
       <button
         type="button"
         onClick={() => setDropdownToggler((prev) => !prev)}
+        aria-expanded={dropdownToggler}
+        aria-controls={submenuId}
         className={`hover:text-blue text-custom-sm font-medium text-dark flex w-full items-center gap-1.5 capitalize ${
           mobile
             ? "justify-between rounded-xl bg-gray-1 px-4 py-3 text-left text-base"
@@ -59,12 +72,30 @@ const Dropdown = ({
 
       {/* <!-- Dropdown Start --> */}
       <ul
+        id={submenuId}
         className={`dropdown ${dropdownToggler && "flex"} ${
           stickyMenu
             ? "xl:group-hover:translate-y-0"
             : "xl:group-hover:translate-y-0"
-        } ${mobile ? "mt-2 rounded-xl border border-gray-3 shadow-none" : ""}`}
+        } ${
+          mobile
+            ? "mt-2 rounded-xl border border-gray-3 bg-gray-1/70 p-2 shadow-none"
+            : ""
+        }`}
       >
+        {mobileParentPath ? (
+          <li>
+            <Link
+              href={mobileParentPath}
+              onClick={onNavigate}
+              className={`flex text-custom-sm hover:text-blue hover:bg-white py-[7px] px-4.5 ${
+                pathUrl === mobileParentPath && "text-blue bg-white"
+              } rounded-lg text-sm font-medium`}
+            >
+              {menuItem.title}
+            </Link>
+          </li>
+        ) : null}
         {menuItem.submenu?.map((item, i) => (
           <li key={i}>
             <Link
