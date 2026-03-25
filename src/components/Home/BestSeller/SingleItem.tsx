@@ -73,44 +73,46 @@ const SingleItem = ({ item }: { item: Product }) => {
             labels={item.labels}
             className="mb-4 justify-center"
           />
-          <div className="mb-2 flex items-center justify-center gap-2.5">
-            <div className="flex items-center gap-1">
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-            </div>
+          {item.reviews > 0 ? (
+            <div className="mb-2 flex items-center justify-center gap-2.5">
+              <div className="flex items-center gap-1">
+                <Image
+                  src="/images/icons/icon-star.svg"
+                  alt="star icon"
+                  width={14}
+                  height={14}
+                />
+                <Image
+                  src="/images/icons/icon-star.svg"
+                  alt="star icon"
+                  width={14}
+                  height={14}
+                />
+                <Image
+                  src="/images/icons/icon-star.svg"
+                  alt="star icon"
+                  width={14}
+                  height={14}
+                />
+                <Image
+                  src="/images/icons/icon-star.svg"
+                  alt="star icon"
+                  width={14}
+                  height={14}
+                />
+                <Image
+                  src="/images/icons/icon-star.svg"
+                  alt="star icon"
+                  width={14}
+                  height={14}
+                />
+              </div>
 
-            <p className="text-custom-sm text-white/62">
-              {t("common.reviewsLabel", { count: item.reviews })}
-            </p>
-          </div>
+              <p className="text-custom-sm text-white/62">
+                {t("common.reviewsLabel", { count: item.reviews })}
+              </p>
+            </div>
+          ) : null}
 
           <h3 className="mb-2 text-lg font-semibold text-white transition-colors duration-200 hover:text-white/80">
             <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>

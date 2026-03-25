@@ -203,23 +203,25 @@ const SingleListItem = ({ item }: { item: Product }) => {
               </p>
             ) : null}
 
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <Image
-                    key={index}
-                    src="/images/icons/icon-star.svg"
-                    alt="star icon"
-                    width={15}
-                    height={15}
-                  />
-                ))}
-              </div>
+            {item.reviews > 0 ? (
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <Image
+                      key={index}
+                      src="/images/icons/icon-star.svg"
+                      alt="star icon"
+                      width={15}
+                      height={15}
+                    />
+                  ))}
+                </div>
 
-              <p className="text-sm font-medium text-dark-4">
-                {t("common.reviewsLabel", { count: item.reviews })}
-              </p>
-            </div>
+                <p className="text-sm font-medium text-dark-4">
+                  {t("common.reviewsLabel", { count: item.reviews })}
+                </p>
+              </div>
+            ) : null}
           </div>
 
           <div className="grid gap-3 border-t border-gray-3/70 pt-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
