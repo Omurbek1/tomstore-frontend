@@ -13,6 +13,7 @@ import { useAppStore } from "@/store/app-store";
 import { useCartToast } from "./useCartToast";
 import { useWishlistToast } from "./useWishlistToast";
 import { useShallow } from "zustand/react/shallow";
+import { markPendingCatalogRestore } from "@/storefront/catalog-restoration";
 
 const FALLBACK_IMAGE = "/images/products/product-1-sm-1.png";
 
@@ -236,11 +237,25 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
           </div>
 
           <div className="min-h-[15px]">
-            <h3
-              className="overflow-hidden text-[17px] font-semibold leading-6 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
-              onClick={handleProductDetails}
-            >
-              <Link href={`/shop-details/${item.slug}`} prefetch={false}>
+            <h3 className="overflow-hidden text-[17px] font-semibold leading-6 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+              <Link
+                href={`/shop-details/${item.slug}`}
+                onClick={(event) => {
+                  if (
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey ||
+                    event.button !== 0
+                  ) {
+                    return;
+                  }
+
+                  markPendingCatalogRestore();
+                  handleProductDetails();
+                }}
+                prefetch={false}
+              >
                 {item.title}
               </Link>
             </h3>

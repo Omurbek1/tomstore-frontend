@@ -10,6 +10,14 @@ import {
   type CatalogRouteContext,
 } from "@/storefront/catalog-routing";
 import {
+  clearActiveCatalogRestoreKey,
+  clearPendingCatalogRestore,
+  hasPendingCatalogRestore,
+  readCatalogScrollSnapshot,
+  saveCatalogScrollSnapshot,
+  setActiveCatalogRestoreKey,
+} from "@/storefront/catalog-restoration";
+import {
   fetchStorefrontCatalog,
   type StorefrontCatalogApiParams,
 } from "@/storefront/query-options";
@@ -36,6 +44,7 @@ type CatalogViewProps = {
 };
 
 const CATALOG_PAGE_STALE_TIME_MS = 120_000;
+const CATALOG_CACHE_GC_TIME_MS = 30 * 60_000;
 const CATALOG_PREFETCH_ROOT_MARGIN = "1200px 0px";
 const CATALOG_AUTO_LOAD_ROOT_MARGIN = "320px 0px";
 
@@ -78,9 +87,21 @@ export default function CatalogView({
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const autoLoadUnlockedRef = useRef(true);
   const prefetchUnlockedRef = useRef(true);
+  const hasRestoredScrollRef = useRef(false);
   const filters = catalog.filters || { categories: [], brands: [] };
   const baseQuery = getCatalogBaseQuery(routeContext);
   const pageTitle = title || t("common.shop");
+  const restoreKey = useMemo(
+    () =>
+      buildCatalogHref(
+        {
+          ...query,
+          page: undefined,
+        },
+        routeContext,
+      ),
+    [query, routeContext],
+  );
   const catalogFeedParams = useMemo<StorefrontCatalogApiParams>(
     () => ({
       ...toStorefrontCatalogApiParams(query),
@@ -105,6 +126,7 @@ export default function CatalogView({
     queryFn: ({ pageParam, signal }) =>
       queryClient.ensureQueryData({
         queryKey: buildCatalogPageQueryKey(catalogFeedParams, Number(pageParam)),
+        gcTime: CATALOG_CACHE_GC_TIME_MS,
         staleTime: CATALOG_PAGE_STALE_TIME_MS,
         queryFn: ({ signal: querySignal }) =>
           fetchStorefrontCatalog(
@@ -121,6 +143,7 @@ export default function CatalogView({
       }),
     getNextPageParam: (lastPage) =>
       lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
+    gcTime: CATALOG_CACHE_GC_TIME_MS,
     refetchOnMount: false,
     staleTime: CATALOG_PAGE_STALE_TIME_MS,
   });
@@ -146,6 +169,101 @@ export default function CatalogView({
   useEffect(() => {
     setProductStyle(query.view === "list" ? "list" : "grid");
   }, [query.view]);
+
+  useEffect(() => {
+    hasRestoredScrollRef.current = false;
+  }, [restoreKey]);
+
+  useEffect(() => {
+    setActiveCatalogRestoreKey(restoreKey);
+
+    return () => {
+      clearActiveCatalogRestoreKey(restoreKey);
+    };
+  }, [restoreKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    let frameId: number | null = null;
+    const persistScrollSnapshot = () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+
+      saveCatalogScrollSnapshot(restoreKey, window.scrollY);
+    };
+    const schedulePersistScrollSnapshot = () => {
+      if (frameId !== null) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = null;
+        saveCatalogScrollSnapshot(restoreKey, window.scrollY);
+      });
+    };
+
+    persistScrollSnapshot();
+    window.addEventListener("scroll", schedulePersistScrollSnapshot, {
+      passive: true,
+    });
+    window.addEventListener("pagehide", persistScrollSnapshot);
+
+    return () => {
+      persistScrollSnapshot();
+      window.removeEventListener("scroll", schedulePersistScrollSnapshot);
+      window.removeEventListener("pagehide", persistScrollSnapshot);
+    };
+  }, [restoreKey]);
+
+  useEffect(() => {
+    if (
+      hasRestoredScrollRef.current ||
+      !loadedCount ||
+      !hasPendingCatalogRestore(restoreKey)
+    ) {
+      return;
+    }
+
+    hasRestoredScrollRef.current = true;
+    clearPendingCatalogRestore(restoreKey);
+
+    const snapshot = readCatalogScrollSnapshot(restoreKey);
+
+    if (!snapshot || snapshot.scrollY <= 0 || typeof window === "undefined") {
+      return;
+    }
+
+    let frameId = 0;
+    let attempts = 0;
+    const restoreScrollPosition = () => {
+      attempts += 1;
+
+      const maxScrollY = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight,
+        0,
+      );
+      const targetScrollY = Math.min(snapshot.scrollY, maxScrollY);
+
+      window.scrollTo(0, targetScrollY);
+
+      if (maxScrollY >= snapshot.scrollY || attempts >= 12) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(restoreScrollPosition);
+    };
+
+    frameId = window.requestAnimationFrame(restoreScrollPosition);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [loadedCount, restoreKey]);
 
   useEffect(() => {
     const node = loadMoreRef.current;
@@ -187,6 +305,7 @@ export default function CatalogView({
         prefetchUnlockedRef.current = false;
         void queryClient.prefetchQuery({
           queryKey: pageQueryKey,
+          gcTime: CATALOG_CACHE_GC_TIME_MS,
           staleTime: CATALOG_PAGE_STALE_TIME_MS,
           queryFn: ({ signal }) =>
             fetchStorefrontCatalog(

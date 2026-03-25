@@ -13,6 +13,7 @@ import { useAppStore } from "@/store/app-store";
 import { useCartToast } from "@/components/Common/useCartToast";
 import { useWishlistToast } from "@/components/Common/useWishlistToast";
 import { useShallow } from "zustand/react/shallow";
+import { markPendingCatalogRestore } from "@/storefront/catalog-restoration";
 
 const FALLBACK_IMAGE = "/images/products/product-1-sm-1.png";
 
@@ -77,6 +78,10 @@ const SingleListItemComponent = ({ item }: { item: Product }) => {
 
     addItemToCart(cartItem);
     showCartToast(cartItem);
+  };
+
+  const handleProductDetails = () => {
+    setProductDetails(item);
   };
 
   const handleItemToWishList = () => {
@@ -202,11 +207,25 @@ const SingleListItemComponent = ({ item }: { item: Product }) => {
           <div className="flex flex-col gap-2.5">
             <div className="flex min-h-[80px] flex-col gap-2.5 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0 flex-1">
-                <h3
-                  className="overflow-hidden text-xl font-semibold leading-8 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
-                  onClick={() => setProductDetails(item)}
-                >
-                  <Link href={`/shop-details/${item.slug}`} prefetch={false}>
+                <h3 className="overflow-hidden text-xl font-semibold leading-8 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                  <Link
+                    href={`/shop-details/${item.slug}`}
+                    onClick={(event) => {
+                      if (
+                        event.metaKey ||
+                        event.ctrlKey ||
+                        event.shiftKey ||
+                        event.altKey ||
+                        event.button !== 0
+                      ) {
+                        return;
+                      }
+
+                      markPendingCatalogRestore();
+                      handleProductDetails();
+                    }}
+                    prefetch={false}
+                  >
                     {item.title}
                   </Link>
                 </h3>
