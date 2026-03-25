@@ -10,15 +10,28 @@ import {
 import { makeQueryClient } from "@/tanstack-query/query-client";
 import { isStorefrontBlogPublic } from "@/storefront/auth";
 import { redirect } from "next/navigation";
-export const metadata: Metadata = {
-  title: "Blog Grid Page | NextCommerce Nextjs E-commerce template",
-  description: "This is Blog Grid Page for NextCommerce Template",
-  // other metadata
-};
+import { buildSeoMetadata } from "@/seo/metadata";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const hasQueryParams = Object.values(params).some((value) =>
+    Array.isArray(value) ? value.length > 0 : Boolean(value),
+  );
+
+  return buildSeoMetadata({
+    title: "Блог",
+    description:
+      "Обзоры техники, советы по выбору и полезные материалы от TOMSTORE.",
+    path: "/blogs/blog-grid",
+    noIndex: hasQueryParams,
+  });
+}
 
 const BlogGridPage = async ({ searchParams }: Props) => {
   const params = await searchParams;

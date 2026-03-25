@@ -2,10 +2,13 @@ import React from "react";
 import Cart from "@/components/Cart";
 
 import { Metadata } from "next";
+import { buildNoIndexMetadata } from "@/seo/metadata";
 export const metadata: Metadata = {
-  title: "Cart Page | NextCommerce Nextjs E-commerce template",
-  description: "This is Cart Page for NextCommerce Template",
-  // other metadata
+  ...buildNoIndexMetadata(
+    "Корзина",
+    "Корзина интернет-магазина TOMSTORE.",
+    "/cart",
+  ),
 };
 
 const CartPage = () => {

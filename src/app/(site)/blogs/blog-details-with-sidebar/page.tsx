@@ -10,10 +10,13 @@ import {
 import { makeQueryClient } from "@/tanstack-query/query-client";
 import { redirect } from "next/navigation";
 import { isStorefrontBlogPublic } from "@/storefront/auth";
+import { buildNoIndexMetadata } from "@/seo/metadata";
 export const metadata: Metadata = {
-  title: "Blog Details Page | NextCommerce Nextjs E-commerce template",
-  description: "This is Blog Details Page for NextCommerce Template",
-  // other metadata
+  ...buildNoIndexMetadata(
+    "Статья",
+    "Альтернативный вариант страницы статьи TOMSTORE.",
+    "/blogs/blog-grid",
+  ),
 };
 
 type Props = {

@@ -2,10 +2,13 @@ import React from "react";
 import Checkout from "@/components/Checkout";
 
 import { Metadata } from "next";
+import { buildNoIndexMetadata } from "@/seo/metadata";
 export const metadata: Metadata = {
-  title: "Checkout Page | NextCommerce Nextjs E-commerce template",
-  description: "This is Checkout Page for NextCommerce Template",
-  // other metadata
+  ...buildNoIndexMetadata(
+    "Оформление заказа",
+    "Страница оформления заказа TOMSTORE.",
+    "/checkout",
+  ),
 };
 
 const CheckoutPage = () => {

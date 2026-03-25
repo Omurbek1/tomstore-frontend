@@ -6,15 +6,28 @@ import {
   type StorefrontCatalogRouteQuery,
 } from "@/storefront/query-options";
 import { makeQueryClient } from "@/tanstack-query/query-client";
-
-export const metadata: Metadata = {
-  title: "Shop | TOMSTORE",
-  description: "Каталог товаров TOMSTORE с данными из backend storefront API.",
-};
+import { buildSeoMetadata } from "@/seo/metadata";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const hasQueryParams = Object.values(params).some((value) =>
+    Array.isArray(value) ? value.length > 0 : Boolean(value),
+  );
+
+  return buildSeoMetadata({
+    title: "Каталог товаров",
+    description:
+      "Каталог ноутбуков, принтеров, компьютеров и аксессуаров TOMSTORE.",
+    path: "/shop-with-sidebar",
+    noIndex: hasQueryParams,
+  });
+}
 
 const ShopWithSidebarPage = async ({ searchParams }: Props) => {
   const params = await searchParams;

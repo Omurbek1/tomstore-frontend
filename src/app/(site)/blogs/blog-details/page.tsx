@@ -10,15 +10,46 @@ import {
 import { makeQueryClient } from "@/tanstack-query/query-client";
 import { redirect } from "next/navigation";
 import { isStorefrontBlogPublic } from "@/storefront/auth";
-export const metadata: Metadata = {
-  title: "Blog Details Page | NextCommerce Nextjs E-commerce template",
-  description: "This is Blog Details Page for NextCommerce Template",
-  // other metadata
-};
+import { buildNoIndexMetadata, buildSeoMetadata } from "@/seo/metadata";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const slug = typeof params.slug === "string" ? params.slug : undefined;
+
+  if (!slug) {
+    return buildSeoMetadata({
+      title: "Блог",
+      description:
+        "Обзоры техники, советы по выбору и полезные материалы от TOMSTORE.",
+      path: "/blogs/blog-grid",
+    });
+  }
+
+  const queryClient = makeQueryClient();
+  const post = await queryClient.fetchQuery(storefrontBlogQueryOptions(slug));
+
+  if (!post) {
+    return buildNoIndexMetadata(
+      "Статья не найдена",
+      "Запрошенная статья не найдена.",
+      "/blogs/blog-grid",
+    );
+  }
+
+  return buildSeoMetadata({
+    title: post.title,
+    description: post.excerpt,
+    path: `/blogs/blog-details?slug=${encodeURIComponent(slug)}`,
+    image: post.coverImageUrl,
+    type: "article",
+  });
+}
 
 const BlogDetailsPage = async ({ searchParams }: Props) => {
   const params = await searchParams;

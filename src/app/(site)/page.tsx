@@ -9,11 +9,15 @@ import {
 } from "@/storefront/query-options";
 import { makeQueryClient } from "@/tanstack-query/query-client";
 import { isStorefrontBlogPublic } from "@/storefront/auth";
+import { buildSeoMetadata } from "@/seo/metadata";
 
 export const metadata: Metadata = {
-  title: "NextCommerce | Nextjs E-commerce template",
-  description: "This is Home for NextCommerce Template",
-  // other metadata
+  ...buildSeoMetadata({
+    title: "Интернет-магазин техники",
+    description:
+      "Ноутбуки, принтеры, компьютеры и аксессуары TOMSTORE с актуальными ценами и удобным заказом через WhatsApp.",
+    path: "/",
+  }),
 };
 
 export default async function HomePage() {

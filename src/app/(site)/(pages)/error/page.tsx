@@ -2,10 +2,13 @@ import React from "react";
 import Error from "@/components/Error";
 
 import { Metadata } from "next";
+import { buildNoIndexMetadata } from "@/seo/metadata";
 export const metadata: Metadata = {
-  title: "Error Page | NextCommerce Nextjs E-commerce template",
-  description: "This is Error Page for NextCommerce Template",
-  // other metadata
+  ...buildNoIndexMetadata(
+    "Ошибка",
+    "Служебная страница ошибки TOMSTORE.",
+    "/error",
+  ),
 };
 
 const ErrorPage = () => {

@@ -2,6 +2,7 @@ import "../css/euclid-circular-a-font.css";
 import "../css/style.css";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { cookies, headers } from "next/headers";
+import type { Metadata } from "next";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
@@ -31,6 +32,90 @@ import {
   storefrontConfigQueryOptions,
 } from "@/storefront/query-options";
 import type { StorefrontConfig } from "@/storefront/types";
+import { buildAbsoluteUrl, getSiteUrl } from "@/storefront/site";
+import {
+  getStorefrontCompanyName,
+  getStorefrontSupportPhone,
+  getStorefrontWhatsappPhone,
+} from "@/storefront/contact";
+import {
+  DEFAULT_SEO_DESCRIPTION,
+  getMetadataBase,
+} from "@/seo/metadata";
+
+const fetchStorefrontConfig = async () => {
+  const queryClient = makeQueryClient();
+  return queryClient.fetchQuery(storefrontConfigQueryOptions()).catch(() => undefined);
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const storefrontConfig = await fetchStorefrontConfig();
+  const companyName = getStorefrontCompanyName(storefrontConfig);
+  const description =
+    storefrontConfig?.warrantyText?.trim() || DEFAULT_SEO_DESCRIPTION;
+  const image =
+    storefrontConfig?.companyLogoUrl || buildAbsoluteUrl("/images/hero/hero-01.png");
+
+  return {
+    metadataBase: getMetadataBase(),
+    title: {
+      default: companyName,
+      template: `%s | ${companyName}`,
+    },
+    description,
+    applicationName: companyName,
+    alternates: {
+      canonical: getSiteUrl(),
+    },
+    keywords: [
+      companyName,
+      "интернет-магазин техники",
+      "ноутбуки",
+      "принтеры",
+      "компьютеры",
+      "аксессуары",
+      "Бишкек",
+      "Кыргызстан",
+    ],
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
+    openGraph: {
+      type: "website",
+      title: companyName,
+      description,
+      url: getSiteUrl(),
+      siteName: companyName,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: companyName,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: companyName,
+      description,
+      images: [image],
+    },
+    icons: {
+      icon: "/favicon.ico",
+      shortcut: "/favicon.ico",
+      apple: "/favicon.ico",
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -65,9 +150,46 @@ export default async function RootLayout({
     currencyPreference === "default"
       ? normalizeCurrencyCode(storefrontConfig?.storefrontDefaultCurrency)
       : currencyPreference;
+  const companyName = getStorefrontCompanyName(storefrontConfig);
+  const companyLogoUrl =
+    storefrontConfig?.companyLogoUrl || buildAbsoluteUrl("/images/hero/hero-01.png");
+  const supportPhone = getStorefrontSupportPhone(storefrontConfig);
+  const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
+  const organizationStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    name: companyName,
+    url: getSiteUrl(),
+    logo: companyLogoUrl,
+    image: companyLogoUrl,
+    telephone: supportPhone,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        telephone: supportPhone,
+      },
+      ...(whatsappPhone
+        ? [
+            {
+              "@type": "ContactPoint",
+              contactType: "sales",
+              telephone: whatsappPhone,
+            },
+          ]
+        : []),
+    ],
+  };
   return (
     <html lang={locale} suppressHydrationWarning={true}>
       <body>
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationStructuredData),
+          }}
+        />
         <TanStackQueryProvider>
           <HydrationBoundary state={dehydratedState}>
             <I18nProvider

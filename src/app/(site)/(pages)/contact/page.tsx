@@ -1,10 +1,14 @@
 import Contact from "@/components/Contact";
 
 import { Metadata } from "next";
+import { buildSeoMetadata } from "@/seo/metadata";
 export const metadata: Metadata = {
-  title: "Contact Page | NextCommerce Nextjs E-commerce template",
-  description: "This is Contact Page for NextCommerce Template",
-  // other metadata
+  ...buildSeoMetadata({
+    title: "Контакты",
+    description:
+      "Контакты TOMSTORE: адрес магазина, телефоны и WhatsApp для заказа и консультации.",
+    path: "/contact",
+  }),
 };
 
 const ContactPage = () => {

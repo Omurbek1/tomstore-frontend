@@ -6,10 +6,14 @@ import {
   type StorefrontCatalogRouteQuery,
 } from "@/storefront/query-options";
 import { makeQueryClient } from "@/tanstack-query/query-client";
+import { buildNoIndexMetadata } from "@/seo/metadata";
 
 export const metadata: Metadata = {
-  title: "Shop Grid | TOMSTORE",
-  description: "Каталог товаров TOMSTORE без боковой панели.",
+  ...buildNoIndexMetadata(
+    "Каталог товаров",
+    "Альтернативный вариант каталога TOMSTORE.",
+    "/shop-with-sidebar",
+  ),
 };
 
 type Props = {
