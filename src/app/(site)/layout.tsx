@@ -2,6 +2,7 @@ import "../css/euclid-circular-a-font.css";
 import "../css/style.css";
 import { cookies, headers } from "next/headers";
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
@@ -234,6 +235,7 @@ export default async function RootLayout({
             </StorefrontContactProvider>
           </I18nProvider>
         </TanStackQueryProvider>
+        <Analytics />
       </body>
     </html>
   );
