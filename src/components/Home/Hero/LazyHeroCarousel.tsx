@@ -10,11 +10,6 @@ type LazyHeroCarouselProps = {
   slides: StorefrontHeroSlide[];
 };
 
-type IdleWindow = Window & {
-  requestIdleCallback?: (callback: () => void) => number;
-  cancelIdleCallback?: (id: number) => void;
-};
-
 export default function LazyHeroCarousel({ slides }: LazyHeroCarouselProps) {
   const [CarouselComponent, setCarouselComponent] =
     useState<HeroCarouselComponent | null>(null);
@@ -26,8 +21,6 @@ export default function LazyHeroCarousel({ slides }: LazyHeroCarouselProps) {
     }
 
     let cancelled = false;
-    let idleId: number | null = null;
-    let timeoutId: number | null = null;
 
     const loadCarousel = async () => {
       const carouselModule = await import("./HeroCarousel");
@@ -41,31 +34,10 @@ export default function LazyHeroCarousel({ slides }: LazyHeroCarouselProps) {
       });
     };
 
-    const idleWindow = window as IdleWindow;
-
-    if (typeof idleWindow.requestIdleCallback === "function") {
-      idleId = idleWindow.requestIdleCallback(() => {
-        void loadCarousel();
-      });
-    } else {
-      timeoutId = window.setTimeout(() => {
-        void loadCarousel();
-      }, 1);
-    }
+    void loadCarousel();
 
     return () => {
       cancelled = true;
-
-      if (
-        idleId !== null &&
-        typeof idleWindow.cancelIdleCallback === "function"
-      ) {
-        idleWindow.cancelIdleCallback(idleId);
-      }
-
-      if (timeoutId !== null) {
-        window.clearTimeout(timeoutId);
-      }
     };
   }, [slides.length]);
 
@@ -74,7 +46,7 @@ export default function LazyHeroCarousel({ slides }: LazyHeroCarouselProps) {
   }
 
   if (!CarouselComponent) {
-    return <HeroCarouselFallback slide={primarySlide} />;
+    return <HeroCarouselFallback slides={slides} />;
   }
 
   return <CarouselComponent slides={slides} />;

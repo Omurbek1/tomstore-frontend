@@ -19,54 +19,56 @@ const getCatalogResultsClassName = (
 ) =>
   productStyle === "grid"
     ? variant === "sidebar"
-      ? "grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3"
-      : "grid grid-cols-1 gap-x-7.5 gap-y-9 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      ? "grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-x-5 sm:gap-y-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-6 xl:gap-y-8"
+      : "grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-x-5 sm:gap-y-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-6 xl:gap-y-8"
     : "flex flex-col gap-7.5";
 
 const CatalogGridSkeleton = ({ index }: { index: number }) => (
   <article
     aria-hidden="true"
-    className="flex h-full animate-pulse flex-col rounded-[30px] border border-white/80 bg-white/88 p-3 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.22)] sm:p-3.5"
+    className="flex h-full animate-pulse flex-col rounded-[24px] border border-white/80 bg-white/88 p-2.5 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.22)] sm:rounded-[30px] sm:p-3.5"
   >
-    <div className="relative mb-2.5 overflow-hidden rounded-[26px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)]">
-      <div className="absolute left-1/2 top-5 h-24 w-24 -translate-x-1/2 rounded-full bg-blue/10 blur-2xl" />
-      <div className="absolute inset-x-3 top-3 flex items-start justify-between">
-        <div className="h-8 w-20 rounded-full bg-white/80" />
+    <div className="relative mb-2 overflow-hidden rounded-[22px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)] sm:mb-2.5 sm:rounded-[26px]">
+      <div className="absolute left-1/2 top-4 h-18 w-18 -translate-x-1/2 rounded-full bg-blue/10 blur-2xl sm:top-5 sm:h-24 sm:w-24" />
+      <div className="absolute inset-x-2 top-2 flex items-start justify-between sm:inset-x-3 sm:top-3">
+        <div className="h-6 w-16 rounded-full bg-white/80 sm:h-8 sm:w-20" />
         <div className="flex flex-col gap-2">
-          <div className="h-10 w-10 rounded-full bg-white/85" />
-          <div className="h-10 w-10 rounded-full bg-white/85" />
+          <div className="h-8 w-8 rounded-full bg-white/85 sm:h-10 sm:w-10" />
+          <div className="h-8 w-8 rounded-full bg-white/85 sm:h-10 sm:w-10" />
         </div>
       </div>
-      <div className="flex min-h-[244px] items-center justify-center px-4 pb-4 pt-20">
-        <div className="h-[176px] w-full max-w-[220px] rounded-[24px] bg-white/85" />
+      <div className="flex min-h-[176px] items-center justify-center px-3 pb-3 pt-14 sm:min-h-[244px] sm:px-4 sm:pb-4 sm:pt-20">
+        <div className="h-[120px] w-full max-w-[140px] rounded-[18px] bg-white/85 sm:h-[176px] sm:max-w-[220px] sm:rounded-[24px]" />
       </div>
     </div>
 
     <div className="flex flex-1 flex-col px-1">
-      <div className="mb-2.5 flex items-start justify-between gap-2">
-        <div className="h-4 w-24 rounded-full bg-gray-2" />
-        <div className="h-7 w-24 rounded-full bg-blue/10" />
+      <div className="mb-2 flex items-start justify-between gap-2 sm:mb-2.5">
+        <div className="h-3.5 w-18 rounded-full bg-gray-2 sm:h-4 sm:w-24" />
+        <div className="h-6 w-18 rounded-full bg-blue/10 sm:h-7 sm:w-24" />
       </div>
       <div className="space-y-2">
-        <div className="h-5 w-4/5 rounded-full bg-gray-2" />
-        <div className="h-5 w-3/5 rounded-full bg-gray-2" />
+        <div className="h-4 w-4/5 rounded-full bg-gray-2 sm:h-5" />
+        <div className="h-4 w-3/5 rounded-full bg-gray-2 sm:h-5" />
       </div>
-      <div className="mt-3 space-y-2">
-        <div className="h-3.5 w-full rounded-full bg-gray-2/80" />
-        <div className="h-3.5 w-2/3 rounded-full bg-gray-2/80" />
+      <div className="mt-2.5 space-y-2 sm:mt-3">
+        <div className="h-3 w-full rounded-full bg-gray-2/80 sm:h-3.5" />
+        <div className="h-3 w-2/3 rounded-full bg-gray-2/80 sm:h-3.5" />
       </div>
-      <div className="mt-auto pt-3">
-        <div className="grid gap-2.5 rounded-[22px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-3">
+      <div className="mt-auto pt-2.5 sm:pt-3">
+        <div className="grid gap-2 rounded-[18px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-2.5 sm:gap-2.5 sm:rounded-[22px] sm:p-3">
           <div className="flex items-start justify-between gap-2">
             <div className="space-y-2">
-              <div className="h-3 w-14 rounded-full bg-gray-2" />
-              <div className="h-7 w-24 rounded-full bg-gray-2" />
+              <div className="h-3 w-12 rounded-full bg-gray-2 sm:w-14" />
+              <div className="h-6 w-18 rounded-full bg-gray-2 sm:h-7 sm:w-24" />
             </div>
-            {index % 2 === 0 ? <div className="h-6 w-14 rounded-full bg-green/10" /> : null}
+            {index % 2 === 0 ? (
+              <div className="h-5 w-12 rounded-full bg-green/10 sm:h-6 sm:w-14" />
+            ) : null}
           </div>
           <div className="grid gap-2 sm:grid-cols-2">
-            <div className="h-11 rounded-full bg-blue/15" />
-            <div className="h-11 rounded-full bg-gray-2/90" />
+            <div className="h-9 rounded-full bg-blue/15 sm:h-11" />
+            <div className="h-9 rounded-full bg-gray-2/90 sm:h-11" />
           </div>
         </div>
       </div>
