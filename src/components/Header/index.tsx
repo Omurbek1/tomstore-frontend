@@ -305,7 +305,6 @@ const Header = ({
     };
   }, [navigationOpen, pathname, stickyMenu]);
 
-  console.log(" companyLogoUrl: ", companyLogoUrl);
 
   return (
     <header

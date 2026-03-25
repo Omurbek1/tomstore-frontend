@@ -156,6 +156,12 @@ export default async function RootLayout({
     buildAbsoluteUrl("/images/hero/hero-01.png");
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);
   const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
+  const facebookUrl =
+    String(process.env.NEXT_PUBLIC_FACEBOOK_URL || "").trim() || undefined;
+  const tiktokUrl =
+    String(process.env.NEXT_PUBLIC_TIKTOK_URL || "").trim() || undefined;
+  const twoGisUrl =
+    String(process.env.NEXT_PUBLIC_TWO_GIS_URL || "").trim() || undefined;
   const organizationStructuredData = {
     "@context": "https://schema.org",
     "@type": "Store",
@@ -199,7 +205,15 @@ export default async function RootLayout({
             initialCurrencyPreference={currencyPreference}
             usdExchangeRate={storefrontConfig?.storefrontUsdExchangeRate}
           >
-            <StorefrontContactProvider whatsappPhone={whatsappPhone}>
+            <StorefrontContactProvider
+              companyName={companyName}
+              facebookUrl={facebookUrl}
+              instagramUrl={storefrontConfig?.instagramUrl}
+              mapUrl={storefrontConfig?.mapUrl}
+              tiktokUrl={tiktokUrl}
+              twoGisUrl={twoGisUrl}
+              whatsappPhone={whatsappPhone}
+            >
               <>
                 <CartModalProvider>
                   <ModalProvider>
