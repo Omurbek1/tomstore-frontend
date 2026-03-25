@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import { useI18n } from "@/i18n/provider";
 import { mapStorefrontProductsToProducts } from "@/storefront/mappers";
@@ -35,6 +35,15 @@ type CatalogViewProps = {
   variant: "sidebar" | "full";
 };
 
+const CATALOG_PAGE_STALE_TIME_MS = 120_000;
+const CATALOG_PREFETCH_ROOT_MARGIN = "1200px 0px";
+const CATALOG_AUTO_LOAD_ROOT_MARGIN = "320px 0px";
+
+const buildCatalogPageQueryKey = (
+  params: StorefrontCatalogApiParams,
+  page: number,
+) => ["storefront", "catalog-page", params, page] as const;
+
 const buildMergedCatalogItems = (pages: StorefrontCatalogResponse[]) => {
   const itemsById = new Map<string, StorefrontProductCard>();
 
@@ -60,6 +69,7 @@ export default function CatalogView({
   variant,
 }: CatalogViewProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { t } = useI18n();
   const [isNavigationPending, startTransition] = useTransition();
   const [productStyle, setProductStyle] = useState<"grid" | "list">(
@@ -67,6 +77,7 @@ export default function CatalogView({
   );
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const autoLoadUnlockedRef = useRef(true);
+  const prefetchUnlockedRef = useRef(true);
   const filters = catalog.filters || { categories: [], brands: [] };
   const baseQuery = getCatalogBaseQuery(routeContext);
   const pageTitle = title || t("common.shop");
@@ -92,21 +103,26 @@ export default function CatalogView({
       pageParams: [initialPage],
     },
     queryFn: ({ pageParam, signal }) =>
-      fetchStorefrontCatalog(
-        {
-          ...catalogFeedParams,
-          page: String(pageParam),
-        },
-        {
-          init: {
-            signal,
-          },
-        },
-      ),
+      queryClient.ensureQueryData({
+        queryKey: buildCatalogPageQueryKey(catalogFeedParams, Number(pageParam)),
+        staleTime: CATALOG_PAGE_STALE_TIME_MS,
+        queryFn: ({ signal: querySignal }) =>
+          fetchStorefrontCatalog(
+            {
+              ...catalogFeedParams,
+              page: String(pageParam),
+            },
+            {
+              init: {
+                signal: signal ?? querySignal,
+              },
+            },
+          ),
+      }),
     getNextPageParam: (lastPage) =>
       lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
     refetchOnMount: false,
-    staleTime: 120_000,
+    staleTime: CATALOG_PAGE_STALE_TIME_MS,
   });
   const catalogPages = useMemo(
     () => infiniteCatalog?.pages || [catalog],
@@ -123,10 +139,85 @@ export default function CatalogView({
   const lastLoadedPage = catalogPages[catalogPages.length - 1] || catalog;
   const total = lastLoadedPage.total || catalog.total || 0;
   const loadedCount = mergedCatalogItems.length;
+  const nextPageToPrefetch = hasNextPage ? lastLoadedPage.page + 1 : undefined;
+  const loadingSkeletonCount =
+    productStyle === "list" ? 2 : variant === "sidebar" ? 6 : 8;
 
   useEffect(() => {
     setProductStyle(query.view === "list" ? "list" : "grid");
   }, [query.view]);
+
+  useEffect(() => {
+    const node = loadMoreRef.current;
+
+    if (!node || !nextPageToPrefetch || isFetchingNextPage) {
+      return;
+    }
+
+    const pageQueryKey = buildCatalogPageQueryKey(
+      catalogFeedParams,
+      nextPageToPrefetch,
+    );
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) {
+          return;
+        }
+
+        if (!entry.isIntersecting) {
+          prefetchUnlockedRef.current = true;
+          return;
+        }
+
+        if (!prefetchUnlockedRef.current) {
+          return;
+        }
+
+        const pageQueryState =
+          queryClient.getQueryState<StorefrontCatalogResponse>(pageQueryKey);
+
+        if (
+          pageQueryState?.fetchStatus === "fetching" ||
+          pageQueryState?.status === "success"
+        ) {
+          prefetchUnlockedRef.current = false;
+          return;
+        }
+
+        prefetchUnlockedRef.current = false;
+        void queryClient.prefetchQuery({
+          queryKey: pageQueryKey,
+          staleTime: CATALOG_PAGE_STALE_TIME_MS,
+          queryFn: ({ signal }) =>
+            fetchStorefrontCatalog(
+              {
+                ...catalogFeedParams,
+                page: String(nextPageToPrefetch),
+              },
+              {
+                init: {
+                  signal,
+                },
+              },
+            ),
+        });
+      },
+      {
+        rootMargin: CATALOG_PREFETCH_ROOT_MARGIN,
+      },
+    );
+
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [
+    catalogFeedParams,
+    isFetchingNextPage,
+    nextPageToPrefetch,
+    queryClient,
+  ]);
 
   useEffect(() => {
     const node = loadMoreRef.current;
@@ -154,7 +245,7 @@ export default function CatalogView({
         void fetchNextPage();
       },
       {
-        rootMargin: "320px 0px",
+        rootMargin: CATALOG_AUTO_LOAD_ROOT_MARGIN,
       },
     );
 
@@ -261,6 +352,8 @@ export default function CatalogView({
               </div>
 
               <CatalogResults
+                isLoadingMore={isFetchingNextPage}
+                loadingSkeletonCount={loadingSkeletonCount}
                 productStyle={productStyle}
                 products={products}
                 variant={variant}
