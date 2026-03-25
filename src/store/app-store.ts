@@ -1,5 +1,6 @@
 "use client";
 
+import { trackAddToCart } from "@/analytics/ecommerce";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { Product } from "@/types/product";
@@ -108,10 +109,12 @@ export const useAppStore = create<AppStoreState>()(
       wishlistItems: [],
       quickViewProduct: EMPTY_PRODUCT,
       productDetails: EMPTY_PRODUCT,
-      addItemToCart: (item) =>
+      addItemToCart: (item) => {
+        trackAddToCart(item);
         set((state) => ({
           cartItems: upsertCartItem(state.cartItems, item),
-        })),
+        }));
+      },
       removeItemFromCart: (id) =>
         set((state) => ({
           cartItems: state.cartItems.filter((item) => item.id !== id),

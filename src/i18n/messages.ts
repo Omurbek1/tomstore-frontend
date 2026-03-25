@@ -412,6 +412,11 @@ export const messages: Record<Locale, Record<string, string>> = {
     "mailSuccess.heading": "Ваше сообщение успешно отправлено",
     "mailSuccess.text":
       "Спасибо за сообщение. Мы регулярно проверяем почту и постараемся ответить как можно быстрее.",
+    "mailSuccess.orderTitle": "Заказ отправлен",
+    "mailSuccess.orderSuccessful": "Заказ отправлен!",
+    "mailSuccess.orderHeading": "Мы получили вашу заявку",
+    "mailSuccess.orderText":
+      "WhatsApp открылся с деталями заказа. Отправьте сообщение менеджеру, и мы подтвердим заказ.",
 
     "blog.search": "Поиск",
     "blog.searchPlaceholder": "Поиск...",
@@ -836,6 +841,11 @@ export const messages: Record<Locale, Record<string, string>> = {
     "mailSuccess.heading": "Your message sent successfully",
     "mailSuccess.text":
       "Thank you so much for your message. We check e-mail frequently and will try our best to respond to your inquiry.",
+    "mailSuccess.orderTitle": "Order Sent",
+    "mailSuccess.orderSuccessful": "Order sent!",
+    "mailSuccess.orderHeading": "We received your request",
+    "mailSuccess.orderText":
+      "WhatsApp opened with your order details. Send the message to our manager and we will confirm the order.",
 
     "blog.search": "Search",
     "blog.searchPlaceholder": "Search here...",
@@ -1261,6 +1271,11 @@ export const messages: Record<Locale, Record<string, string>> = {
     "mailSuccess.heading": "Билдирүүңүз ийгиликтүү жөнөтүлдү",
     "mailSuccess.text":
       "Билдирүүңүз үчүн чоң рахмат. Биз электрондук почтаны тез-тез текшеребиз жана мүмкүн болушунча эртерээк жооп берүүгө аракет кылабыз.",
+    "mailSuccess.orderTitle": "Заказ жөнөтүлдү",
+    "mailSuccess.orderSuccessful": "Заказ жөнөтүлдү!",
+    "mailSuccess.orderHeading": "Биз сиздин билдирмени алдык",
+    "mailSuccess.orderText":
+      "WhatsApp'та заказдын чоо-жайы ачылды. Менеджерге билдирүүнү жөнөтүңүз, андан кийин заказды ырастайбыз.",
 
     "blog.search": "Издөө",
     "blog.searchPlaceholder": "Бул жерден издеңиз...",

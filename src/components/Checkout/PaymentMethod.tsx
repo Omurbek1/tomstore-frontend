@@ -19,9 +19,11 @@ const PaymentMethod = () => {
           >
             <div className="relative">
               <input
-                type="checkbox"
-                name="bank"
+                type="radio"
+                name="paymentMethod"
                 id="bank"
+                value="bank"
+                checked={payment === "bank"}
                 className="sr-only"
                 onChange={() => setPayment("bank")}
               />
@@ -59,9 +61,11 @@ const PaymentMethod = () => {
           >
             <div className="relative">
               <input
-                type="checkbox"
-                name="cash"
+                type="radio"
+                name="paymentMethod"
                 id="cash"
+                value="cash"
+                checked={payment === "cash"}
                 className="sr-only"
                 onChange={() => setPayment("cash")}
               />
@@ -99,9 +103,11 @@ const PaymentMethod = () => {
           >
             <div className="relative">
               <input
-                type="checkbox"
-                name="paypal"
+                type="radio"
+                name="paymentMethod"
                 id="paypal"
+                value="paypal"
+                checked={payment === "paypal"}
                 className="sr-only"
                 onChange={() => setPayment("paypal")}
               />

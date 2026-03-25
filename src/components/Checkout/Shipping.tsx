@@ -7,8 +7,15 @@ const Shipping = () => {
 
   return (
     <div className="bg-white shadow-1 rounded-[10px] mt-7.5">
-      <div
+      <input
+        type="hidden"
+        name="shipToDifferentAddress"
+        value={dropdown ? "yes" : "no"}
+      />
+      <button
+        type="button"
         onClick={() => setDropdown(!dropdown)}
+        aria-expanded={dropdown}
         className="cursor-pointer flex items-center gap-2.5 font-medium text-lg text-dark py-5 px-5.5"
       >
         {t("checkout.shipDifferentAddress")}
@@ -29,21 +36,29 @@ const Shipping = () => {
             fill=""
           />
         </svg>
-      </div>
+      </button>
 
       {/* <!-- dropdown menu --> */}
       <div className={`p-4 sm:p-8.5 ${dropdown ? "block" : "hidden"}`}>
         <div className="mb-5">
-          <label htmlFor="countryName" className="block mb-2.5">
+          <label htmlFor="shippingCountryRegion" className="block mb-2.5">
             {t("checkout.countryRegion")}
             <span className="text-red">*</span>
           </label>
 
           <div className="relative">
-            <select className="w-full bg-gray-1 rounded-md border border-gray-3 text-dark-4 py-3 pl-5 pr-9 duration-200 appearance-none outline-none focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20">
-              <option value="0">{t("checkout.australia")}</option>
-              <option value="1">{t("checkout.america")}</option>
-              <option value="2">{t("checkout.england")}</option>
+            <select
+              name="shippingCountryRegion"
+              id="shippingCountryRegion"
+              defaultValue=""
+              className="w-full bg-gray-1 rounded-md border border-gray-3 text-dark-4 py-3 pl-5 pr-9 duration-200 appearance-none outline-none focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+            >
+              <option value="" disabled>
+                {t("checkout.countryRegion")}
+              </option>
+              <option value="australia">{t("checkout.australia")}</option>
+              <option value="america">{t("checkout.america")}</option>
+              <option value="england">{t("checkout.england")}</option>
             </select>
 
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-4">
@@ -74,7 +89,8 @@ const Shipping = () => {
 
           <input
             type="text"
-            name="address"
+            name="shippingStreetAddress"
+            id="shippingStreetAddress"
             placeholder={t("checkout.housePlaceholder")}
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
@@ -82,7 +98,8 @@ const Shipping = () => {
           <div className="mt-5">
             <input
               type="text"
-              name="address"
+              name="shippingApartment"
+              id="shippingApartment"
               placeholder={t("checkout.apartmentPlaceholder")}
               className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
             />
@@ -96,7 +113,8 @@ const Shipping = () => {
 
           <input
             type="text"
-            name="town"
+            name="shippingTown"
+            id="shippingTown"
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
@@ -108,7 +126,8 @@ const Shipping = () => {
 
           <input
             type="text"
-            name="country"
+            name="shippingCountry"
+            id="shippingCountry"
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
@@ -120,7 +139,8 @@ const Shipping = () => {
 
           <input
             type="text"
-            name="phone"
+            name="shippingPhone"
+            id="shippingPhone"
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
@@ -132,7 +152,8 @@ const Shipping = () => {
 
           <input
             type="email"
-            name="email"
+            name="shippingEmail"
+            id="shippingEmail"
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>

@@ -21,6 +21,7 @@ const Billing = () => {
               type="text"
               name="firstName"
               id="firstName"
+              required
               placeholder={t("contact.placeholderFirstName")}
               className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
             />
@@ -35,6 +36,7 @@ const Billing = () => {
               type="text"
               name="lastName"
               id="lastName"
+              required
               placeholder={t("contact.placeholderLastName")}
               className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
             />
@@ -55,16 +57,25 @@ const Billing = () => {
         </div>
 
         <div className="mb-5">
-          <label htmlFor="countryName" className="block mb-2.5">
+          <label htmlFor="billingCountryRegion" className="block mb-2.5">
             {t("checkout.countryRegion")}
             <span className="text-red">*</span>
           </label>
 
           <div className="relative">
-            <select className="w-full bg-gray-1 rounded-md border border-gray-3 text-dark-4 py-3 pl-5 pr-9 duration-200 appearance-none outline-none focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20">
-              <option value="0">{t("checkout.australia")}</option>
-              <option value="1">{t("checkout.america")}</option>
-              <option value="2">{t("checkout.england")}</option>
+            <select
+              name="billingCountryRegion"
+              id="billingCountryRegion"
+              defaultValue=""
+              required
+              className="w-full bg-gray-1 rounded-md border border-gray-3 text-dark-4 py-3 pl-5 pr-9 duration-200 appearance-none outline-none focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+            >
+              <option value="" disabled>
+                {t("checkout.countryRegion")}
+              </option>
+              <option value="australia">{t("checkout.australia")}</option>
+              <option value="america">{t("checkout.america")}</option>
+              <option value="england">{t("checkout.england")}</option>
             </select>
 
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-4">
@@ -95,8 +106,9 @@ const Billing = () => {
 
           <input
             type="text"
-            name="address"
-            id="address"
+            name="billingStreetAddress"
+            id="billingStreetAddress"
+            required
             placeholder={t("checkout.housePlaceholder")}
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
@@ -104,8 +116,8 @@ const Billing = () => {
           <div className="mt-5">
             <input
               type="text"
-              name="address"
-              id="addressTwo"
+              name="billingApartment"
+              id="billingApartment"
               placeholder={t("checkout.apartmentPlaceholder")}
               className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
             />
@@ -119,8 +131,9 @@ const Billing = () => {
 
           <input
             type="text"
-            name="town"
-            id="town"
+            name="billingTown"
+            id="billingTown"
+            required
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
@@ -132,8 +145,8 @@ const Billing = () => {
 
           <input
             type="text"
-            name="country"
-            id="country"
+            name="billingCountry"
+            id="billingCountry"
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
@@ -147,6 +160,7 @@ const Billing = () => {
             type="text"
             name="phone"
             id="phone"
+            required
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
@@ -160,6 +174,7 @@ const Billing = () => {
             type="email"
             name="email"
             id="email"
+            required
             className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
           />
         </div>
@@ -173,6 +188,8 @@ const Billing = () => {
               <input
                 type="checkbox"
                 id="checkboxLabelTwo"
+                name="createAccount"
+                value="yes"
                 className="sr-only"
               />
               <div className="mr-2 flex h-4 w-4 items-center justify-center rounded border border-gray-4">

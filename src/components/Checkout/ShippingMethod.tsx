@@ -19,9 +19,11 @@ const ShippingMethod = () => {
           >
             <div className="relative">
               <input
-                type="checkbox"
-                name="free"
+                type="radio"
+                name="shippingMethod"
                 id="free"
+                value="free"
+                checked={shippingMethod === "free"}
                 className="sr-only"
                 onChange={() => setShippingMethod("free")}
               />
@@ -43,9 +45,11 @@ const ShippingMethod = () => {
           >
             <div className="relative">
               <input
-                type="checkbox"
-                name="fedex"
+                type="radio"
+                name="shippingMethod"
                 id="fedex"
+                value="fedex"
+                checked={shippingMethod === "fedex"}
                 className="sr-only"
                 onChange={() => setShippingMethod("fedex")}
               />
@@ -83,9 +87,11 @@ const ShippingMethod = () => {
           >
             <div className="relative">
               <input
-                type="checkbox"
-                name="dhl"
+                type="radio"
+                name="shippingMethod"
                 id="dhl"
+                value="dhl"
+                checked={shippingMethod === "dhl"}
                 className="sr-only"
                 onChange={() => setShippingMethod("dhl")}
               />
