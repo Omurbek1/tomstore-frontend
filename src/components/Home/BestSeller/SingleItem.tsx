@@ -9,25 +9,34 @@ import ProductLabelBadges from "@/components/Common/ProductLabelBadges";
 import { useAppStore } from "@/store/app-store";
 import { useCartToast } from "@/components/Common/useCartToast";
 import { useWishlistToast } from "@/components/Common/useWishlistToast";
+import { useShallow } from "zustand/react/shallow";
 
 const SingleItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t, formatPrice } = useI18n();
-  const setQuickViewProduct = useAppStore((state) => state.setQuickViewProduct);
-  const addItemToCart = useAppStore((state) => state.addItemToCart);
-  const addItemToWishlist = useAppStore((state) => state.addItemToWishlist);
-  const removeItemFromWishlist = useAppStore(
-    (state) => state.removeItemFromWishlist,
-  );
-  const isInWishlist = useAppStore((state) =>
-    state.wishlistItems.some((wishlistItem) => wishlistItem.id === item.id),
+  const {
+    addItemToCart,
+    addItemToWishlist,
+    isInWishlist,
+    removeItemFromWishlist,
+    setQuickViewProduct,
+  } = useAppStore(
+    useShallow((state) => ({
+      addItemToCart: state.addItemToCart,
+      addItemToWishlist: state.addItemToWishlist,
+      isInWishlist: state.wishlistItems.some(
+        (wishlistItem) => wishlistItem.id === item.id,
+      ),
+      removeItemFromWishlist: state.removeItemFromWishlist,
+      setQuickViewProduct: state.setQuickViewProduct,
+    })),
   );
   const showCartToast = useCartToast();
   const showWishlistToast = useWishlistToast();
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
-    setQuickViewProduct({ ...item });
+    setQuickViewProduct(item);
   };
 
   // add to cart

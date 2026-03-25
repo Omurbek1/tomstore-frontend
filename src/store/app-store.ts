@@ -159,7 +159,6 @@ export const useAppStore = create<AppStoreState>()(
       partialize: (state) => ({
         cartItems: state.cartItems,
         wishlistItems: state.wishlistItems,
-        productDetails: state.productDetails,
       }),
       merge: (persistedState, currentState) => {
         const typedState = persistedState as Partial<AppStoreState> | undefined;
@@ -171,10 +170,8 @@ export const useAppStore = create<AppStoreState>()(
           wishlistItems: normalizeWishlistItems(
             typedState?.wishlistItems || currentState.wishlistItems,
           ),
-          quickViewProduct:
-            typedState?.quickViewProduct || currentState.quickViewProduct,
-          productDetails:
-            typedState?.productDetails || currentState.productDetails,
+          quickViewProduct: currentState.quickViewProduct,
+          productDetails: currentState.productDetails,
         };
       },
     },

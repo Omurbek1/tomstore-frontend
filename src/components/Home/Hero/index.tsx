@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import HeroCarousel from "./HeroCarousel";
+import LazyHeroCarousel from "./LazyHeroCarousel";
 import HeroFeature from "./HeroFeature";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,6 +20,7 @@ type HeroProps = {
 const Hero = ({ hero, featuredProducts }: HeroProps) => {
   const { t, formatPrice } = useI18n();
   const sideProducts = featuredProducts.slice(0, 2);
+  const heroSlides = hero.slides?.length ? hero.slides : [hero];
 
   return (
     <section className="relative overflow-hidden px-4 pb-8 pt-57.5 sm:px-8 sm:pb-10 sm:pt-45 lg:pb-12 lg:pt-30 xl:px-0 xl:pt-44">
@@ -35,7 +36,7 @@ const Hero = ({ hero, featuredProducts }: HeroProps) => {
             <div className="relative overflow-hidden rounded-[28px] border border-white/10">
               <div className="soft-grid absolute inset-0 opacity-15" />
               <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/6 to-transparent" />
-              <HeroCarousel slides={hero.slides?.length ? hero.slides : [hero]} />
+              <LazyHeroCarousel slides={heroSlides} />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
@@ -84,6 +85,7 @@ const Hero = ({ hero, featuredProducts }: HeroProps) => {
                           alt={product.title}
                           width={116}
                           height={140}
+                          sizes="112px"
                           className="h-auto max-h-[86%] w-auto object-contain"
                         />
                       </div>

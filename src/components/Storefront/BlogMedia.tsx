@@ -46,6 +46,11 @@ export default function BlogMedia({
           alt={title}
           width={1200}
           height={630}
+          sizes={
+            detail
+              ? "(min-width: 1280px) 850px, (min-width: 1024px) 720px, 100vw"
+              : "(min-width: 1280px) 370px, (min-width: 640px) 50vw, 100vw"
+          }
           className={mediaClassName}
         />
       ) : (

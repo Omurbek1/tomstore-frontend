@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getMenuData } from "./menuData";
@@ -22,6 +22,7 @@ import {
   useAppStore,
 } from "@/store/app-store";
 import { useStorefrontConfigQuery } from "@/storefront/hooks";
+import { useShallow } from "zustand/react/shallow";
 
 const CartIcon = () => (
   <svg
@@ -120,8 +121,12 @@ const Header = () => {
   const companyLogoUrl = storefrontConfig?.companyLogoUrl;
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);
   const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
-  const cartItemsCount = useAppStore(selectCartItemsCount);
-  const totalPrice = useAppStore(selectCartTotalPrice);
+  const { cartItemsCount, totalPrice } = useAppStore(
+    useShallow((state) => ({
+      cartItemsCount: selectCartItemsCount(state),
+      totalPrice: selectCartTotalPrice(state),
+    })),
+  );
   const compactHeader = stickyMenu;
   const headerOnDark =
     !stickyMenu && headerContrastMode === "dark" && !navigationOpen;
@@ -139,6 +144,8 @@ const Header = () => {
   };
 
   useEffect(() => {
+    let frameId = 0;
+
     const handleScrollState = () => {
       const currentScrollY = window.scrollY;
       const scrollDelta = currentScrollY - lastScrollYRef.current;
@@ -161,12 +168,28 @@ const Header = () => {
 
       lastScrollYRef.current = currentScrollY;
     };
+    const queueScrollStateUpdate = () => {
+      if (frameId) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0;
+        handleScrollState();
+      });
+    };
 
     lastScrollYRef.current = window.scrollY;
     handleScrollState();
 
-    window.addEventListener("scroll", handleScrollState, { passive: true });
-    return () => window.removeEventListener("scroll", handleScrollState);
+    window.addEventListener("scroll", queueScrollStateUpdate, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", queueScrollStateUpdate);
+
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
   }, [navigationOpen]);
 
   useEffect(() => {
@@ -174,9 +197,13 @@ const Header = () => {
     setSupplementaryNavHidden(false);
   }, [pathname]);
   const showBlogMenu = isStorefrontBlogPublic(storefrontConfig);
-  const menuData = getMenuData(t, {
-    showBlogMenu,
-  });
+  const menuData = useMemo(
+    () =>
+      getMenuData(t, {
+        showBlogMenu,
+      }),
+    [showBlogMenu, t],
+  );
   const closeNavigation = () => {
     setNavigationOpen(false);
   };
@@ -217,6 +244,11 @@ const Header = () => {
   }, [navigationOpen]);
 
   useEffect(() => {
+    let frameId = 0;
+    const contrastSections = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-header-contrast]"),
+    );
+
     const updateHeaderContrast = () => {
       if (stickyMenu || navigationOpen) {
         setHeaderContrastMode("default");
@@ -224,9 +256,7 @@ const Header = () => {
       }
 
       const headerBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
-      const activeContrastSection = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-header-contrast]"),
-      ).find((section) => {
+      const activeContrastSection = contrastSections.find((section) => {
         const rect = section.getBoundingClientRect();
         return rect.top <= headerBottom && rect.bottom >= 0;
       });
@@ -237,15 +267,29 @@ const Header = () => {
           : "default",
       );
     };
+    const queueHeaderContrastUpdate = () => {
+      if (frameId) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0;
+        updateHeaderContrast();
+      });
+    };
 
     updateHeaderContrast();
 
-    window.addEventListener("scroll", updateHeaderContrast, { passive: true });
-    window.addEventListener("resize", updateHeaderContrast);
+    window.addEventListener("scroll", queueHeaderContrastUpdate, { passive: true });
+    window.addEventListener("resize", queueHeaderContrastUpdate);
 
     return () => {
-      window.removeEventListener("scroll", updateHeaderContrast);
-      window.removeEventListener("resize", updateHeaderContrast);
+      window.removeEventListener("scroll", queueHeaderContrastUpdate);
+      window.removeEventListener("resize", queueHeaderContrastUpdate);
+
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
     };
   }, [navigationOpen, pathname, stickyMenu]);
 

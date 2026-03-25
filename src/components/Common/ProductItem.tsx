@@ -11,6 +11,7 @@ import ProductLabelBadges from "./ProductLabelBadges";
 import { useAppStore } from "@/store/app-store";
 import { useCartToast } from "./useCartToast";
 import { useWishlistToast } from "./useWishlistToast";
+import { useShallow } from "zustand/react/shallow";
 
 const FALLBACK_IMAGE = "/images/products/product-1-sm-1.png";
 
@@ -21,31 +22,27 @@ const STATUS_CLASS_BY_STATUS = {
   out_of_stock: "border-red/10 bg-red/10 text-red",
 } as const;
 
-const buildProductMeta = (
-  item: Product,
-  t: (key: string) => string,
-) =>
-  [
-    item.sku
-      ? {
-          label: t("common.sku"),
-          value: item.sku,
-        }
-      : null,
-  ].filter(Boolean) as Array<{ label: string; value: string }>;
-
 const ProductItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t, formatPrice } = useI18n();
-  const setQuickViewProduct = useAppStore((state) => state.setQuickViewProduct);
-  const addItemToCart = useAppStore((state) => state.addItemToCart);
-  const addItemToWishlist = useAppStore((state) => state.addItemToWishlist);
-  const removeItemFromWishlist = useAppStore(
-    (state) => state.removeItemFromWishlist,
-  );
-  const setProductDetails = useAppStore((state) => state.setProductDetails);
-  const isInWishlist = useAppStore((state) =>
-    state.wishlistItems.some((wishlistItem) => wishlistItem.id === item.id),
+  const {
+    addItemToCart,
+    addItemToWishlist,
+    isInWishlist,
+    removeItemFromWishlist,
+    setProductDetails,
+    setQuickViewProduct,
+  } = useAppStore(
+    useShallow((state) => ({
+      addItemToCart: state.addItemToCart,
+      addItemToWishlist: state.addItemToWishlist,
+      isInWishlist: state.wishlistItems.some(
+        (wishlistItem) => wishlistItem.id === item.id,
+      ),
+      removeItemFromWishlist: state.removeItemFromWishlist,
+      setProductDetails: state.setProductDetails,
+      setQuickViewProduct: state.setQuickViewProduct,
+    })),
   );
   const showCartToast = useCartToast();
   const showWishlistToast = useWishlistToast();
@@ -65,10 +62,9 @@ const ProductItem = ({ item }: { item: Product }) => {
     hasDiscount && item.price > 0
       ? Math.round(((item.price - item.discountedPrice) / item.price) * 100)
       : 0;
-  const productMeta = buildProductMeta(item, t);
 
   const handleQuickViewUpdate = () => {
-    setQuickViewProduct({ ...item });
+    setQuickViewProduct(item);
   };
 
   const handleAddToCart = () => {
@@ -106,7 +102,7 @@ const ProductItem = ({ item }: { item: Product }) => {
   };
 
   const handleProductDetails = () => {
-    setProductDetails({ ...item });
+    setProductDetails(item);
   };
 
   return (
@@ -187,6 +183,7 @@ const ProductItem = ({ item }: { item: Product }) => {
             alt={item.title}
             width={260}
             height={240}
+            sizes="(min-width: 1536px) 240px, (min-width: 1280px) 20vw, (min-width: 1024px) 28vw, (min-width: 640px) 42vw, 92vw"
             className="relative z-[1] h-auto max-h-[190px] w-auto object-contain drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)] transition-transform duration-300 group-hover:scale-[1.05]"
           />
         </div>
@@ -236,7 +233,9 @@ const ProductItem = ({ item }: { item: Product }) => {
               {item.brand}
             </span>
           ) : null}
-          <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>
+          <Link href={`/shop-details/${item.slug}`} prefetch={false}>
+            {item.title}
+          </Link>
         </h3>
 
         {item.shortDescription ? (
@@ -244,26 +243,6 @@ const ProductItem = ({ item }: { item: Product }) => {
             {item.shortDescription}
           </p>
         ) : null}
-
-        {productMeta.length ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {productMeta.map((meta) => (
-              <span
-                key={meta.label}
-                className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50/90 px-3 py-1.5 text-[11px] text-slate-600"
-              >
-                <span className="shrink-0 font-semibold text-slate-500">
-                  {meta.label}
-                </span>
-                <span className="truncate font-medium text-slate-700">
-                  {meta.value}
-                </span>
-              </span>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-3 h-[34px]" />
-        )}
 
         <div className="mt-4 grid gap-3 rounded-[22px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-3.5">
           <div className="flex flex-wrap items-start justify-between gap-2.5">

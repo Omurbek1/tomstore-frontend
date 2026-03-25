@@ -10,21 +10,31 @@ import ProductLabelBadges from "./ProductLabelBadges";
 import { useAppStore } from "@/store/app-store";
 import { useCartToast } from "./useCartToast";
 import { useWishlistToast } from "./useWishlistToast";
+import { useShallow } from "zustand/react/shallow";
 
 const QuickViewModal = () => {
   const { isModalOpen, closeModal } = useModalContext();
   const { openPreviewModal } = usePreviewSlider();
   const { t, formatPrice } = useI18n();
   const [quantity, setQuantity] = useState(1);
-  const addItemToCart = useAppStore((state) => state.addItemToCart);
-  const addItemToWishlist = useAppStore((state) => state.addItemToWishlist);
-  const removeItemFromWishlist = useAppStore(
-    (state) => state.removeItemFromWishlist,
-  );
-  const setProductDetails = useAppStore((state) => state.setProductDetails);
-  const product = useAppStore((state) => state.quickViewProduct);
-  const isInWishlist = useAppStore((state) =>
-    state.wishlistItems.some((wishlistItem) => wishlistItem.id === product.id),
+  const {
+    addItemToCart,
+    addItemToWishlist,
+    isInWishlist,
+    product,
+    removeItemFromWishlist,
+    setProductDetails,
+  } = useAppStore(
+    useShallow((state) => ({
+      addItemToCart: state.addItemToCart,
+      addItemToWishlist: state.addItemToWishlist,
+      isInWishlist: state.wishlistItems.some(
+        (wishlistItem) => wishlistItem.id === state.quickViewProduct.id,
+      ),
+      product: state.quickViewProduct,
+      removeItemFromWishlist: state.removeItemFromWishlist,
+      setProductDetails: state.setProductDetails,
+    })),
   );
   const showCartToast = useCartToast();
   const showWishlistToast = useWishlistToast();

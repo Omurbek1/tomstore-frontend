@@ -1,16 +1,11 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import Hero from "./Hero";
 import Categories from "./Categories";
 import NewArrival from "./NewArrivals";
-import PromoBanner from "./PromoBanner";
 import BestSeller from "./BestSeller";
-import CounDown from "./Countdown";
-import LatestBlogPosts from "./LatestBlogPosts";
-import HomeSeoSection from "./HomeSeoSection";
-import Testimonials from "./Testimonials";
-import Newsletter from "../Common/Newsletter";
 import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import { useI18n } from "@/i18n/provider";
 import { useStorefrontHomeQuery } from "@/storefront/hooks";
@@ -18,6 +13,42 @@ import {
   mapStorefrontCategoriesToCategories,
   mapStorefrontProductsToProducts,
 } from "@/storefront/mappers";
+
+const HomeSectionPlaceholder = ({
+  minHeightClassName,
+}: {
+  minHeightClassName: string;
+}) => (
+  <section className="overflow-hidden">
+    <div className="mx-auto w-full max-w-[1170px]">
+      <div
+        className={`section-shell animate-pulse border border-white/70 bg-white/75 ${minHeightClassName}`}
+      />
+    </div>
+  </section>
+);
+
+const PromoBanner = dynamic(() => import("./PromoBanner"), {
+  loading: () => <HomeSectionPlaceholder minHeightClassName="min-h-[380px]" />,
+});
+
+const CounDown = dynamic(() => import("./Countdown"), {
+  loading: () =>
+    <HomeSectionPlaceholder minHeightClassName="min-h-[420px] section-shell-dark" />,
+});
+
+const Testimonials = dynamic(() => import("./Testimonials"), {
+  loading: () => <HomeSectionPlaceholder minHeightClassName="min-h-[360px]" />,
+});
+
+const LatestBlogPosts = dynamic(() => import("./LatestBlogPosts"), {
+  loading: () => <HomeSectionPlaceholder minHeightClassName="min-h-[340px]" />,
+});
+
+const Newsletter = dynamic(() => import("../Common/Newsletter"), {
+  loading: () =>
+    <HomeSectionPlaceholder minHeightClassName="min-h-[220px] section-shell-dark" />,
+});
 
 const Home = ({
   canShowBlogPreview = true,

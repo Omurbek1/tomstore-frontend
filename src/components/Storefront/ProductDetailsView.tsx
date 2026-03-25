@@ -105,6 +105,9 @@ export default function ProductDetailsView({
                   alt={product.name}
                   width={420}
                   height={420}
+                  priority
+                  sizes="(min-width: 1280px) 420px, (min-width: 1024px) 36vw, 92vw"
+                  className="h-auto w-full max-w-[420px] object-contain"
                 />
               </div>
 
@@ -115,7 +118,13 @@ export default function ProductDetailsView({
                       key={`${image}-${index}`}
                       className="rounded-lg bg-gray-2 shadow-1 p-3 flex items-center justify-center"
                     >
-                      <Image src={image} alt={product.name} width={100} height={100} />
+                      <Image
+                        src={image}
+                        alt={product.name}
+                        width={100}
+                        height={100}
+                        sizes="100px"
+                      />
                     </div>
                   ))}
                 </div>

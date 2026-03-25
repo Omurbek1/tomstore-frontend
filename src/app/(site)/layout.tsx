@@ -8,13 +8,7 @@ import Footer from "../../components/Footer";
 
 import { ModalProvider } from "../context/QuickViewModalContext";
 import { CartModalProvider } from "../context/CartSidebarModalContext";
-import QuickViewModal from "@/components/Common/QuickViewModal";
-import CartSidebarModal from "@/components/Common/CartSidebarModal";
 import { PreviewSliderProvider } from "../context/PreviewSliderContext";
-import PreviewSliderModal from "@/components/Common/PreviewSlider";
-import AppToaster from "@/components/Common/AppToaster";
-
-import ScrollToTop from "@/components/Common/ScrollToTop";
 import { I18nProvider } from "@/i18n/provider";
 import TanStackQueryProvider from "@/tanstack-query/provider";
 import { makeQueryClient } from "@/tanstack-query/query-client";
@@ -42,6 +36,11 @@ import {
   DEFAULT_SEO_DESCRIPTION,
   getMetadataBase,
 } from "@/seo/metadata";
+import LazyAppToaster from "@/components/Common/LazyAppToaster";
+import LazyScrollToTop from "@/components/Common/LazyScrollToTop";
+import LazyQuickViewModal from "@/components/Common/LazyQuickViewModal";
+import LazyCartSidebarModal from "@/components/Common/LazyCartSidebarModal";
+import LazyPreviewSliderModal from "@/components/Common/LazyPreviewSliderModal";
 
 const fetchStorefrontConfig = async () => {
   const queryClient = makeQueryClient();
@@ -206,14 +205,14 @@ export default async function RootLayout({
                       <Header />
                       {children}
 
-                      <QuickViewModal />
-                      <CartSidebarModal />
-                      <PreviewSliderModal />
-                      <AppToaster />
+                      <LazyQuickViewModal />
+                      <LazyCartSidebarModal />
+                      <LazyPreviewSliderModal />
+                      <LazyAppToaster />
                     </PreviewSliderProvider>
                   </ModalProvider>
                 </CartModalProvider>
-                <ScrollToTop />
+                <LazyScrollToTop />
                 <Footer />
               </>
             </I18nProvider>
