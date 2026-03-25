@@ -342,7 +342,7 @@ const ShopDetails = () => {
                           fill="#3C50E0"
                         />
                       </svg>
-                      Free delivery available
+                      Доставка по всему Кыргызстану
                     </li>
 
                     <li className="flex items-center gap-2.5">

@@ -70,17 +70,20 @@ const Footer = ({
               {companyName}
             </h2>
 
-            <div className="mt-6 rounded-[24px] border border-white/10 bg-white/6 p-5 text-sm leading-7 text-white/70 backdrop-blur-sm">
-              <p>{address}</p>
-            </div>
+	            <div className="mt-6 rounded-[24px] border border-white/10 bg-white/6 p-5 text-sm leading-7 text-white/70 backdrop-blur-sm">
+	              <p>{address}</p>
+	              <p className="mt-3 border-t border-white/10 pt-3 text-white/82">
+	                {t("common.deliveryAcrossKyrgyzstan")}
+	              </p>
+	            </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href={getPhoneHref(supportPhone)}
-                className="inline-flex rounded-full border border-white/10 bg-white/8 px-4 py-3 text-sm font-medium text-white transition-colors duration-200 hover:bg-white hover:text-dark"
-              >
-                {supportPhone}
-              </a>
+	            <div className="mt-6 flex flex-wrap gap-3">
+	              <a
+	                href={getPhoneHref(supportPhone)}
+	                className="inline-flex rounded-full border border-white/10 bg-white/8 px-4 py-3 text-sm font-medium text-white transition-colors duration-200 hover:bg-white hover:text-dark"
+	              >
+	                {t("common.orderPhone")}: {supportPhone}
+	              </a>
               <a
                 href={getWhatsAppHref(whatsappPhone)}
                 className="inline-flex rounded-full border border-green-400/20 bg-green-400/10 px-4 py-3 text-sm font-medium text-white transition-colors duration-200 hover:bg-white hover:text-dark"

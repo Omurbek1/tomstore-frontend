@@ -39,7 +39,7 @@ const Contact = ({
 
               <div className="p-4 sm:p-7.5">
                 <div className="flex flex-col gap-4">
-                  <p className="flex items-center gap-4">
+	                  <p className="flex items-center gap-4">
                     <svg
                       width="22"
                       height="22"
@@ -82,8 +82,8 @@ const Contact = ({
                         fill="#3C50E0"
                       />
                     </svg>
-                    {t("common.phone")}: {supportPhone}
-                  </p>
+	                    {t("common.orderPhone")}: {supportPhone}
+	                  </p>
 
                   {showSeparateWhatsapp ? (
                     <p className="flex items-center gap-4">
@@ -111,7 +111,7 @@ const Contact = ({
                     </p>
                   ) : null}
 
-                  <p className="flex gap-4">
+	                  <p className="flex gap-4">
                     <svg
                       className="mt-0.5 shrink-0"
                       width="22"
@@ -127,11 +127,29 @@ const Contact = ({
                         fill="#3C50E0"
                       />
                     </svg>
-                    {t("common.address")}: {address}
-                  </p>
-                </div>
-              </div>
-            </div>
+	                    {t("common.address")}: {address}
+	                  </p>
+
+	                  <p className="flex items-center gap-4">
+	                    <svg
+	                      width="22"
+	                      height="22"
+	                      viewBox="0 0 22 22"
+	                      fill="none"
+	                      xmlns="http://www.w3.org/2000/svg"
+	                    >
+	                      <path
+	                        fillRule="evenodd"
+	                        clipRule="evenodd"
+	                        d="M11 2.29169C6.7428 2.29169 3.29167 5.74282 3.29167 10C3.29167 14.2572 6.7428 17.7084 11 17.7084C15.2572 17.7084 18.7083 14.2572 18.7083 10C18.7083 5.74282 15.2572 2.29169 11 2.29169ZM1.91667 10C1.91667 4.98343 5.98341 0.916687 11 0.916687C16.0166 0.916687 20.0833 4.98343 20.0833 10C20.0833 15.0166 16.0166 19.0834 11 19.0834C5.98341 19.0834 1.91667 15.0166 1.91667 10ZM14.9858 7.9856C15.2543 8.25412 15.2543 8.68948 14.9858 8.95801L10.8608 13.083C10.5922 13.3515 10.1569 13.3515 9.88834 13.083L7.82684 11.0215C7.55832 10.7529 7.55832 10.3176 7.82684 10.0491C8.09537 9.78054 8.53073 9.78054 8.79926 10.0491L10.3746 11.6244L14.0133 7.9856C14.2818 7.71708 14.7172 7.71708 14.9858 7.9856Z"
+	                        fill="#3C50E0"
+	                      />
+	                    </svg>
+	                    {t("common.deliveryAcrossKyrgyzstan")}
+	                  </p>
+	                </div>
+	              </div>
+	            </div>
 
             <div className="xl:max-w-[770px] w-full bg-white rounded-xl shadow-1 p-4 sm:p-7.5 xl:p-10">
               <form>
