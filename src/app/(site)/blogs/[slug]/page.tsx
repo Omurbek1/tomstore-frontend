@@ -14,7 +14,7 @@ import {
   storefrontBlogQueryOptions,
   storefrontConfigQueryOptions,
 } from "@/storefront/query-options";
-import { buildAbsoluteUrl } from "@/storefront/site";
+import { buildAbsoluteUrl, buildStorefrontAssetUrl } from "@/storefront/site";
 import { makeQueryClient } from "@/tanstack-query/query-client";
 
 type Props = {
@@ -88,6 +88,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const companyName = getStorefrontCompanyName(storefrontConfig);
+  const companyLogoUrl = buildStorefrontAssetUrl(storefrontConfig?.companyLogoUrl);
   const matchedCategory = findMatchingCategory(post.category, post.categories);
   const articlePath = buildBlogPostPath(slug);
   const articleStructuredData = {
@@ -111,10 +112,10 @@ export default async function BlogPostPage({ params }: Props) {
     publisher: {
       "@type": "Organization",
       name: companyName,
-      logo: storefrontConfig?.companyLogoUrl
+      logo: companyLogoUrl
         ? {
             "@type": "ImageObject",
-            url: buildAbsoluteUrl(storefrontConfig.companyLogoUrl),
+            url: companyLogoUrl,
           }
         : undefined,
     },

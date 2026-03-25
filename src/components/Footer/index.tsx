@@ -16,6 +16,7 @@ import {
   buildBrandsHubPath,
   buildCategoriesHubPath,
 } from "@/storefront/catalog-routing";
+import { buildStorefrontAssetUrl } from "@/storefront/site";
 import type { StorefrontConfig } from "@/storefront/types";
 
 const Footer = ({
@@ -27,6 +28,7 @@ const Footer = ({
   const { t } = useI18n();
   const address = getStorefrontAddress(storefrontConfig);
   const companyName = getStorefrontCompanyName(storefrontConfig);
+  const companyLogoUrl = buildStorefrontAssetUrl(storefrontConfig?.companyLogoUrl);
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);
   const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
 
@@ -42,9 +44,9 @@ const Footer = ({
               href="/"
               className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 py-2"
             >
-              {storefrontConfig?.companyLogoUrl ? (
+              {companyLogoUrl ? (
                 <Image
-                  src={storefrontConfig.companyLogoUrl}
+                  src={companyLogoUrl}
                   alt={companyName}
                   width={168}
                   height={56}

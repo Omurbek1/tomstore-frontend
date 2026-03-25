@@ -25,7 +25,11 @@ import {
   storefrontConfigQueryOptions,
 } from "@/storefront/query-options";
 import type { StorefrontConfig } from "@/storefront/types";
-import { buildAbsoluteUrl, getSiteUrl } from "@/storefront/site";
+import {
+  buildAbsoluteUrl,
+  buildStorefrontAssetUrl,
+  getSiteUrl,
+} from "@/storefront/site";
 import {
   getStorefrontCompanyName,
   getStorefrontSupportPhone,
@@ -52,7 +56,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const description =
     storefrontConfig?.warrantyText?.trim() || DEFAULT_SEO_DESCRIPTION;
   const image =
-    storefrontConfig?.companyLogoUrl || buildAbsoluteUrl("/images/hero/hero-01.png");
+    buildStorefrontAssetUrl(storefrontConfig?.companyLogoUrl) ||
+    buildAbsoluteUrl("/images/hero/hero-01.png");
 
   return {
     metadataBase: getMetadataBase(),
@@ -146,7 +151,8 @@ export default async function RootLayout({
       : currencyPreference;
   const companyName = getStorefrontCompanyName(storefrontConfig);
   const companyLogoUrl =
-    storefrontConfig?.companyLogoUrl || buildAbsoluteUrl("/images/hero/hero-01.png");
+    buildStorefrontAssetUrl(storefrontConfig?.companyLogoUrl) ||
+    buildAbsoluteUrl("/images/hero/hero-01.png");
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);
   const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
   const organizationStructuredData = {

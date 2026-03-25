@@ -8,6 +8,8 @@ const backendUrl = new URL(
 const supabaseUrl =
   process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 
+const localImageHosts = new Set(["127.0.0.1", "localhost", "0.0.0.0"]);
+
 const remotePatterns = [
   {
     protocol: backendUrl.protocol.replace(":", ""),
@@ -50,6 +52,7 @@ const nextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 7,
+    dangerouslyAllowLocalIP: localImageHosts.has(backendUrl.hostname),
     remotePatterns,
   },
 };

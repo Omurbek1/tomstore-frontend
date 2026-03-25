@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { queryOptions } from "@tanstack/react-query";
-import { getBackendUrl } from "./site";
+import { buildStorefrontAssetUrl, getBackendUrl } from "./site";
 import {
   buildStorefrontAuthorizationValue,
   getStorefrontAuthScope,
@@ -16,11 +16,15 @@ import {
   type StorefrontCatalogRouteQuery,
 } from "./query-keys";
 import type {
+  StorefrontBlogPostSummary,
   StorefrontBlogListResponse,
   StorefrontBlogPostDetails,
+  StorefrontCategory,
   StorefrontCatalogResponse,
   StorefrontConfig,
+  StorefrontHeroSlide,
   StorefrontHomeResponse,
+  StorefrontProductCard,
   StorefrontProductDetails,
 } from "./types";
 
@@ -87,6 +91,119 @@ const STORE_STALE_TIME_MS = {
 } as const;
 
 const buildStorefrontUrl = (path: string) => `${getBackendUrl()}${path}`;
+
+const normalizeStorefrontCategory = (
+  category: StorefrontCategory,
+): StorefrontCategory => ({
+  ...category,
+  image: buildStorefrontAssetUrl(category.image),
+});
+
+const normalizeStorefrontHeroSlide = (
+  slide: StorefrontHeroSlide,
+): StorefrontHeroSlide => ({
+  ...slide,
+  backgroundImageUrl: buildStorefrontAssetUrl(slide.backgroundImageUrl),
+});
+
+const normalizeStorefrontProductCard = <
+  T extends StorefrontProductCard,
+>(
+  product: T,
+): T => ({
+  ...product,
+  mainImage: buildStorefrontAssetUrl(product.mainImage),
+  gallery: Array.from(
+    new Set(
+      (product.gallery || [])
+        .map((image) => buildStorefrontAssetUrl(image))
+        .filter((image): image is string => Boolean(image)),
+    ),
+  ),
+});
+
+const normalizeStorefrontBlogSummary = <
+  T extends StorefrontBlogPostSummary,
+>(
+  post: T,
+): T => ({
+  ...post,
+  coverImageUrl: buildStorefrontAssetUrl(post.coverImageUrl),
+  coverVideoUrl: buildStorefrontAssetUrl(post.coverVideoUrl),
+});
+
+const normalizeStorefrontConfig = (
+  config: StorefrontConfig,
+): StorefrontConfig => ({
+  ...config,
+  companyLogoUrl: buildStorefrontAssetUrl(config.companyLogoUrl),
+});
+
+const normalizeStorefrontCatalogResponse = (
+  catalog: StorefrontCatalogResponse,
+): StorefrontCatalogResponse => ({
+  ...catalog,
+  items: catalog.items.map(normalizeStorefrontProductCard),
+  filters: {
+    ...catalog.filters,
+    categories: catalog.filters.categories.map(normalizeStorefrontCategory),
+  },
+});
+
+const normalizeStorefrontHomeResponse = (
+  home: StorefrontHomeResponse,
+): StorefrontHomeResponse => ({
+  ...home,
+  hero: {
+    ...normalizeStorefrontHeroSlide(home.hero),
+    slides: home.hero.slides?.map(normalizeStorefrontHeroSlide),
+  },
+  categories: home.categories.map(normalizeStorefrontCategory),
+  popularProducts: home.popularProducts.map(normalizeStorefrontProductCard),
+  recommendedProducts: home.recommendedProducts.map(
+    normalizeStorefrontProductCard,
+  ),
+  hitProducts: home.hitProducts.map(normalizeStorefrontProductCard),
+  saleProducts: home.saleProducts.map(normalizeStorefrontProductCard),
+  newProducts: home.newProducts.map(normalizeStorefrontProductCard),
+});
+
+const normalizeStorefrontProductDetails = (
+  product: StorefrontProductDetails | null,
+) =>
+  product
+    ? {
+        ...normalizeStorefrontProductCard(product),
+        relatedProducts: product.relatedProducts.map(
+          normalizeStorefrontProductCard,
+        ),
+        recommendedProducts: product.recommendedProducts.map(
+          normalizeStorefrontProductCard,
+        ),
+      }
+    : null;
+
+const normalizeStorefrontBlogListResponse = (
+  blogList: StorefrontBlogListResponse,
+): StorefrontBlogListResponse => ({
+  ...blogList,
+  items: blogList.items.map(normalizeStorefrontBlogSummary),
+  recentPosts: blogList.recentPosts.map(normalizeStorefrontBlogSummary),
+  featuredProducts: blogList.featuredProducts.map(normalizeStorefrontProductCard),
+});
+
+const normalizeStorefrontBlogPostDetails = (
+  post: StorefrontBlogPostDetails | null,
+) =>
+  post
+    ? {
+        ...normalizeStorefrontBlogSummary(post),
+        recentPosts: post.recentPosts.map(normalizeStorefrontBlogSummary),
+        featuredProducts: post.featuredProducts.map(
+          normalizeStorefrontProductCard,
+        ),
+      }
+    : null;
 
 const performStorefrontJsonFetch = async <T>(
   path: string,
@@ -219,7 +336,7 @@ export const storefrontConfigQueryOptions = () =>
     queryFn: () =>
       fetchRequiredStorefrontJson<StorefrontConfig>("/storefront/config", {
         revalidate: STORE_REVALIDATE_SECONDS.config,
-      }),
+      }).then(normalizeStorefrontConfig),
   });
 
 export const storefrontCategoriesQueryOptions = () =>
@@ -234,7 +351,7 @@ export const storefrontCategoriesQueryOptions = () =>
         },
       );
 
-      return catalog.filters.categories;
+      return normalizeStorefrontCatalogResponse(catalog).filters.categories;
     },
   });
 
@@ -245,7 +362,7 @@ export const storefrontHomeQueryOptions = () =>
     queryFn: () =>
       fetchRequiredStorefrontJson<StorefrontHomeResponse>("/storefront/home", {
         revalidate: STORE_REVALIDATE_SECONDS.home,
-      }),
+      }).then(normalizeStorefrontHomeResponse),
   });
 
 export const storefrontBlogsQueryOptions = (
@@ -276,7 +393,7 @@ export const storefrontBlogsQueryOptions = (
               authToken: options.authToken,
               revalidate: STORE_REVALIDATE_SECONDS.blogs,
             },
-      ),
+      ).then(normalizeStorefrontBlogListResponse),
   });
 };
 
@@ -294,7 +411,7 @@ export const storefrontCatalogQueryOptions = (
         {
           revalidate: STORE_REVALIDATE_SECONDS.catalog,
         },
-      ),
+      ).then(normalizeStorefrontCatalogResponse),
   });
 };
 
@@ -309,7 +426,7 @@ export const storefrontProductQueryOptions = (slug: string) =>
           allowNotFound: true,
           revalidate: STORE_REVALIDATE_SECONDS.product,
         },
-      ),
+      ).then(normalizeStorefrontProductDetails),
   });
 
 export const storefrontBlogQueryOptions = (
@@ -342,6 +459,6 @@ export const storefrontBlogQueryOptions = (
                 authToken: options.authToken,
                 revalidate: STORE_REVALIDATE_SECONDS.blogPost,
               },
-        ),
+        ).then(normalizeStorefrontBlogPostDetails),
     });
   };

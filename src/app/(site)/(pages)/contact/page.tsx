@@ -10,7 +10,11 @@ import {
   getStorefrontSupportPhone,
   getStorefrontWhatsappPhone,
 } from "@/storefront/contact";
-import { buildAbsoluteUrl, getSiteUrl } from "@/storefront/site";
+import {
+  buildAbsoluteUrl,
+  buildStorefrontAssetUrl,
+  getSiteUrl,
+} from "@/storefront/site";
 export const metadata: Metadata = {
   ...buildSeoMetadata({
     title: "Контакты",
@@ -29,15 +33,14 @@ const ContactPage = async () => {
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);
   const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
   const address = getStorefrontAddress(storefrontConfig);
+  const companyLogoUrl = buildStorefrontAssetUrl(storefrontConfig?.companyLogoUrl);
   const contactStructuredData = {
     "@context": "https://schema.org",
     "@type": "Store",
     name: companyName,
     url: getSiteUrl(),
     telephone: supportPhone,
-    image: storefrontConfig?.companyLogoUrl
-      ? buildAbsoluteUrl(storefrontConfig.companyLogoUrl)
-      : undefined,
+    image: companyLogoUrl,
     address: {
       "@type": "PostalAddress",
       streetAddress: address,

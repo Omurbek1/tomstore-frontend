@@ -21,6 +21,7 @@ import {
   selectCartTotalPrice,
   useAppStore,
 } from "@/store/app-store";
+import { buildStorefrontAssetUrl } from "@/storefront/site";
 import type { StorefrontConfig } from "@/storefront/types";
 import { useShallow } from "zustand/react/shallow";
 
@@ -121,7 +122,7 @@ const Header = ({
   const headerRef = useRef<HTMLElement>(null);
   const { openCartModal } = useCartModalContext();
   const companyName = getStorefrontCompanyName(storefrontConfig);
-  const companyLogoUrl = storefrontConfig?.companyLogoUrl;
+  const companyLogoUrl = buildStorefrontAssetUrl(storefrontConfig?.companyLogoUrl);
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);
   const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);
   const { cartItemsCount, totalPrice } = useAppStore(
@@ -141,6 +142,14 @@ const Header = ({
     : "border-blue/10 bg-[linear-gradient(180deg,rgba(251,253,255,0.94)_0%,rgba(239,246,255,0.88)_100%)] shadow-[0_22px_40px_-30px_rgba(60,80,224,0.2)]";
   const primaryTextClass = headerOnDark ? "text-white" : "text-dark";
   const secondaryTextClass = headerOnDark ? "text-white/68" : "text-dark-4";
+  const mobileDrawerBackdropClass =
+    "bg-[radial-gradient(circle_at_top,rgba(116,161,255,0.28),rgba(12,20,34,0.88)_58%)] backdrop-blur-md";
+  const mobileDrawerPanelClass =
+    "border-white/60 bg-[linear-gradient(180deg,rgba(249,252,255,0.98)_0%,rgba(237,244,255,0.96)_48%,rgba(227,238,255,0.98)_100%)] shadow-[0_36px_90px_-44px_rgba(15,23,42,0.52)] backdrop-blur-2xl";
+  const mobileDrawerCardClass =
+    "border-white/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.9)_0%,rgba(245,249,255,0.8)_100%)] shadow-[0_20px_44px_-34px_rgba(15,23,42,0.3)] backdrop-blur-xl";
+  const mobileDrawerAccentCardClass =
+    "border-white/80 bg-[linear-gradient(135deg,rgba(60,80,224,0.14)_0%,rgba(104,176,255,0.18)_100%)] shadow-[0_24px_44px_-34px_rgba(60,80,224,0.32)] backdrop-blur-xl";
 
   const handleOpenCartModal = () => {
     openCartModal();
@@ -295,6 +304,8 @@ const Header = ({
       }
     };
   }, [navigationOpen, pathname, stickyMenu]);
+
+  console.log(" companyLogoUrl: ", companyLogoUrl);
 
   return (
     <header
@@ -473,18 +484,26 @@ const Header = ({
             type="button"
             aria-label={t("common.close")}
             onClick={closeNavigation}
-            className={`absolute inset-0 bg-dark/45 backdrop-blur-[2px] transition-opacity duration-300 ${
+            className={`absolute inset-0 transition-opacity duration-300 ${mobileDrawerBackdropClass} ${
               navigationOpen ? "opacity-100" : "opacity-0"
             }`}
           />
 
           <aside
             aria-hidden={!navigationOpen}
-            className={`absolute right-0 top-0 flex h-dvh w-full max-w-[380px] flex-col border-l border-white/60 bg-[#f8fbff]/96 shadow-2 backdrop-blur-xl transition-transform duration-300 ${
+            className={`absolute right-0 top-0 flex h-dvh w-full max-w-[380px] flex-col overflow-hidden border-l transition-transform duration-300 ${mobileDrawerPanelClass} ${
               navigationOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
-            <div className="flex items-center justify-between gap-3 border-b border-gray-3 px-4 py-4">
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              <div className="absolute right-[-4.5rem] -top-20 h-60 w-60 rounded-full bg-[radial-gradient(circle,rgba(60,80,224,0.22)_0%,rgba(60,80,224,0)_72%)] blur-3xl" />
+              <div className="absolute -left-20 top-48 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(84,196,255,0.2)_0%,rgba(84,196,255,0)_72%)] blur-3xl" />
+              <div className="absolute bottom-[-120px] right-[-60px] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(137,157,255,0.18)_0%,rgba(137,157,255,0)_72%)] blur-3xl" />
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.38)_1px,transparent_1px),linear-gradient(90deg,rgba(144,168,255,0.14)_1px,transparent_1px)] bg-[size:22px_22px] opacity-[0.18] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.86),transparent_92%)]" />
+              <div className="absolute inset-x-0 top-0 h-36 bg-[linear-gradient(180deg,rgba(255,255,255,0.5)_0%,rgba(255,255,255,0)_100%)]" />
+            </div>
+
+            <div className="relative z-10 flex items-center justify-between gap-3 border-b border-white/45 bg-white/25 px-4 py-4 backdrop-blur-md">
               <Link
                 href="/"
                 onClick={closeNavigation}
@@ -516,7 +535,7 @@ const Header = ({
                 type="button"
                 aria-label={t("common.close")}
                 onClick={closeNavigation}
-                className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[24px] border border-white/70 bg-white/80 text-dark transition-colors duration-200 hover:border-blue hover:text-blue"
+                className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[24px] border text-dark transition-colors duration-200 hover:border-blue hover:text-blue ${mobileDrawerCardClass}`}
               >
                 <svg
                   width="18"
@@ -535,14 +554,16 @@ const Header = ({
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-4 no-scrollbar">
+            <div className="relative z-10 flex-1 overflow-y-auto px-4 py-4 no-scrollbar">
               <div className="grid grid-cols-2 gap-3">
                 {whatsappPhone ? (
                   <a
                     href={getWhatsAppHref(whatsappPhone)}
                     target="_blank"
                     rel="noreferrer"
-                    className={`rounded-[24px] border border-white/70 bg-white/80 px-4 py-3 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.25)] ${
+                    className={`rounded-[24px] border px-4 py-3 ${
+                      mobileDrawerCardClass
+                    } ${
                       !supportPhone ? "col-span-2" : ""
                     }`}
                   >
@@ -561,7 +582,9 @@ const Header = ({
                 {supportPhone ? (
                   <a
                     href={getPhoneHref(supportPhone)}
-                    className={`rounded-[24px] border border-white/70 bg-white/80 px-4 py-3 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.25)] ${
+                    className={`rounded-[24px] border px-4 py-3 ${
+                      mobileDrawerCardClass
+                    } ${
                       !whatsappPhone ? "col-span-2" : ""
                     }`}
                   >
@@ -583,7 +606,7 @@ const Header = ({
                     closeNavigation();
                     handleOpenCartModal();
                   }}
-                  className="col-span-2 rounded-[24px] border border-blue/15 bg-blue/8 px-4 py-3 text-left shadow-[0_18px_36px_-30px_rgba(60,80,224,0.32)]"
+                  className={`col-span-2 rounded-[24px] border px-4 py-3 text-left ${mobileDrawerAccentCardClass}`}
                 >
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <span className="flex items-center gap-2.5">
@@ -603,7 +626,9 @@ const Header = ({
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <label className="rounded-[24px] border border-white/70 bg-white/80 px-3 py-2.5">
+                <label
+                  className={`rounded-[24px] border px-3 py-2.5 ${mobileDrawerCardClass}`}
+                >
                   <span className="mb-1 block text-[11px] uppercase tracking-[0.16em] text-dark-4">
                     {t("header.language")}
                   </span>
@@ -624,7 +649,9 @@ const Header = ({
                   </select>
                 </label>
 
-                <label className="rounded-[24px] border border-white/70 bg-white/80 px-3 py-2.5">
+                <label
+                  className={`rounded-[24px] border px-3 py-2.5 ${mobileDrawerCardClass}`}
+                >
                   <span className="mb-1 block text-[11px] uppercase tracking-[0.16em] text-dark-4">
                     {t("header.currency")}
                   </span>
@@ -647,7 +674,7 @@ const Header = ({
                 </label>
               </div>
 
-              <nav className="mt-4 border-t border-gray-3 pt-4">
+              <nav className="mt-4 border-t border-white/45 pt-4">
                 <ul className="flex flex-col gap-2.5">
                   {menuData.map((menuItem, i) =>
                     menuItem.submenu ? (
@@ -663,10 +690,10 @@ const Header = ({
                         <Link
                           href={menuItem.path}
                           onClick={closeNavigation}
-                          className={`flex rounded-[20px] bg-white/80 px-4 py-3 text-base font-medium shadow-[0_18px_36px_-30px_rgba(15,23,42,0.2)] ${
+                          className={`flex rounded-[20px] border px-4 py-3 text-base font-medium transition-colors duration-200 ${
                             pathname === menuItem.path
-                              ? "text-blue"
-                              : "text-dark"
+                              ? `text-blue ${mobileDrawerAccentCardClass}`
+                              : `text-dark ${mobileDrawerCardClass}`
                           }`}
                         >
                           {menuItem.title}
