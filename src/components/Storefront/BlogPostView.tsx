@@ -1,7 +1,6 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import BlogMedia from "@/components/Storefront/BlogMedia";
 import { useI18n } from "@/i18n/provider";
 import {
@@ -11,12 +10,12 @@ import {
   buildLegacyBlogListPath,
   buildLegacyBlogPostPath,
 } from "@/storefront/blog-routing";
-import { useStorefrontBlogQuery } from "@/storefront/hooks";
+import type { StorefrontBlogPostDetails } from "@/storefront/types";
 import Link from "next/link";
 import Image from "next/image";
 
 type BlogPostViewProps = {
-  slug: string;
+  post: StorefrontBlogPostDetails;
   variant: "plain" | "sidebar";
 };
 
@@ -54,9 +53,8 @@ const findMatchingCategory = (
   );
 };
 
-export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
+export default function BlogPostView({ post, variant }: BlogPostViewProps) {
   const { t, formatPrice } = useI18n();
-  const { data: post, isPending, isError, refetch } = useStorefrontBlogQuery(slug);
   const listPath =
     variant === "sidebar"
       ? "/blogs/blog-grid-with-sidebar"
@@ -65,59 +63,6 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
     variant === "sidebar"
       ? "/blogs/blog-details-with-sidebar"
       : undefined;
-
-  if (isPending && !post) {
-    return (
-      <main>
-        <Breadcrumb title={t("blog.blogDetails")} pages={[t("blog.blogDetails")]} />
-        <section className="overflow-hidden py-20 bg-gray-2">
-          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-            <QueryStatusCard
-              state="loading"
-              title="Загружаем статью"
-              description={t("common.loadingHint")}
-            />
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  if (isError && !post) {
-    return (
-      <main>
-        <Breadcrumb title={t("blog.blogDetails")} pages={[t("blog.blogDetails")]} />
-        <section className="overflow-hidden py-20 bg-gray-2">
-          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-            <QueryStatusCard
-              state="error"
-              title="Не удалось загрузить статью"
-              description={t("common.errorHint")}
-              actionLabel={t("common.retry")}
-              onAction={() => {
-                void refetch();
-              }}
-            />
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  if (!post) {
-    return (
-      <main>
-        <Breadcrumb title={t("blog.blogDetails")} pages={[t("blog.blogDetails")]} />
-        <section className="overflow-hidden py-20 bg-gray-2">
-          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-            <div className="rounded-[10px] border border-gray-3 bg-white px-6 py-8 shadow-1">
-              Статья не найдена.
-            </div>
-          </div>
-        </section>
-      </main>
-    );
-  }
 
   const matchedCategory = findMatchingCategory(post.category, post.categories);
   const categoryHref = matchedCategory

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { notFound, redirect } from "next/navigation";
 import BlogPostView from "@/components/Storefront/BlogPostView";
 import { buildNoIndexMetadata, buildSeoMetadata } from "@/seo/metadata";
@@ -173,11 +172,9 @@ export default async function BlogPostPage({ params }: Props) {
           __html: JSON.stringify(breadcrumbStructuredData),
         }}
       />
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <main>
-          <BlogPostView slug={slug} variant="plain" />
-        </main>
-      </HydrationBoundary>
+      <main>
+        <BlogPostView post={post} variant="plain" />
+      </main>
     </>
   );
 }

@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import BlogPostView from "@/components/Storefront/BlogPostView";
 import {
   StorefrontApiError,
@@ -64,11 +63,9 @@ const BlogDetailsWithSidebarPage = async ({ searchParams }: Props) => {
   }
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <main>
-        <BlogPostView slug={slug} variant="sidebar" />
-      </main>
-    </HydrationBoundary>
+    <main>
+      <BlogPostView post={post} variant="sidebar" />
+    </main>
   );
 };
 

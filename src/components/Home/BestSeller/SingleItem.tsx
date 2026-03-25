@@ -80,6 +80,8 @@ const SingleItem = ({ item }: { item: Product }) => {
         <div className="text-center px-4 py-7">
           <ProductLabelBadges
             labels={item.labels}
+            compact
+            singleLine
             className="mb-4 justify-center"
           />
           {item.reviews > 0 ? (

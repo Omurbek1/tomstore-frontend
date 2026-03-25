@@ -13,11 +13,15 @@ const LABEL_CLASSNAMES: Record<StorefrontProductLabel, string> = {
 type ProductLabelBadgesProps = {
   labels?: StorefrontProductLabel[];
   className?: string;
+  compact?: boolean;
+  singleLine?: boolean;
 };
 
 const ProductLabelBadges = ({
   labels = [],
   className = "",
+  compact = false,
+  singleLine = false,
 }: ProductLabelBadgesProps) => {
   const { t } = useI18n();
   const visibleLabels = Array.from(new Set(labels)).slice(0, 3);
@@ -27,11 +31,21 @@ const ProductLabelBadges = ({
   }
 
   return (
-    <div className={`flex flex-wrap items-center gap-2 ${className}`.trim()}>
+    <div
+      className={`flex items-center gap-2 ${
+        singleLine
+          ? "flex-nowrap overflow-hidden whitespace-nowrap"
+          : "flex-wrap"
+      } ${className}`.trim()}
+    >
       {visibleLabels.map((label) => (
         <span
           key={label}
-          className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] backdrop-blur-sm ${LABEL_CLASSNAMES[label]}`}
+          className={`inline-flex shrink-0 items-center rounded-full font-semibold uppercase backdrop-blur-sm ${
+            compact
+              ? "px-2.5 py-1 text-[9px] tracking-[0.18em]"
+              : "px-3.5 py-1.5 text-[10px] tracking-[0.24em]"
+          } ${LABEL_CLASSNAMES[label]}`}
         >
           {t(getProductLabelMessageKey(label) || label)}
         </span>

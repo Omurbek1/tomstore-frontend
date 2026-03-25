@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import BlogListView from "@/components/Storefront/BlogListView";
 import {
   StorefrontApiError,
@@ -40,25 +39,24 @@ const BlogGridWithSidebarPage = async ({ searchParams }: Props) => {
   }
 
   try {
-    await queryClient.fetchQuery(storefrontBlogsQueryOptions(query));
+    const blogs = await queryClient.fetchQuery(storefrontBlogsQueryOptions(query));
+
+    return (
+      <main>
+        <BlogListView
+          blogs={blogs}
+          pathname="/blogs/blog-grid-with-sidebar"
+          query={query}
+          variant="sidebar"
+        />
+      </main>
+    );
   } catch (error) {
     if (error instanceof StorefrontApiError && error.status === 401) {
       redirect("/");
     }
     throw error;
   }
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <main>
-        <BlogListView
-          pathname="/blogs/blog-grid-with-sidebar"
-          query={query}
-          variant="sidebar"
-        />
-      </main>
-    </HydrationBoundary>
-  );
 };
 
 export default BlogGridWithSidebarPage;

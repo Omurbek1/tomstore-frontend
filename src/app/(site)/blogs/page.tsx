@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 import BlogListView from "@/components/Storefront/BlogListView";
 import CatalogSeoSection from "@/components/Storefront/CatalogSeoSection";
@@ -131,27 +130,26 @@ export default async function BlogsPage({ searchParams }: Props) {
             __html: JSON.stringify(faqStructuredData),
           }}
         />
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <main className="relative overflow-hidden pb-16 sm:pb-20">
-            <BlogListView
-              pathname={buildBlogPath()}
-              query={query}
-              routeContext={{
-                type: "blogs",
-              }}
-              title={content.introTitle}
-              breadcrumbCurrent="Блог"
-              variant="grid"
+        <main className="relative overflow-hidden pb-16 sm:pb-20">
+          <BlogListView
+            blogs={blogs}
+            pathname={buildBlogPath()}
+            query={query}
+            routeContext={{
+              type: "blogs",
+            }}
+            title={content.introTitle}
+            breadcrumbCurrent="Блог"
+            variant="grid"
+          />
+          <div className="relative z-10 -mt-4 sm:-mt-6">
+            <CatalogSeoSection
+              content={content}
+              totalProducts={blogs.total}
+              catalogHref={buildBlogPath()}
             />
-            <div className="relative z-10 -mt-4 sm:-mt-6">
-              <CatalogSeoSection
-                content={content}
-                totalProducts={blogs.total}
-                catalogHref={buildBlogPath()}
-              />
-            </div>
-          </main>
-        </HydrationBoundary>
+          </div>
+        </main>
       </>
     );
   } catch (error) {

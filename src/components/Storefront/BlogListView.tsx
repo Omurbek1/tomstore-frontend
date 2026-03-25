@@ -1,15 +1,15 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import { useI18n } from "@/i18n/provider";
 import type { BlogRouteContext } from "@/storefront/blog-routing";
-import { useStorefrontBlogsQuery } from "@/storefront/hooks";
 import type { StorefrontBlogRouteQuery } from "@/storefront/query-keys";
+import type { StorefrontBlogListResponse } from "@/storefront/types";
 import BlogResults from "./BlogResults";
 import BlogSidebar from "./BlogSidebar";
 
 type BlogListViewProps = {
+  blogs: StorefrontBlogListResponse;
   pathname: string;
   query: StorefrontBlogRouteQuery;
   routeContext?: BlogRouteContext;
@@ -19,6 +19,7 @@ type BlogListViewProps = {
 };
 
 export default function BlogListView({
+  blogs,
   pathname,
   query,
   routeContext = {
@@ -28,40 +29,19 @@ export default function BlogListView({
   breadcrumbCurrent,
   variant,
 }: BlogListViewProps) {
-  const { t, formatPrice } = useI18n();
-  const { data, isPending, isError, refetch } = useStorefrontBlogsQuery(query);
+  const { t } = useI18n();
   const resolvedTitle =
     title ||
     (variant === "sidebar" ? t("blog.blogGridSidebar") : t("blog.blogGrid"));
-  const posts = data?.items || [];
-  const recentPosts = data?.recentPosts || [];
-  const categories = data?.categories || [];
-  const tags = data?.tags || [];
-  const featuredProducts = data?.featuredProducts || [];
+  const posts = blogs.items || [];
+  const recentPosts = blogs.recentPosts || [];
+  const categories = blogs.categories || [];
+  const tags = blogs.tags || [];
+  const featuredProducts = blogs.featuredProducts || [];
 
   let content: React.ReactNode;
 
-  if (isPending && !data) {
-    content = (
-      <QueryStatusCard
-        state="loading"
-        title="Загружаем блог"
-        description={t("common.loadingHint")}
-      />
-    );
-  } else if (isError && !data) {
-    content = (
-      <QueryStatusCard
-        state="error"
-        title="Не удалось загрузить блог"
-        description={t("common.errorHint")}
-        actionLabel={t("common.retry")}
-        onAction={() => {
-          void refetch();
-        }}
-      />
-    );
-  } else if (!data?.enabled) {
+  if (!blogs.enabled) {
     content = (
       <div className="rounded-[10px] border border-gray-3 bg-white px-6 py-8 shadow-1">
         Блог сейчас скрыт в настройках магазина.

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import CatalogView from "@/components/Storefront/CatalogView";
 import CatalogSeoSection from "@/components/Storefront/CatalogSeoSection";
@@ -171,20 +170,19 @@ export default async function BrandLandingPage({ params, searchParams }: Props) 
           __html: JSON.stringify(faqStructuredData),
         }}
       />
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <main className="relative overflow-hidden pb-16 sm:pb-20">
-          <CatalogView
-            title={content.introTitle}
-            breadcrumbCurrent={brand.name}
-            routeContext={routeContext}
-            query={query}
-            variant="sidebar"
-          />
-          <div className="relative z-10 -mt-4 sm:-mt-6">
-            <CatalogSeoSection content={content} totalProducts={brand.totalProducts} />
-          </div>
-        </main>
-      </HydrationBoundary>
+      <main className="relative overflow-hidden pb-16 sm:pb-20">
+        <CatalogView
+          catalog={catalog}
+          title={content.introTitle}
+          breadcrumbCurrent={brand.name}
+          routeContext={routeContext}
+          query={query}
+          variant="sidebar"
+        />
+        <div className="relative z-10 -mt-4 sm:-mt-6">
+          <CatalogSeoSection content={content} totalProducts={brand.totalProducts} />
+        </div>
+      </main>
     </>
   );
 }

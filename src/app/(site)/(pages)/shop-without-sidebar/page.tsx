@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import CatalogView from "@/components/Storefront/CatalogView";
 import {
   storefrontCatalogQueryOptions,
@@ -25,21 +24,20 @@ const ShopWithoutSidebarPage = async ({ searchParams }: Props) => {
   const params = await searchParams;
   const query: StorefrontCatalogRouteQuery = normalizeCatalogQuery(params);
   const queryClient = makeQueryClient();
-  await queryClient.prefetchQuery(storefrontCatalogQueryOptions(query));
+  const catalog = await queryClient.fetchQuery(storefrontCatalogQueryOptions(query));
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <main>
-        <CatalogView
-          routeContext={{
-            type: "catalog",
-            path: "/shop-without-sidebar",
-          }}
-          query={query}
-          variant="full"
-        />
-      </main>
-    </HydrationBoundary>
+    <main>
+      <CatalogView
+        catalog={catalog}
+        routeContext={{
+          type: "catalog",
+          path: "/shop-without-sidebar",
+        }}
+        query={query}
+        variant="full"
+      />
+    </main>
   );
 };
 

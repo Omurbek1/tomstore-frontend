@@ -113,7 +113,9 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
 
         <ProductLabelBadges
           labels={item.labels}
-          className="absolute left-3 top-3 z-10 max-w-[calc(100%-116px)]"
+          compact
+          singleLine
+          className="absolute left-3 top-3 z-10 max-w-[calc(100%-98px)]"
         />
 
         <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
