@@ -76,28 +76,26 @@ const Home = ({
       <div className="pointer-events-none absolute right-[-10%] top-[22%] h-72 w-72 rounded-full bg-sky-300/20 blur-3xl" />
       <div className="pointer-events-none absolute left-[18%] top-[58%] h-60 w-60 rounded-full bg-indigo-200/20 blur-3xl" />
       <Hero hero={home.hero} featuredProducts={recommendedProducts} />
-      <div className="relative z-10 space-y-6 px-4 sm:px-8 xl:px-0">
+      <div className="relative z-10 space-y-8 px-4 sm:space-y-10 sm:px-8 xl:space-y-12 xl:px-0">
         <Categories categories={categories} />
         <NewArrival products={newProducts} />
         <PromoBanner />
-      </div>
-      {hitProducts.length > 0 ? (
-        <BestSeller
-          products={hitProducts}
-          eyebrowKey="home.thisMonth"
-          titleKey="home.bestSellers"
-          viewAllHref="/shop-with-sidebar?label=hit"
-        />
-      ) : null}
-      {saleProducts.length > 0 ? (
-        <NewArrival
-          products={saleProducts}
-          eyebrowKey="home.specialOffers"
-          titleKey="home.discountDeals"
-          viewAllHref="/shop-with-sidebar?label=sale"
-        />
-      ) : null}
-      <div className="relative z-10 space-y-6 px-4 sm:px-8 xl:px-0">
+        {hitProducts.length > 0 ? (
+          <BestSeller
+            products={hitProducts}
+            eyebrowKey="home.thisMonth"
+            titleKey="home.bestSellers"
+            viewAllHref="/shop-with-sidebar?label=hit"
+          />
+        ) : null}
+        {saleProducts.length > 0 ? (
+          <NewArrival
+            products={saleProducts}
+            eyebrowKey="home.specialOffers"
+            titleKey="home.discountDeals"
+            viewAllHref="/shop-with-sidebar?label=sale"
+          />
+        ) : null}
         <CounDown />
         <Testimonials />
         <LatestBlogPosts enabled={canShowBlogPreview} />

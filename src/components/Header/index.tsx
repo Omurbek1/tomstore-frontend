@@ -109,7 +109,11 @@ const Header = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
   const [supplementaryNavHidden, setSupplementaryNavHidden] = useState(false);
+  const [headerContrastMode, setHeaderContrastMode] = useState<
+    "default" | "dark"
+  >("default");
   const lastScrollYRef = useRef(0);
+  const headerRef = useRef<HTMLElement>(null);
   const { openCartModal } = useCartModalContext();
   const { data: storefrontConfig } = useStorefrontConfigQuery();
   const companyName = getStorefrontCompanyName(storefrontConfig);
@@ -119,6 +123,16 @@ const Header = () => {
   const cartItemsCount = useAppStore(selectCartItemsCount);
   const totalPrice = useAppStore(selectCartTotalPrice);
   const compactHeader = stickyMenu;
+  const headerOnDark =
+    !stickyMenu && headerContrastMode === "dark" && !navigationOpen;
+  const surfaceClass = headerOnDark
+    ? "border-white/10 bg-[#08111f]/44 shadow-[0_24px_60px_-38px_rgba(8,17,31,0.92)] backdrop-blur-xl"
+    : "border-white/70 bg-white/78 shadow-[0_22px_44px_-32px_rgba(15,23,42,0.24)]";
+  const mobileSurfaceClass = headerOnDark
+    ? "border-white/10 bg-[#08111f]/48 shadow-[0_22px_40px_-30px_rgba(8,17,31,0.88)] backdrop-blur-xl"
+    : "border-white/70 bg-white/86 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.26)]";
+  const primaryTextClass = headerOnDark ? "text-white" : "text-dark";
+  const secondaryTextClass = headerOnDark ? "text-white/68" : "text-dark-4";
 
   const handleOpenCartModal = () => {
     openCartModal();
@@ -202,9 +216,47 @@ const Header = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigationOpen]);
 
+  useEffect(() => {
+    const updateHeaderContrast = () => {
+      if (stickyMenu || navigationOpen) {
+        setHeaderContrastMode("default");
+        return;
+      }
+
+      const headerBottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
+      const activeContrastSection = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-header-contrast]"),
+      ).find((section) => {
+        const rect = section.getBoundingClientRect();
+        return rect.top <= headerBottom && rect.bottom >= 0;
+      });
+
+      setHeaderContrastMode(
+        activeContrastSection?.dataset.headerContrast === "dark"
+          ? "dark"
+          : "default",
+      );
+    };
+
+    updateHeaderContrast();
+
+    window.addEventListener("scroll", updateHeaderContrast, { passive: true });
+    window.addEventListener("resize", updateHeaderContrast);
+
+    return () => {
+      window.removeEventListener("scroll", updateHeaderContrast);
+      window.removeEventListener("resize", updateHeaderContrast);
+    };
+  }, [navigationOpen, pathname, stickyMenu]);
+
   return (
     <header
-      className={`fixed left-0 top-0 z-9999 w-full border-b border-white/50 bg-white/74 backdrop-blur-xl transition-all duration-300 ease-in-out ${
+      ref={headerRef}
+      className={`fixed left-0 top-0 z-9999 w-full transition-all duration-300 ease-in-out ${
+        headerOnDark
+          ? "border-b border-white/10 bg-[#08111f]/8 backdrop-blur-md"
+          : "border-b border-white/50 bg-white/74 backdrop-blur-xl"
+      } ${
         stickyMenu ? "shadow-[0_18px_50px_-34px_rgba(15,23,42,0.35)]" : ""
       }`}
     >
@@ -214,7 +266,7 @@ const Header = () => {
         >
           <div className={`flex items-center ${compactHeader ? "gap-2" : "gap-2.5"}`}>
             <Link
-              className={`flex min-w-0 flex-1 items-center overflow-hidden border border-white/70 bg-white/86 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.26)] transition-all duration-300 ${
+              className={`flex min-w-0 flex-1 items-center overflow-hidden transition-all duration-300 ${mobileSurfaceClass} ${
                 compactHeader
                   ? "h-9 gap-2 rounded-[18px] px-2.5"
                   : "h-11 gap-3 rounded-[24px] px-3.5"
@@ -241,7 +293,7 @@ const Header = () => {
                 />
               )}
               <span
-                className={`min-w-0 truncate font-semibold uppercase text-dark transition-all duration-300 ${
+                className={`min-w-0 truncate font-semibold uppercase transition-all duration-300 ${primaryTextClass} ${
                   compactHeader
                     ? "text-[11px] leading-none tracking-[0.1em]"
                     : "text-sm leading-none tracking-[0.18em]"
@@ -254,7 +306,7 @@ const Header = () => {
             <button
               onClick={handleOpenCartModal}
               aria-label={t("header.cart")}
-              className={`relative inline-flex flex-shrink-0 items-center justify-center border border-white/70 bg-white/86 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.26)] transition-all duration-300 ${
+              className={`relative inline-flex flex-shrink-0 items-center justify-center transition-all duration-300 ${mobileSurfaceClass} ${
                 compactHeader
                   ? "h-9 w-9 rounded-[18px] [&_svg]:scale-[0.9]"
                   : "h-11 w-11 rounded-[24px]"
@@ -270,7 +322,7 @@ const Header = () => {
               type="button"
               aria-label={navigationOpen ? t("common.close") : t("header.toggleAria")}
               aria-expanded={navigationOpen}
-              className={`flex flex-shrink-0 items-center justify-center border border-white/70 bg-white/86 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.26)] transition-all duration-300 ${
+              className={`flex flex-shrink-0 items-center justify-center transition-all duration-300 ${mobileSurfaceClass} ${
                 compactHeader
                   ? "h-9 w-9 rounded-[18px]"
                   : "h-11 w-11 rounded-[24px]"
@@ -284,17 +336,23 @@ const Header = () => {
               >
                 <span className="du-block absolute right-0 w-full h-full">
                   <span
-                    className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-[0] ${
+                    className={`block relative top-0 left-0 rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-[0] ${
+                      headerOnDark ? "bg-white" : "bg-dark"
+                    } ${
                       !navigationOpen && "!w-full delay-300"
                     }`}
                   ></span>
                   <span
-                    className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-150 ${
+                    className={`block relative top-0 left-0 rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-150 ${
+                      headerOnDark ? "bg-white" : "bg-dark"
+                    } ${
                       !navigationOpen && "!w-full delay-400"
                     }`}
                   ></span>
                   <span
-                    className={`block relative top-0 left-0 bg-dark rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-200 ${
+                    className={`block relative top-0 left-0 rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-200 ${
+                      headerOnDark ? "bg-white" : "bg-dark"
+                    } ${
                       !navigationOpen && "!w-full delay-500"
                     }`}
                   ></span>
@@ -302,12 +360,16 @@ const Header = () => {
 
                 <span className="block absolute right-0 w-full h-full rotate-45">
                   <span
-                    className={`block bg-dark rounded-sm ease-in-out duration-200 delay-300 absolute left-2.5 top-0 w-0.5 h-full ${
+                    className={`block rounded-sm ease-in-out duration-200 delay-300 absolute left-2.5 top-0 w-0.5 h-full ${
+                      headerOnDark ? "bg-white" : "bg-dark"
+                    } ${
                       !navigationOpen && "!h-0 delay-[0] "
                     }`}
                   ></span>
                   <span
-                    className={`block bg-dark rounded-sm ease-in-out duration-200 delay-400 absolute left-0 top-2.5 w-full h-0.5 ${
+                    className={`block rounded-sm ease-in-out duration-200 delay-400 absolute left-0 top-2.5 w-full h-0.5 ${
+                      headerOnDark ? "bg-white" : "bg-dark"
+                    } ${
                       !navigationOpen && "!h-0 dealy-200"
                     }`}
                   ></span>
@@ -327,21 +389,21 @@ const Header = () => {
               {supportPhone ? (
                 <a
                   href={getPhoneHref(supportPhone)}
-                  className={`flex items-center justify-between border border-white/70 bg-white/70 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.2)] transition-all duration-300 ${
+                  className={`flex items-center justify-between transition-all duration-300 ${mobileSurfaceClass} ${
                     compactHeader
                       ? "h-9 rounded-[18px] px-3"
                       : "h-11 rounded-[24px] px-4"
                   }`}
                 >
                   <span
-                    className={`font-medium uppercase text-dark-4 transition-all duration-300 ${
+                    className={`font-medium uppercase transition-all duration-300 ${secondaryTextClass} ${
                       compactHeader ? "text-[10px] tracking-[0.12em]" : "text-xs tracking-[0.18em]"
                     }`}
                   >
                     {t("header.support")}
                   </span>
                   <span
-                    className={`font-semibold text-dark transition-all duration-300 ${
+                    className={`font-semibold transition-all duration-300 ${primaryTextClass} ${
                       compactHeader ? "text-[13px]" : "text-sm"
                     }`}
                   >
@@ -579,7 +641,7 @@ const Header = () => {
             }`}
           >
             <Link
-              className={`flex w-auto min-w-0 items-center rounded-full border border-white/70 bg-white/78 shadow-[0_22px_44px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 ${
+              className={`flex w-auto min-w-0 items-center rounded-full transition-all duration-300 ${surfaceClass} ${
                 compactHeader
                   ? "max-w-[280px] gap-2 px-3 py-2 2xl:max-w-[320px]"
                   : "max-w-[360px] gap-3 px-4 py-3 2xl:max-w-[400px]"
@@ -610,7 +672,7 @@ const Header = () => {
                 />
               )}
               <span
-                className={`min-w-0 truncate font-semibold uppercase text-dark transition-all duration-300 ${
+                className={`min-w-0 truncate font-semibold uppercase transition-all duration-300 ${primaryTextClass} ${
                   compactHeader
                     ? "text-[11px] tracking-[0.14em] sm:text-[12px]"
                     : "text-sm tracking-[0.28em] sm:text-base"
@@ -628,7 +690,7 @@ const Header = () => {
             }`}
           >
             <div
-              className={`hidden min-w-0 items-center rounded-full border border-white/70 bg-white/78 shadow-[0_22px_44px_-32px_rgba(15,23,42,0.24)] xl:flex xl:max-w-[240px] transition-all duration-300 ${
+              className={`hidden min-w-0 items-center xl:flex xl:max-w-[240px] transition-all duration-300 rounded-full ${surfaceClass} ${
                 compactHeader ? "h-11 gap-2 px-3" : "h-[52px] gap-3 px-4"
               }`}
             >
@@ -659,16 +721,16 @@ const Header = () => {
               </svg>
 
               <div className="min-w-0 leading-none">
-                <span className="block text-2xs uppercase text-dark-4">
-                  {t("header.support")}
-                </span>
-                {supportPhone ? (
-                  <a
-                    href={getPhoneHref(supportPhone)}
-                    className="mt-1 block break-words font-medium leading-none text-custom-sm text-dark hover:text-blue"
-                  >
-                    {supportPhone}
-                  </a>
+                      <span className={`block text-2xs uppercase ${secondaryTextClass}`}>
+                        {t("header.support")}
+                      </span>
+                      {supportPhone ? (
+                        <a
+                          href={getPhoneHref(supportPhone)}
+                          className={`mt-1 block break-words font-medium leading-none text-custom-sm ${primaryTextClass} ${headerOnDark ? "hover:text-white/75" : "hover:text-blue"}`}
+                        >
+                          {supportPhone}
+                        </a>
                 ) : null}
               </div>
             </div>
@@ -687,7 +749,7 @@ const Header = () => {
                 }`}
               >
                 <label
-                  className={`flex items-center gap-2 rounded-full border border-white/70 bg-white/78 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.22)] transition-all duration-300 ${
+                  className={`flex items-center gap-2 rounded-full transition-all duration-300 ${surfaceClass} ${
                     compactHeader ? "h-11 px-2.5" : "h-[52px] px-3.5"
                   }`}
                 >
@@ -700,7 +762,7 @@ const Header = () => {
                       )
                     }
                     aria-label={t("header.language")}
-                    className={`h-full bg-transparent font-medium text-dark outline-none transition-all duration-300 ${
+                    className={`h-full bg-transparent font-medium outline-none transition-all duration-300 ${primaryTextClass} ${
                       compactHeader ? "min-w-[92px] text-xs" : "min-w-[112px] text-custom-sm"
                     }`}
                   >
@@ -712,7 +774,7 @@ const Header = () => {
                 </label>
 
                 <label
-                  className={`flex items-center gap-2 rounded-full border border-white/70 bg-white/78 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.22)] transition-all duration-300 ${
+                  className={`flex items-center gap-2 rounded-full transition-all duration-300 ${surfaceClass} ${
                     compactHeader ? "h-11 px-2.5" : "h-[52px] px-3.5"
                   }`}
                 >
@@ -725,7 +787,7 @@ const Header = () => {
                       )
                     }
                     aria-label={t("header.currency")}
-                    className={`h-full bg-transparent font-medium text-dark outline-none transition-all duration-300 ${
+                    className={`h-full bg-transparent font-medium outline-none transition-all duration-300 ${primaryTextClass} ${
                       compactHeader ? "min-w-[90px] text-xs" : "min-w-[110px] text-custom-sm"
                     }`}
                   >
@@ -740,16 +802,16 @@ const Header = () => {
                     href={getWhatsAppHref(whatsappPhone)}
                     target="_blank"
                     rel="noreferrer"
-                    className={`flex items-center rounded-full border border-white/70 bg-white/78 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.22)] transition-all duration-300 ${
+                    className={`flex items-center rounded-full transition-all duration-300 ${surfaceClass} ${
                       compactHeader ? "h-11 gap-2 px-3" : "h-[52px] gap-2.5 px-4"
                     }`}
                   >
                     <WhatsAppIcon />
                     <div className="leading-none">
-                      <span className="block text-2xs uppercase text-dark-4">
+                      <span className={`block text-2xs uppercase ${secondaryTextClass}`}>
                         {t("header.whatsapp")}
                       </span>
-                      <p className="mt-1 font-medium leading-none text-custom-sm text-dark">
+                      <p className={`mt-1 font-medium leading-none text-custom-sm ${primaryTextClass}`}>
                         {whatsappPhone}
                       </p>
                     </div>
@@ -758,7 +820,7 @@ const Header = () => {
 
                 <button
                   onClick={handleOpenCartModal}
-                  className={`flex items-center rounded-full border border-white/70 bg-white/78 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.22)] transition-all duration-300 ${
+                  className={`flex items-center rounded-full transition-all duration-300 ${surfaceClass} ${
                     compactHeader ? "h-11 gap-2 px-3" : "h-[52px] gap-2.5 px-4"
                   }`}
                 >
@@ -799,11 +861,11 @@ const Header = () => {
                     </span>
                   </span>
 
-                  <div className="leading-none">
-                    <span className="block text-2xs uppercase text-dark-4">
+                    <div className="leading-none">
+                    <span className={`block text-2xs uppercase ${secondaryTextClass}`}>
                       {t("header.cart")}
                     </span>
-                    <p className="mt-1 font-medium leading-none text-custom-sm text-dark">
+                    <p className={`mt-1 font-medium leading-none text-custom-sm ${primaryTextClass}`}>
                       {formatPrice(totalPrice)}
                     </p>
                   </div>
@@ -823,7 +885,13 @@ const Header = () => {
         }`}
       >
         <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
-          <div className="section-shell flex items-center justify-between px-6">
+          <div
+            className={`flex items-center justify-between rounded-[30px] px-6 ${
+              headerOnDark
+                ? "border border-white/10 bg-[#08111f]/36 shadow-[0_30px_80px_-42px_rgba(8,17,31,0.82)] backdrop-blur-xl"
+                : "section-shell"
+            }`}
+          >
             {/* <!--=== Main Nav Start ===--> */}
             <div
               className={`w-[288px] absolute right-4 top-full xl:static xl:w-auto h-0 xl:h-auto invisible xl:visible xl:flex items-center justify-between ${
@@ -840,6 +908,7 @@ const Header = () => {
                         key={i}
                         menuItem={menuItem}
                         stickyMenu={stickyMenu}
+                        darkMode={headerOnDark}
                         onNavigate={closeNavigation}
                       />
                     ) : (
@@ -849,8 +918,12 @@ const Header = () => {
                       >
                         <Link
                           href={menuItem.path}
-                          className={`hover:text-blue text-custom-sm font-medium flex ${
-                            pathname === menuItem.path ? "text-blue" : "text-dark"
+                          className={`text-custom-sm font-medium flex ${
+                            pathname === menuItem.path
+                              ? "text-blue"
+                              : headerOnDark
+                                ? "text-white hover:text-white/75"
+                                : "text-dark hover:text-blue"
                           } ${stickyMenu ? "xl:py-4" : "xl:py-5"}`}
                         >
                           {menuItem.title}
@@ -870,7 +943,11 @@ const Header = () => {
                 <li className="py-4">
                   <a
                     href="#"
-                    className="flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 font-medium text-custom-sm text-dark transition-colors duration-200 hover:text-blue"
+                    className={`flex items-center gap-1.5 rounded-full px-3.5 py-2 font-medium text-custom-sm transition-colors duration-200 ${
+                      headerOnDark
+                        ? "bg-[#08111f]/42 text-white hover:text-white/75"
+                        : "bg-white text-dark hover:text-blue"
+                    }`}
                   >
                     <svg
                       className="fill-current"
@@ -896,7 +973,11 @@ const Header = () => {
                 <li className="py-4">
                   <Link
                     href="/wishlist"
-                    className="flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 font-medium text-custom-sm text-dark transition-colors duration-200 hover:text-blue"
+                    className={`flex items-center gap-1.5 rounded-full px-3.5 py-2 font-medium text-custom-sm transition-colors duration-200 ${
+                      headerOnDark
+                        ? "bg-[#08111f]/42 text-white hover:text-white/75"
+                        : "bg-white text-dark hover:text-blue"
+                    }`}
                   >
                     <svg
                       className="fill-current"

@@ -27,7 +27,10 @@ const Hero = ({ hero, featuredProducts }: HeroProps) => {
       <div className="pointer-events-none absolute right-[10%] top-[18%] h-72 w-72 rounded-full bg-sky-300/15 blur-3xl" />
 
       <div className="mx-auto w-full max-w-[1170px]">
-        <div className="section-shell-dark p-4 sm:p-5 xl:p-6">
+        <div
+          data-header-contrast="dark"
+          className="section-shell-dark p-4 sm:p-5 xl:p-6"
+        >
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_392px]">
             <div className="relative overflow-hidden rounded-[28px] border border-white/10">
               <div className="soft-grid absolute inset-0 opacity-15" />

@@ -7,11 +7,13 @@ const Dropdown = ({
   menuItem,
   stickyMenu,
   mobile = false,
+  darkMode = false,
   onNavigate,
 }: {
   menuItem: Menu;
   stickyMenu: boolean;
   mobile?: boolean;
+  darkMode?: boolean;
   onNavigate?: () => void;
 }) => {
   const [dropdownToggler, setDropdownToggler] = useState(false);
@@ -42,12 +44,18 @@ const Dropdown = ({
         onClick={() => setDropdownToggler((prev) => !prev)}
         aria-expanded={dropdownToggler}
         aria-controls={submenuId}
-        className={`hover:text-blue text-custom-sm font-medium text-dark flex w-full items-center gap-1.5 capitalize ${
+        className={`text-custom-sm font-medium flex w-full items-center gap-1.5 capitalize ${
           mobile
             ? "justify-between rounded-xl bg-gray-1 px-4 py-3 text-left text-base"
             : stickyMenu
               ? "xl:py-4"
               : "xl:py-6"
+        } ${
+          mobile
+            ? "text-dark hover:text-blue"
+            : darkMode
+              ? "text-white hover:text-white/75"
+              : "text-dark hover:text-blue"
         } ${isActive && "!text-blue"}`}
       >
         {menuItem.title}
@@ -80,6 +88,8 @@ const Dropdown = ({
         } ${
           mobile
             ? "mt-2 rounded-xl border border-gray-3 bg-gray-1/70 p-2 shadow-none"
+            : darkMode
+              ? "border-white/10 bg-[#08111f]/92 backdrop-blur-xl"
             : ""
         }`}
       >
