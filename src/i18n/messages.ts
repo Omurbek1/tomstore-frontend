@@ -281,6 +281,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "catalog.availability": "Наличие",
     "catalog.loading": "Загружаем каталог",
     "catalog.error": "Не удалось загрузить каталог",
+    "catalog.loadMore": "Показать ещё",
+    "catalog.loadingMore": "Подгружаем товары...",
 
     "product.notFoundTitle": "Товар не найден",
     "product.notFoundDescription": "Такой товар не найден.",
@@ -710,6 +712,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "catalog.availability": "Availability",
     "catalog.loading": "Loading catalog",
     "catalog.error": "Could not load catalog",
+    "catalog.loadMore": "Load more",
+    "catalog.loadingMore": "Loading more products...",
 
     "product.notFoundTitle": "Product not found",
     "product.notFoundDescription": "This product could not be found.",
@@ -1140,6 +1144,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "catalog.availability": "Жеткиликтүүлүк",
     "catalog.loading": "Каталог жүктөлүүдө",
     "catalog.error": "Каталогду жүктөө мүмкүн болгон жок",
+    "catalog.loadMore": "Дагы көрсөтүү",
+    "catalog.loadingMore": "Товарлар жүктөлүүдө...",
 
     "product.notFoundTitle": "Товар табылган жок",
     "product.notFoundDescription": "Бул товар табылган жок.",

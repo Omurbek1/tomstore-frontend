@@ -1,5 +1,6 @@
 "use client";
 
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import { useI18n } from "@/i18n/provider";
 import { mapStorefrontProductsToProducts } from "@/storefront/mappers";
@@ -8,11 +9,20 @@ import {
   getCatalogBaseQuery,
   type CatalogRouteContext,
 } from "@/storefront/catalog-routing";
-import { type StorefrontCatalogRouteQuery } from "@/storefront/query-keys";
-import type { StorefrontCatalogResponse } from "@/storefront/types";
-import Link from "next/link";
+import {
+  fetchStorefrontCatalog,
+  type StorefrontCatalogApiParams,
+} from "@/storefront/query-options";
+import {
+  type StorefrontCatalogRouteQuery,
+  toStorefrontCatalogApiParams,
+} from "@/storefront/query-keys";
+import type {
+  StorefrontCatalogResponse,
+  StorefrontProductCard,
+} from "@/storefront/types";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import CatalogResults from "./CatalogResults";
 import CatalogSidebarFilters from "./CatalogSidebarFilters";
 
@@ -25,12 +35,18 @@ type CatalogViewProps = {
   variant: "sidebar" | "full";
 };
 
-const buildPages = (currentPage: number, totalPages: number) => {
-  const pages = new Set<number>([1, totalPages, currentPage - 1, currentPage, currentPage + 1]);
+const buildMergedCatalogItems = (pages: StorefrontCatalogResponse[]) => {
+  const itemsById = new Map<string, StorefrontProductCard>();
 
-  return Array.from(pages)
-    .filter((page) => page >= 1 && page <= totalPages)
-    .sort((left, right) => left - right);
+  for (const pageData of pages) {
+    for (const item of pageData.items || []) {
+      if (!itemsById.has(item.id)) {
+        itemsById.set(item.id, item);
+      }
+    }
+  }
+
+  return Array.from(itemsById.values());
 };
 
 export default function CatalogView({
@@ -49,22 +65,105 @@ export default function CatalogView({
   const [productStyle, setProductStyle] = useState<"grid" | "list">(
     query.view === "list" ? "list" : "grid",
   );
-  const products = useMemo(
-    () => mapStorefrontProductsToProducts(catalog.items || []),
-    [catalog.items],
-  );
-  const total = catalog.total || 0;
-  const page = catalog.page || 1;
-  const totalPages = catalog.totalPages || 1;
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const autoLoadUnlockedRef = useRef(true);
   const filters = catalog.filters || { categories: [], brands: [] };
   const baseQuery = getCatalogBaseQuery(routeContext);
   const pageTitle = title || t("common.shop");
-
-  const pages = useMemo(() => buildPages(page, totalPages), [page, totalPages]);
+  const catalogFeedParams = useMemo<StorefrontCatalogApiParams>(
+    () => ({
+      ...toStorefrontCatalogApiParams(query),
+      page: undefined,
+      pageSize: catalog.pageSize,
+    }),
+    [catalog.pageSize, query],
+  );
+  const initialPage = catalog.page || 1;
+  const {
+    data: infiniteCatalog,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["storefront", "catalog-infinite", catalogFeedParams],
+    initialPageParam: initialPage,
+    initialData: {
+      pages: [catalog],
+      pageParams: [initialPage],
+    },
+    queryFn: ({ pageParam, signal }) =>
+      fetchStorefrontCatalog(
+        {
+          ...catalogFeedParams,
+          page: String(pageParam),
+        },
+        {
+          init: {
+            signal,
+          },
+        },
+      ),
+    getNextPageParam: (lastPage) =>
+      lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
+    refetchOnMount: false,
+    staleTime: 120_000,
+  });
+  const catalogPages = useMemo(
+    () => infiniteCatalog?.pages || [catalog],
+    [catalog, infiniteCatalog?.pages],
+  );
+  const mergedCatalogItems = useMemo(
+    () => buildMergedCatalogItems(catalogPages),
+    [catalogPages],
+  );
+  const products = useMemo(
+    () => mapStorefrontProductsToProducts(mergedCatalogItems),
+    [mergedCatalogItems],
+  );
+  const lastLoadedPage = catalogPages[catalogPages.length - 1] || catalog;
+  const total = lastLoadedPage.total || catalog.total || 0;
+  const loadedCount = mergedCatalogItems.length;
 
   useEffect(() => {
     setProductStyle(query.view === "list" ? "list" : "grid");
   }, [query.view]);
+
+  useEffect(() => {
+    const node = loadMoreRef.current;
+
+    if (!node || !hasNextPage) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) {
+          return;
+        }
+
+        if (!entry.isIntersecting) {
+          autoLoadUnlockedRef.current = true;
+          return;
+        }
+
+        if (!autoLoadUnlockedRef.current || isFetchingNextPage) {
+          return;
+        }
+
+        autoLoadUnlockedRef.current = false;
+        void fetchNextPage();
+      },
+      {
+        rootMargin: "320px 0px",
+      },
+    );
+
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <>
@@ -128,7 +227,7 @@ export default function CatalogView({
 
                     <p>
                       {t("common.showingOfProducts", {
-                        shown: products.length,
+                        shown: loadedCount,
                         total,
                       })}
                     </p>
@@ -167,31 +266,43 @@ export default function CatalogView({
                 variant={variant}
               />
 
-              {totalPages > 1 ? (
-                <div className="flex justify-center mt-15">
-                  <div className="bg-white shadow-1 rounded-md p-2">
-                    <ul className="flex items-center gap-1">
-                      {pages.map((pageNumber) => (
-                        <li key={pageNumber}>
-                          <Link
-                            href={buildCatalogHref(
-                              {
-                                ...query,
-                                page: String(pageNumber),
-                              },
-                              routeContext,
-                            )}
-                            className={`flex py-1.5 px-3.5 rounded-[3px] duration-200 ${
-                              pageNumber === page
-                                ? "bg-blue text-white"
-                                : "hover:text-white hover:bg-blue"
-                            }`}
-                          >
-                            {pageNumber}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+              {hasNextPage || isFetchingNextPage ? (
+                <div className="mt-12 flex flex-col items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!isFetchingNextPage) {
+                        void fetchNextPage();
+                      }
+                    }}
+                    disabled={isFetchingNextPage}
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-dark px-6 py-3 text-sm font-medium text-dark transition-all duration-200 hover:-translate-y-0.5 hover:bg-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {isFetchingNextPage
+                      ? t("catalog.loadingMore")
+                      : t("catalog.loadMore")}
+                  </button>
+                  <div
+                    ref={loadMoreRef}
+                    aria-hidden="true"
+                    className="h-1 w-full"
+                  />
+                  <p className="text-center text-sm text-dark-4">
+                    {t("common.showingOfProducts", {
+                      shown: loadedCount,
+                      total,
+                    })}
+                  </p>
+                </div>
+              ) : null}
+
+              {!hasNextPage && loadedCount > 0 ? (
+                <div className="mt-12 flex justify-center">
+                  <div className="rounded-full bg-white px-5 py-3 text-sm text-dark-4 shadow-1">
+                    {t("common.showingOfProducts", {
+                      shown: loadedCount,
+                      total,
+                    })}
                   </div>
                 </div>
               ) : null}

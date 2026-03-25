@@ -405,15 +405,21 @@ export const storefrontCatalogQueryOptions = (
   return queryOptions({
     queryKey: storefrontQueryKeys.catalog(params),
     staleTime: STORE_STALE_TIME_MS.catalog,
-    queryFn: () =>
-      fetchRequiredStorefrontJson<StorefrontCatalogResponse>(
-        buildStorefrontCatalogPath(params),
-        {
-          revalidate: STORE_REVALIDATE_SECONDS.catalog,
-        },
-      ).then(normalizeStorefrontCatalogResponse),
+    queryFn: () => fetchStorefrontCatalog(params),
   });
 };
+
+export const fetchStorefrontCatalog = (
+  params: StorefrontCatalogApiParams = {},
+  options: StorefrontRequestOptions = {},
+) =>
+  fetchRequiredStorefrontJson<StorefrontCatalogResponse>(
+    buildStorefrontCatalogPath(params),
+    {
+      revalidate: STORE_REVALIDATE_SECONDS.catalog,
+      ...options,
+    },
+  ).then(normalizeStorefrontCatalogResponse);
 
 export const storefrontProductQueryOptions = (slug: string) =>
   queryOptions({
