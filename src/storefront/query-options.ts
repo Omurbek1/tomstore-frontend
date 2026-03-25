@@ -400,7 +400,10 @@ export const storefrontBlogsQueryOptions = (
 export const storefrontCatalogQueryOptions = (
   query: StorefrontCatalogRouteQuery,
 ) => {
-  const params = toStorefrontCatalogApiParams(query);
+  const params = {
+    ...toStorefrontCatalogApiParams(query),
+    page: undefined,
+  };
 
   return queryOptions({
     queryKey: storefrontQueryKeys.catalog(params),
