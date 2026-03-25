@@ -104,17 +104,22 @@ const SingleListItemComponent = ({ item }: { item: Product }) => {
   return (
     <article className="group overflow-hidden rounded-[30px] border border-white/80 bg-white/92 p-3 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.34)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-blue/20 hover:shadow-[0_38px_75px_-40px_rgba(60,80,224,0.24)] sm:p-4">
       <div className="flex flex-col gap-3 lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-stretch xl:grid-cols-[260px_minmax(0,1fr)]">
-        <div className="relative flex min-h-[224px] items-center justify-center overflow-hidden rounded-[26px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)] px-4 pb-5 pt-16">
+        <div className="relative flex min-h-[224px] items-center justify-center overflow-hidden rounded-[26px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)] px-4 pb-5 pt-20">
           <div className="absolute left-1/2 top-5 h-24 w-24 -translate-x-1/2 rounded-full bg-blue/15 blur-2xl" />
 
-          <ProductLabelBadges
-            labels={item.labels}
-            compact
-            singleLine
-            className="absolute left-3 top-3 z-10 max-w-[calc(100%-98px)]"
-          />
+          <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start gap-2.5">
+            {item.labels.length > 0 ? (
+              <div className="min-w-0 rounded-[20px] border border-white/80 bg-white/72 p-1.5 shadow-[0_18px_34px_-28px_rgba(15,23,42,0.32)] backdrop-blur-md">
+                <ProductLabelBadges
+                  labels={item.labels}
+                  compact
+                  singleLine
+                  className="max-w-full"
+                />
+              </div>
+            ) : null}
 
-          <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
+            <div className="pointer-events-auto ml-auto flex shrink-0 flex-col gap-2">
             <button
               type="button"
               onClick={handleItemToWishList}
@@ -173,6 +178,7 @@ const SingleListItemComponent = ({ item }: { item: Product }) => {
                 />
               </svg>
             </button>
+            </div>
           </div>
 
           {hasDiscount ? (

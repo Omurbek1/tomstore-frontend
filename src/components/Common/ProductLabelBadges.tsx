@@ -32,9 +32,9 @@ const ProductLabelBadges = ({
 
   return (
     <div
-      className={`flex items-center gap-2 ${
+      className={`flex min-w-0 items-center ${compact ? "gap-1.5" : "gap-2"} ${
         singleLine
-          ? "flex-nowrap overflow-hidden whitespace-nowrap"
+          ? "max-w-full flex-nowrap overflow-hidden whitespace-nowrap"
           : "flex-wrap"
       } ${className}`.trim()}
     >
@@ -43,7 +43,9 @@ const ProductLabelBadges = ({
           key={label}
           className={`inline-flex shrink-0 items-center rounded-full font-semibold uppercase backdrop-blur-sm ${
             compact
-              ? "px-2.5 py-1 text-[9px] tracking-[0.18em]"
+              ? singleLine
+                ? "px-2.5 py-1 text-[8px] tracking-[0.14em] sm:text-[9px]"
+                : "px-2.5 py-1 text-[9px] tracking-[0.18em]"
               : "px-3.5 py-1.5 text-[10px] tracking-[0.24em]"
           } ${LABEL_CLASSNAMES[label]}`}
         >
