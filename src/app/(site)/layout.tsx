@@ -35,6 +35,7 @@ import {
   getStorefrontSupportPhone,
   getStorefrontWhatsappPhone,
 } from "@/storefront/contact";
+import { StorefrontContactProvider } from "@/storefront/contact-context";
 import {
   DEFAULT_SEO_DESCRIPTION,
   getMetadataBase,
@@ -198,23 +199,25 @@ export default async function RootLayout({
             initialCurrencyPreference={currencyPreference}
             usdExchangeRate={storefrontConfig?.storefrontUsdExchangeRate}
           >
-            <>
-              <CartModalProvider>
-                <ModalProvider>
-                  <PreviewSliderProvider>
-                    <Header storefrontConfig={storefrontConfig} />
-                    {children}
+            <StorefrontContactProvider whatsappPhone={whatsappPhone}>
+              <>
+                <CartModalProvider>
+                  <ModalProvider>
+                    <PreviewSliderProvider>
+                      <Header storefrontConfig={storefrontConfig} />
+                      {children}
 
-                    <LazyQuickViewModal />
-                    <LazyCartSidebarModal />
-                    <LazyPreviewSliderModal />
-                    <LazyAppToaster />
-                  </PreviewSliderProvider>
-                </ModalProvider>
-              </CartModalProvider>
-              <LazyScrollToTop />
-              <Footer storefrontConfig={storefrontConfig} />
-            </>
+                      <LazyQuickViewModal />
+                      <LazyCartSidebarModal />
+                      <LazyPreviewSliderModal />
+                      <LazyAppToaster />
+                    </PreviewSliderProvider>
+                  </ModalProvider>
+                </CartModalProvider>
+                <LazyScrollToTop />
+                <Footer storefrontConfig={storefrontConfig} />
+              </>
+            </StorefrontContactProvider>
           </I18nProvider>
         </TanStackQueryProvider>
       </body>

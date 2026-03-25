@@ -59,6 +59,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.contactManager": "Связаться с менеджером",
     "common.contactManagerWhatsappMessage":
       "Здравствуйте! Интересует товар {product}. Хочу сразу связаться с менеджером.",
+    "common.quickOrderWhatsapp": "Заказать в WhatsApp",
+    "common.quickOrderWhatsappMessage":
+      "Здравствуйте! Хочу быстро оформить заказ на {product}. Цена: {price}. Ссылка на товар: {url}",
     "common.backToCatalog": "Назад в каталог",
     "common.recommended": "Рекомендуем",
     "common.youMayAlsoLike": "Вам может понравиться",
@@ -466,6 +469,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.contactManager": "Contact manager",
     "common.contactManagerWhatsappMessage":
       "Hello! I am interested in {product}. I would like to contact a manager right away.",
+    "common.quickOrderWhatsapp": "Order in WhatsApp",
+    "common.quickOrderWhatsappMessage":
+      "Hello! I want to place a quick order for {product}. Price: {price}. Product link: {url}",
     "common.backToCatalog": "Back to catalog",
     "common.recommended": "Recommended",
     "common.youMayAlsoLike": "You may also like",
@@ -872,6 +878,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.contactManager": "Менеджер менен байланышуу",
     "common.contactManagerWhatsappMessage":
       "Салам! Мени {product} товары кызыктырат. Менеджер менен дароо байланышкым келет.",
+    "common.quickOrderWhatsapp": "WhatsApp аркылуу буюртма",
+    "common.quickOrderWhatsappMessage":
+      "Салам! {product} боюнча тез буюртма бергим келет. Баасы: {price}. Товардын шилтемеси: {url}",
     "common.backToCatalog": "Каталогго кайтуу",
     "common.recommended": "Сунушталат",
     "common.youMayAlsoLike": "Сизге дагы жагышы мүмкүн",
