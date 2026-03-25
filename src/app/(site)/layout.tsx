@@ -1,6 +1,5 @@
 import "../css/euclid-circular-a-font.css";
 import "../css/style.css";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { cookies, headers } from "next/headers";
 import type { Metadata } from "next";
 import Header from "../../components/Header";
@@ -122,15 +121,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const queryClient = makeQueryClient();
-  const configQueryOptions = storefrontConfigQueryOptions();
-  const [requestCookies, requestHeaders] = await Promise.all([
+  const [requestCookies, requestHeaders, storefrontConfig] = await Promise.all([
     cookies(),
     headers(),
-    queryClient.prefetchQuery(configQueryOptions),
+    queryClient.fetchQuery(storefrontConfigQueryOptions()).catch(() => undefined),
   ]);
-  const storefrontConfig =
-    queryClient.getQueryData<StorefrontConfig>(configQueryOptions.queryKey);
-  const dehydratedState = dehydrate(queryClient);
   const cookiePreference = requestCookies.get(LOCALE_COOKIE_NAME)?.value;
   const localePreference =
     cookiePreference === "auto"
@@ -190,33 +185,31 @@ export default async function RootLayout({
           }}
         />
         <TanStackQueryProvider>
-          <HydrationBoundary state={dehydratedState}>
-            <I18nProvider
-              initialLocale={locale}
-              initialPreference={localePreference}
-              initialCurrency={currency}
-              initialCurrencyPreference={currencyPreference}
-              usdExchangeRate={storefrontConfig?.storefrontUsdExchangeRate}
-            >
-              <>
-                <CartModalProvider>
-                  <ModalProvider>
-                    <PreviewSliderProvider>
-                      <Header />
-                      {children}
+          <I18nProvider
+            initialLocale={locale}
+            initialPreference={localePreference}
+            initialCurrency={currency}
+            initialCurrencyPreference={currencyPreference}
+            usdExchangeRate={storefrontConfig?.storefrontUsdExchangeRate}
+          >
+            <>
+              <CartModalProvider>
+                <ModalProvider>
+                  <PreviewSliderProvider>
+                    <Header storefrontConfig={storefrontConfig} />
+                    {children}
 
-                      <LazyQuickViewModal />
-                      <LazyCartSidebarModal />
-                      <LazyPreviewSliderModal />
-                      <LazyAppToaster />
-                    </PreviewSliderProvider>
-                  </ModalProvider>
-                </CartModalProvider>
-                <LazyScrollToTop />
-                <Footer />
-              </>
-            </I18nProvider>
-          </HydrationBoundary>
+                    <LazyQuickViewModal />
+                    <LazyCartSidebarModal />
+                    <LazyPreviewSliderModal />
+                    <LazyAppToaster />
+                  </PreviewSliderProvider>
+                </ModalProvider>
+              </CartModalProvider>
+              <LazyScrollToTop />
+              <Footer storefrontConfig={storefrontConfig} />
+            </>
+          </I18nProvider>
         </TanStackQueryProvider>
       </body>
     </html>

@@ -21,7 +21,7 @@ import {
   selectCartTotalPrice,
   useAppStore,
 } from "@/store/app-store";
-import { useStorefrontConfigQuery } from "@/storefront/hooks";
+import type { StorefrontConfig } from "@/storefront/types";
 import { useShallow } from "zustand/react/shallow";
 
 const CartIcon = () => (
@@ -97,7 +97,11 @@ const PhoneIcon = () => (
   </svg>
 );
 
-const Header = () => {
+const Header = ({
+  storefrontConfig,
+}: {
+  storefrontConfig?: StorefrontConfig;
+}) => {
   const pathname = usePathname();
   const {
     localePreference,
@@ -116,7 +120,6 @@ const Header = () => {
   const lastScrollYRef = useRef(0);
   const headerRef = useRef<HTMLElement>(null);
   const { openCartModal } = useCartModalContext();
-  const { data: storefrontConfig } = useStorefrontConfigQuery();
   const companyName = getStorefrontCompanyName(storefrontConfig);
   const companyLogoUrl = storefrontConfig?.companyLogoUrl;
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);

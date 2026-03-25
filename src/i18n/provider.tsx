@@ -15,12 +15,10 @@ import {
   DEFAULT_CURRENCY,
   type CurrencyCode,
   type CurrencyPreference,
-  isSupportedCurrency,
 } from "./currency";
 import {
   detectLocale,
   getMessage,
-  isSupportedLocale,
   LOCALE_COOKIE_NAME,
 } from "./utils";
 
@@ -75,43 +73,11 @@ export const I18nProvider = ({
     Number.isFinite(usdExchangeRate) && usdExchangeRate > 0 ? usdExchangeRate : 89;
 
   useEffect(() => {
-    const storedPreference = window.localStorage.getItem(LOCALE_COOKIE_NAME);
-    const nextPreference: LocalePreference =
-      storedPreference === "auto"
-        ? "auto"
-        : isSupportedLocale(storedPreference)
-          ? storedPreference
-          : initialPreference;
-    const nextLocale =
-      nextPreference === "auto" ? getBrowserLocale() : nextPreference;
-
-    setLocalePreferenceState(nextPreference);
-    setLocale(nextLocale);
-  }, [initialPreference]);
-
-  useEffect(() => {
-    const storedPreference = window.localStorage.getItem(CURRENCY_COOKIE_NAME);
-    const nextPreference: CurrencyPreference =
-      storedPreference === "default"
-        ? "default"
-        : isSupportedCurrency(storedPreference)
-          ? storedPreference
-          : initialCurrencyPreference;
-    const nextCurrency =
-      nextPreference === "default" ? initialCurrency : nextPreference;
-
-    setCurrencyPreferenceState(nextPreference);
-    setCurrency(nextCurrency);
-  }, [initialCurrency, initialCurrencyPreference]);
-
-  useEffect(() => {
     document.documentElement.lang = locale;
-    window.localStorage.setItem(LOCALE_COOKIE_NAME, localePreference);
     document.cookie = `${LOCALE_COOKIE_NAME}=${localePreference}; path=/; max-age=31536000; samesite=lax`;
   }, [locale, localePreference]);
 
   useEffect(() => {
-    window.localStorage.setItem(CURRENCY_COOKIE_NAME, currencyPreference);
     document.cookie = `${CURRENCY_COOKIE_NAME}=${currencyPreference}; path=/; max-age=31536000; samesite=lax`;
   }, [currencyPreference]);
 

@@ -1,94 +1,77 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import Newsletter from "@/components/Common/Newsletter";
-import ProductItem from "@/components/Common/ProductItem";
 import ProductLabelBadges from "@/components/Common/ProductLabelBadges";
-import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import { useI18n } from "@/i18n/provider";
-import { useStorefrontConfigQuery, useStorefrontProductQuery } from "@/storefront/hooks";
+import { getAvailabilityMessageKey } from "@/i18n/utils";
+import { getWhatsAppHref } from "@/storefront/contact";
 import {
   getStorefrontProductBrand,
   mapStorefrontProductsToProducts,
 } from "@/storefront/mappers";
-import { getStorefrontWhatsappPhone, getWhatsAppHref } from "@/storefront/contact";
-import {
-  getAvailabilityMessageKey,
-} from "@/i18n/utils";
+import type { StorefrontProductDetails } from "@/storefront/types";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
+
+const ProductDetailsSectionPlaceholder = ({
+  minHeightClassName,
+}: {
+  minHeightClassName: string;
+}) => (
+  <div
+    className={`mt-20 animate-pulse rounded-[28px] border border-gray-3/70 bg-white/75 ${minHeightClassName}`}
+  />
+);
+
+const ProductRecommendationsSection = dynamic(
+  () => import("./ProductRecommendationsSection"),
+  {
+    loading: () => (
+      <ProductDetailsSectionPlaceholder minHeightClassName="min-h-[420px]" />
+    ),
+  },
+);
+
+const Newsletter = dynamic(() => import("@/components/Common/Newsletter"), {
+  loading: () => (
+    <ProductDetailsSectionPlaceholder minHeightClassName="min-h-[220px]" />
+  ),
+});
 
 type ProductDetailsViewProps = {
-  slug: string;
   categoryHref?: string;
   brandHref?: string;
+  product: StorefrontProductDetails;
+  whatsappPhone?: string;
 };
 
 export default function ProductDetailsView({
-  slug,
   categoryHref,
   brandHref,
+  product,
+  whatsappPhone,
 }: ProductDetailsViewProps) {
   const { t, formatPrice } = useI18n();
-  const { data: storefrontConfig } = useStorefrontConfigQuery();
-  const { data: product, isPending, isError, refetch } =
-    useStorefrontProductQuery(slug);
-
-  if (isPending && !product) {
-    return (
-      <main>
-        <Breadcrumb title={t("product.loading")} pages={[t("common.shop")]} />
-        <section className="overflow-hidden relative pb-20 pt-5 lg:pt-20 xl:pt-28">
-          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-            <QueryStatusCard
-              state="loading"
-              title={t("product.loading")}
-              description={t("common.loadingHint")}
-            />
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  if (isError && !product) {
-    return (
-      <main>
-        <Breadcrumb
-          title={t("product.notFoundTitle")}
-          pages={[t("common.shop")]}
-        />
-        <section className="overflow-hidden relative pb-20 pt-5 lg:pt-20 xl:pt-28">
-          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-            <QueryStatusCard
-              state="error"
-              title={t("product.error")}
-              description={t("common.errorHint")}
-              actionLabel={t("common.retry")}
-              onAction={() => {
-                void refetch();
-              }}
-            />
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  if (!product) {
-    return null;
-  }
-
-  const relatedProducts = mapStorefrontProductsToProducts(product.relatedProducts);
-  const recommendedProducts = mapStorefrontProductsToProducts(
-    product.recommendedProducts,
+  const relatedProducts = useMemo(
+    () => mapStorefrontProductsToProducts(product.relatedProducts),
+    [product.relatedProducts],
+  );
+  const recommendedProducts = useMemo(
+    () => mapStorefrontProductsToProducts(product.recommendedProducts),
+    [product.recommendedProducts],
   );
   const productBrand = getStorefrontProductBrand(product);
-  const whatsappHref = getWhatsAppHref(
-    getStorefrontWhatsappPhone(storefrontConfig),
-    t("common.contactManagerWhatsappMessage", {
-      product: product.name,
-    }),
+  const whatsappHref = useMemo(
+    () =>
+      getWhatsAppHref(
+        whatsappPhone,
+        t("common.contactManagerWhatsappMessage", {
+          product: product.name,
+        }),
+      ),
+    [product.name, t, whatsappPhone],
   );
 
   return (
@@ -254,47 +237,17 @@ export default function ProductDetailsView({
             </div>
           </div>
 
-          {relatedProducts.length > 0 ? (
-            <div className="mt-20">
-              <div className="mb-7 flex items-center justify-between">
-                <div>
-                  <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
-                    {t("common.similarProducts")}
-                  </span>
-                  <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-                    {t("common.relatedItems")}
-                  </h2>
-                </div>
-              </div>
+          <ProductRecommendationsSection
+            eyebrowKey="common.similarProducts"
+            items={relatedProducts}
+            titleKey="common.relatedItems"
+          />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9">
-                {relatedProducts.slice(0, 4).map((item) => (
-                  <ProductItem item={item} key={item.id} />
-                ))}
-              </div>
-            </div>
-          ) : null}
-
-          {recommendedProducts.length > 0 ? (
-            <div className="mt-20">
-              <div className="mb-7 flex items-center justify-between">
-                <div>
-                  <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
-                    {t("common.recommended")}
-                  </span>
-                  <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-                    {t("common.youMayAlsoLike")}
-                  </h2>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9">
-                {recommendedProducts.slice(0, 4).map((item) => (
-                  <ProductItem item={item} key={item.id} />
-                ))}
-              </div>
-            </div>
-          ) : null}
+          <ProductRecommendationsSection
+            eyebrowKey="common.recommended"
+            items={recommendedProducts}
+            titleKey="common.youMayAlsoLike"
+          />
         </div>
       </section>
 

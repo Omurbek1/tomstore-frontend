@@ -22,7 +22,7 @@ const STATUS_CLASS_BY_STATUS = {
   out_of_stock: "border-red/10 bg-red/10 text-red",
 } as const;
 
-const SingleListItem = ({ item }: { item: Product }) => {
+const SingleListItemComponent = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t, formatPrice } = useI18n();
   const {
@@ -320,5 +320,9 @@ const SingleListItem = ({ item }: { item: Product }) => {
     </article>
   );
 };
+
+const SingleListItem = React.memo(SingleListItemComponent);
+
+SingleListItem.displayName = "SingleListItem";
 
 export default SingleListItem;

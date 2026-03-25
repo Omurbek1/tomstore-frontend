@@ -12,16 +12,19 @@ import {
   getStorefrontWhatsappPhone,
   getWhatsAppHref,
 } from "@/storefront/contact";
-import { useStorefrontConfigQuery } from "@/storefront/hooks";
 import {
   buildBrandsHubPath,
   buildCategoriesHubPath,
 } from "@/storefront/catalog-routing";
+import type { StorefrontConfig } from "@/storefront/types";
 
-const Footer = () => {
+const Footer = ({
+  storefrontConfig,
+}: {
+  storefrontConfig?: StorefrontConfig;
+}) => {
   const year = new Date().getFullYear();
   const { t } = useI18n();
-  const { data: storefrontConfig } = useStorefrontConfigQuery();
   const address = getStorefrontAddress(storefrontConfig);
   const companyName = getStorefrontCompanyName(storefrontConfig);
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);

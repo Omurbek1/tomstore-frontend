@@ -22,7 +22,7 @@ const STATUS_CLASS_BY_STATUS = {
   out_of_stock: "border-red/10 bg-red/10 text-red",
 } as const;
 
-const ProductItem = ({ item }: { item: Product }) => {
+const ProductItemComponent = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t, formatPrice } = useI18n();
   const {
@@ -309,5 +309,9 @@ const ProductItem = ({ item }: { item: Product }) => {
     </article>
   );
 };
+
+const ProductItem = React.memo(ProductItemComponent);
+
+ProductItem.displayName = "ProductItem";
 
 export default ProductItem;

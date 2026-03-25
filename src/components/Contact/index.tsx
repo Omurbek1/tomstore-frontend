@@ -9,11 +9,14 @@ import {
   getStorefrontSupportPhone,
   getStorefrontWhatsappPhone,
 } from "@/storefront/contact";
-import { useStorefrontConfigQuery } from "@/storefront/hooks";
+import type { StorefrontConfig } from "@/storefront/types";
 
-const Contact = () => {
+const Contact = ({
+  storefrontConfig,
+}: {
+  storefrontConfig?: StorefrontConfig;
+}) => {
   const { t } = useI18n();
-  const { data: storefrontConfig } = useStorefrontConfigQuery();
   const companyName = getStorefrontCompanyName(storefrontConfig);
   const supportPhone = getStorefrontSupportPhone(storefrontConfig);
   const whatsappPhone = getStorefrontWhatsappPhone(storefrontConfig);

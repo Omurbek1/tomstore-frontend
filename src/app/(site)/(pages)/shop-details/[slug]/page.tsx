@@ -1,7 +1,7 @@
 import ProductDetailsView from "@/components/Storefront/ProductDetailsView";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import {
   storefrontCatalogQueryOptions,
+  storefrontConfigQueryOptions,
   storefrontProductQueryOptions,
 } from "@/storefront/query-options";
 import { makeQueryClient } from "@/tanstack-query/query-client";
@@ -14,6 +14,7 @@ import {
   buildBrandPath,
   buildCategoryPath,
 } from "@/storefront/catalog-routing";
+import { getStorefrontWhatsappPhone } from "@/storefront/contact";
 
 const normalizeLookupValue = (value?: string | null) =>
   String(value || "")
@@ -56,9 +57,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ShopDetailsSlugPage({ params }: Props) {
   const { slug } = await params;
   const queryClient = makeQueryClient();
-  const [product, catalog] = await Promise.all([
+  const [product, catalog, storefrontConfig] = await Promise.all([
     queryClient.fetchQuery(storefrontProductQueryOptions(slug)),
     queryClient.fetchQuery(storefrontCatalogQueryOptions({})),
+    queryClient.fetchQuery(storefrontConfigQueryOptions()),
   ]);
 
   if (!product) {
@@ -157,13 +159,12 @@ export default async function ShopDetailsSlugPage({ params }: Props) {
           __html: JSON.stringify(breadcrumbStructuredData),
         }}
       />
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <ProductDetailsView
-          slug={slug}
-          categoryHref={resolvedCategoryHref}
-          brandHref={resolvedBrandHref || undefined}
-        />
-      </HydrationBoundary>
+      <ProductDetailsView
+        product={product}
+        categoryHref={resolvedCategoryHref}
+        brandHref={resolvedBrandHref || undefined}
+        whatsappPhone={getStorefrontWhatsappPhone(storefrontConfig)}
+      />
     </>
   );
 }

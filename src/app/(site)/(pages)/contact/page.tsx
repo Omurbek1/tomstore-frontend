@@ -97,7 +97,7 @@ const ContactPage = async () => {
         }}
       />
       <main>
-        <Contact />
+        <Contact storefrontConfig={storefrontConfig} />
       </main>
     </>
   );
