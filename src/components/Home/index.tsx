@@ -8,6 +8,7 @@ import PromoBanner from "./PromoBanner";
 import BestSeller from "./BestSeller";
 import CounDown from "./Countdown";
 import LatestBlogPosts from "./LatestBlogPosts";
+import HomeSeoSection from "./HomeSeoSection";
 import Testimonials from "./Testimonials";
 import Newsletter from "../Common/Newsletter";
 import QueryStatusCard from "@/components/Common/QueryStatusCard";

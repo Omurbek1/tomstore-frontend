@@ -13,6 +13,10 @@ import {
   getWhatsAppHref,
 } from "@/storefront/contact";
 import { useStorefrontConfigQuery } from "@/storefront/hooks";
+import {
+  buildBrandsHubPath,
+  buildCategoriesHubPath,
+} from "@/storefront/catalog-routing";
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -36,9 +40,11 @@ const Footer = () => {
               className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-4 py-2"
             >
               {storefrontConfig?.companyLogoUrl ? (
-                <img
+                <Image
                   src={storefrontConfig.companyLogoUrl}
                   alt={companyName}
+                  width={168}
+                  height={56}
                   className="h-7 w-auto max-w-[84px] object-contain"
                 />
               ) : (
@@ -88,6 +94,16 @@ const Footer = () => {
               <li>
                 <Link className="transition-colors duration-200 hover:text-white" href="/shop-with-sidebar">
                   {t("menu.shop")}
+                </Link>
+              </li>
+              <li>
+                <Link className="transition-colors duration-200 hover:text-white" href={buildCategoriesHubPath()}>
+                  {t("common.categories")}
+                </Link>
+              </li>
+              <li>
+                <Link className="transition-colors duration-200 hover:text-white" href={buildBrandsHubPath()}>
+                  {t("common.brands")}
                 </Link>
               </li>
               <li>

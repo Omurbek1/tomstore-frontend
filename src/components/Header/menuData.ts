@@ -1,4 +1,9 @@
 import { Menu } from "@/types/Menu";
+import {
+  buildBrandsHubPath,
+  buildCategoriesHubPath,
+} from "@/storefront/catalog-routing";
+import { buildBlogPath } from "@/storefront/blog-routing";
 
 export const getMenuData = (
   t: (key: string) => string,
@@ -44,19 +49,31 @@ export const getMenuData = (
           path: "/shop-without-sidebar",
         },
         {
+          id: 63,
+          title: t("common.categories"),
+          newTab: false,
+          path: buildCategoriesHubPath(),
+        },
+        {
           id: 64,
+          title: t("common.brands"),
+          newTab: false,
+          path: buildBrandsHubPath(),
+        },
+        {
+          id: 65,
           title: t("menu.checkout"),
           newTab: false,
           path: "/checkout",
         },
         {
-          id: 65,
+          id: 66,
           title: t("menu.cart"),
           newTab: false,
           path: "/cart",
         },
         {
-          id: 66,
+          id: 67,
           title: t("menu.wishlist"),
           newTab: false,
           path: "/wishlist",
@@ -86,7 +103,7 @@ export const getMenuData = (
           id: 7,
           title: t("menu.blogs"),
           newTab: false,
-          path: "/blogs/blog-grid",
+          path: buildBlogPath(),
           submenu: [
             {
               id: 73,
@@ -98,7 +115,7 @@ export const getMenuData = (
               id: 74,
               title: t("menu.blogGrid"),
               newTab: false,
-              path: "/blogs/blog-grid",
+              path: buildBlogPath(),
             },
           ],
         }

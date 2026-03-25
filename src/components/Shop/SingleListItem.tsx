@@ -21,6 +21,19 @@ const STATUS_CLASS_BY_STATUS = {
   out_of_stock: "border-red/10 bg-red/10 text-red",
 } as const;
 
+const buildProductMeta = (
+  item: Product,
+  t: (key: string) => string,
+) =>
+  [
+    item.sku
+      ? {
+          label: t("common.sku"),
+          value: item.sku,
+        }
+      : null,
+  ].filter(Boolean) as Array<{ label: string; value: string }>;
+
 const SingleListItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t, formatPrice } = useI18n();
@@ -52,6 +65,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
     hasDiscount && item.price > 0
       ? Math.round(((item.price - item.discountedPrice) / item.price) * 100)
       : 0;
+  const productMeta = buildProductMeta(item, t);
 
   const handleQuickViewUpdate = () => {
     setQuickViewProduct({ ...item });
@@ -93,8 +107,8 @@ const SingleListItem = ({ item }: { item: Product }) => {
 
   return (
     <article className="group overflow-hidden rounded-[30px] border border-white/80 bg-white/92 p-3 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.34)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-blue/20 hover:shadow-[0_38px_75px_-40px_rgba(60,80,224,0.24)] sm:p-4">
-      <div className="flex flex-col gap-3 lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:items-stretch">
-        <div className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-[26px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)] px-4 pb-4 pt-14">
+      <div className="flex flex-col gap-3 lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-stretch xl:grid-cols-[260px_minmax(0,1fr)]">
+        <div className="relative flex min-h-[224px] items-center justify-center overflow-hidden rounded-[26px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)] px-4 pb-5 pt-16">
           <div className="absolute left-1/2 top-5 h-24 w-24 -translate-x-1/2 rounded-full bg-blue/15 blur-2xl" />
 
           <ProductLabelBadges
@@ -180,8 +194,13 @@ const SingleListItem = ({ item }: { item: Product }) => {
 
         <div className="flex min-w-0 flex-col justify-between gap-4 px-1 py-1 lg:px-2">
           <div className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
+                {item.brand ? (
+                  <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-blue/85">
+                    {item.brand}
+                  </p>
+                ) : null}
                 <h3
                   className="overflow-hidden text-xl font-semibold leading-8 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
                   onClick={() => setProductDetails({ ...item })}
@@ -191,16 +210,34 @@ const SingleListItem = ({ item }: { item: Product }) => {
               </div>
 
               <span
-                className={`inline-flex shrink-0 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${availabilityClass}`}
+                className={`inline-flex max-w-full rounded-full border px-3 py-1.5 text-center text-[11px] font-semibold leading-4 ${availabilityClass}`}
               >
                 {availabilityLabel}
               </span>
             </div>
 
             {item.shortDescription ? (
-              <p className="max-w-2xl overflow-hidden text-[13px] leading-6 text-dark-4 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1]">
+              <p className="max-w-2xl overflow-hidden text-[13px] leading-6 text-dark-4 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
                 {item.shortDescription}
               </p>
+            ) : null}
+
+            {productMeta.length ? (
+              <div className="flex flex-wrap gap-2">
+                {productMeta.map((meta) => (
+                  <span
+                    key={meta.label}
+                    className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50/90 px-3 py-1.5 text-[11px] text-slate-600"
+                  >
+                    <span className="shrink-0 font-semibold text-slate-500">
+                      {meta.label}
+                    </span>
+                    <span className="truncate font-medium text-slate-700">
+                      {meta.value}
+                    </span>
+                  </span>
+                ))}
+              </div>
             ) : null}
 
             {item.reviews > 0 ? (
@@ -226,18 +263,18 @@ const SingleListItem = ({ item }: { item: Product }) => {
 
           <div className="grid gap-3 border-t border-gray-3/70 pt-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div className="grid gap-3 rounded-[24px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
+              <div className="flex flex-wrap items-start justify-between gap-2.5">
+                <div className="min-w-0 flex-1">
                   <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
                     {t("common.price")}
                   </p>
 
                   <div className="flex flex-wrap items-end gap-x-3 gap-y-1">
-                    <span className="text-[28px] font-semibold leading-none text-dark">
+                    <span className="max-w-full break-words text-[24px] font-semibold leading-tight text-dark lg:text-[26px]">
                       {formatPrice(item.discountedPrice)}
                     </span>
                     {hasDiscount ? (
-                      <span className="inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-dark-4 line-through shadow-[0_10px_24px_-20px_rgba(15,23,42,0.45)]">
+                      <span className="inline-flex max-w-full rounded-full bg-white px-3 py-1 text-sm font-medium text-dark-4 line-through shadow-[0_10px_24px_-20px_rgba(15,23,42,0.45)]">
                         {formatPrice(item.price)}
                       </span>
                     ) : null}
@@ -245,14 +282,14 @@ const SingleListItem = ({ item }: { item: Product }) => {
                 </div>
 
                 {hasDiscount ? (
-                  <span className="shrink-0 rounded-full border border-green/10 bg-green/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-green-dark">
+                  <span className="shrink-0 rounded-full border border-green/10 bg-green/10 px-3 py-1 text-[11px] font-semibold text-green-dark">
                     -{discountPercent}%
                   </span>
                 ) : null}
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3 lg:justify-end">
+            <div className="flex flex-col gap-3 sm:flex-row lg:items-stretch lg:justify-end xl:flex-row">
               <button
                 type="button"
                 onClick={handleAddToCart}

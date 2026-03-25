@@ -2,11 +2,12 @@ import { Category } from "@/types/category";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { buildCategoryPath } from "@/storefront/catalog-routing";
 
 const SingleItem = ({ item }: { item: Category }) => {
   return (
     <Link
-      href={item.slug ? `/shop-with-sidebar?category=${item.slug}` : "/shop-with-sidebar"}
+      href={item.slug ? buildCategoryPath(item.slug) : "/shop-with-sidebar"}
       className="group block h-full px-1"
     >
       <div className="h-full rounded-[24px] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f2f6ff_100%)] px-4 py-5 text-center shadow-[0_24px_44px_-34px_rgba(15,23,42,0.35)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-blue/15 group-hover:shadow-[0_30px_64px_-34px_rgba(60,80,224,0.28)]">

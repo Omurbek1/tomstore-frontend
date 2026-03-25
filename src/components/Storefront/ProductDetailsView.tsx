@@ -20,9 +20,15 @@ import Link from "next/link";
 
 type ProductDetailsViewProps = {
   slug: string;
+  categoryHref?: string;
+  brandHref?: string;
 };
 
-export default function ProductDetailsView({ slug }: ProductDetailsViewProps) {
+export default function ProductDetailsView({
+  slug,
+  categoryHref,
+  brandHref,
+}: ProductDetailsViewProps) {
   const { t, formatPrice } = useI18n();
   const { data: storefrontConfig } = useStorefrontConfigQuery();
   const { data: product, isPending, isError, refetch } =
@@ -157,12 +163,30 @@ export default function ProductDetailsView({ slug }: ProductDetailsViewProps) {
                 {productBrand ? (
                   <div className="flex items-center justify-between gap-4">
                     <span className="text-dark-4">{t("common.brand")}</span>
-                    <span className="text-dark font-medium">{productBrand}</span>
+                    {brandHref ? (
+                      <Link
+                        href={brandHref}
+                        className="text-dark font-medium transition-colors duration-200 hover:text-blue"
+                      >
+                        {productBrand}
+                      </Link>
+                    ) : (
+                      <span className="text-dark font-medium">{productBrand}</span>
+                    )}
                   </div>
                 ) : null}
                 <div className="flex items-center justify-between gap-4">
                   <span className="text-dark-4">{t("common.category")}</span>
-                  <span className="text-dark font-medium">{product.category}</span>
+                  {categoryHref ? (
+                    <Link
+                      href={categoryHref}
+                      className="text-dark font-medium transition-colors duration-200 hover:text-blue"
+                    >
+                      {product.category}
+                    </Link>
+                  ) : (
+                    <span className="text-dark font-medium">{product.category}</span>
+                  )}
                 </div>
                 {product.sku ? (
                   <div className="flex items-center justify-between gap-4">

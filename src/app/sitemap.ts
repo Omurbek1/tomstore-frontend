@@ -1,5 +1,16 @@
 import type { MetadataRoute } from "next";
 import { buildAbsoluteUrl, getBackendUrl } from "@/storefront/site";
+import {
+  buildBrandPath,
+  buildBrandsHubPath,
+  buildCategoryPath,
+  buildCategoriesHubPath,
+} from "@/storefront/catalog-routing";
+import {
+  buildBlogCategoryPath,
+  buildBlogPath,
+  buildBlogPostPath,
+} from "@/storefront/blog-routing";
 import type {
   StorefrontBlogListResponse,
   StorefrontCatalogResponse,
@@ -59,25 +70,62 @@ const fetchCatalogEntries = async () => {
   }));
 };
 
+const fetchCatalogLandingEntries = async () => {
+  const catalog = await fetchStorefrontJson<StorefrontCatalogResponse>(
+    "/storefront/catalog?pageSize=1",
+  );
+
+  if (!catalog) {
+    return [];
+  }
+
+  return [
+    ...catalog.filters.categories.map((category) => ({
+      url: buildAbsoluteUrl(buildCategoryPath(category.slug)),
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
+    ...catalog.filters.brands.map((brand) => ({
+      url: buildAbsoluteUrl(buildBrandPath(brand.slug)),
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+  ];
+};
+
 const fetchBlogEntries = async () => {
   const blogList =
     await fetchStorefrontJson<StorefrontBlogListResponse>("/storefront/blogs");
 
   if (!blogList?.enabled) {
-    return [];
+    return {
+      posts: [],
+      categories: [],
+    };
   }
 
-  return blogList.items.map((item) => ({
-    url: buildAbsoluteUrl(`/blogs/blog-details?slug=${encodeURIComponent(item.slug)}`),
-    lastModified: item.publishedAt,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
+  return {
+    posts: blogList.items.map((item) => ({
+      url: buildAbsoluteUrl(buildBlogPostPath(item.slug)),
+      lastModified: item.publishedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+    categories: blogList.categories.map((category) => ({
+      url: buildAbsoluteUrl(buildBlogCategoryPath(category.slug)),
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.65,
+    })),
+  };
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [catalogEntries, blogEntries] = await Promise.all([
+  const [catalogEntries, catalogLandingEntries, blogEntries] = await Promise.all([
     fetchCatalogEntries(),
+    fetchCatalogLandingEntries(),
     fetchBlogEntries(),
   ]);
 
@@ -101,12 +149,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
     {
-      url: buildAbsoluteUrl("/blogs/blog-grid"),
+      url: buildAbsoluteUrl(buildCategoriesHubPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: buildAbsoluteUrl(buildBrandsHubPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.75,
+    },
+    {
+      url: buildAbsoluteUrl(buildBlogPath()),
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     },
+    ...catalogLandingEntries,
     ...catalogEntries,
-    ...blogEntries,
+    ...blogEntries.categories,
+    ...blogEntries.posts,
   ];
 }

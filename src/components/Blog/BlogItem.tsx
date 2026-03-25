@@ -3,6 +3,7 @@
 import React from "react";
 import { BlogItem } from "@/types/blogItem";
 import { useI18n } from "@/i18n/provider";
+import { buildBlogPath } from "@/storefront/blog-routing";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,7 +12,7 @@ const BlogItem = ({ blog }: { blog: BlogItem }) => {
 
   return (
     <div className="shadow-1 bg-white rounded-xl px-4 sm:px-5 pt-5 pb-4">
-      <Link href="/blogs/blog-details" className="rounded-md overflow-hidden">
+      <Link href={buildBlogPath()} className="rounded-md overflow-hidden">
         <Image
           src={blog.img}
           alt="blog"
@@ -42,11 +43,11 @@ const BlogItem = ({ blog }: { blog: BlogItem }) => {
         </span>
 
         <h2 className="font-medium text-dark text-lg sm:text-xl ease-out duration-200 mb-4 hover:text-blue">
-          <Link href="/blogs/blog-details">{blog.title}</Link>
+          <Link href={buildBlogPath()}>{blog.title}</Link>
         </h2>
 
         <Link
-          href="/blogs/blog-details"
+          href={buildBlogPath()}
           className="text-custom-sm inline-flex items-center gap-2 py-2 ease-out duration-200 hover:text-blue"
         >
           {t("common.readMore")}

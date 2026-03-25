@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 type BlogMediaProps = {
   title: string;
   imageUrl?: string;
@@ -39,7 +41,13 @@ export default function BlogMedia({
           ) : null}
         </div>
       ) : imageUrl ? (
-        <img src={imageUrl} alt={title} className={mediaClassName} />
+        <Image
+          src={imageUrl}
+          alt={title}
+          width={1200}
+          height={630}
+          className={mediaClassName}
+        />
       ) : (
         <div
           className={

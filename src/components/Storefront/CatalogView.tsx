@@ -7,9 +7,13 @@ import SingleListItem from "@/components/Shop/SingleListItem";
 import { useI18n } from "@/i18n/provider";
 import { getAvailabilityMessageKey } from "@/i18n/utils";
 import { useStorefrontCatalogQuery } from "@/storefront/hooks";
-import { type StorefrontCatalogRouteQuery } from "@/storefront/query-keys";
 import { mapStorefrontProductsToProducts } from "@/storefront/mappers";
-import type { Product } from "@/types/product";
+import {
+  buildCatalogHref,
+  getCatalogBaseQuery,
+  type CatalogRouteContext,
+} from "@/storefront/catalog-routing";
+import { type StorefrontCatalogRouteQuery } from "@/storefront/query-keys";
 import type {
   StorefrontBrand,
   StorefrontCategory,
@@ -19,30 +23,11 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 type CatalogViewProps = {
-  title: string;
-  pathname: string;
+  title?: string;
+  breadcrumbCurrent?: string;
+  routeContext?: CatalogRouteContext;
   query: StorefrontCatalogRouteQuery;
   variant: "sidebar" | "full";
-};
-
-const buildQueryString = (
-  pathname: string,
-  query: StorefrontCatalogRouteQuery,
-  overrides: Partial<StorefrontCatalogRouteQuery> = {},
-) => {
-  const nextQuery = { ...query, ...overrides };
-  const searchParams = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(nextQuery)) {
-    if (!value || value === "all") {
-      continue;
-    }
-
-    searchParams.set(key, value);
-  }
-
-  const serialized = searchParams.toString();
-  return serialized ? `${pathname}?${serialized}` : pathname;
 };
 
 const buildPages = (currentPage: number, totalPages: number) => {
@@ -55,7 +40,10 @@ const buildPages = (currentPage: number, totalPages: number) => {
 
 export default function CatalogView({
   title,
-  pathname,
+  breadcrumbCurrent,
+  routeContext = {
+    type: "catalog",
+  },
   query,
   variant,
 }: CatalogViewProps) {
@@ -78,21 +66,34 @@ export default function CatalogView({
     categories: [] as StorefrontCategory[],
     brands: [] as StorefrontBrand[],
   };
+  const baseQuery = getCatalogBaseQuery(routeContext);
+  const pageTitle = title || t("common.shop");
 
   const pages = useMemo(() => buildPages(page, totalPages), [page, totalPages]);
 
   const applySearch = () => {
     router.push(
-      buildQueryString(pathname, query, {
-        q: searchValue.trim() || undefined,
-        page: undefined,
-      }),
+      buildCatalogHref(
+        {
+          ...query,
+          q: searchValue.trim() || undefined,
+          page: undefined,
+        },
+        routeContext,
+      ),
     );
   };
 
   return (
     <>
-      <Breadcrumb title={title} pages={["shop"]} />
+      <Breadcrumb
+        title={pageTitle}
+        pages={
+          breadcrumbCurrent
+            ? [t("common.shop"), breadcrumbCurrent]
+            : [t("common.shop")]
+        }
+      />
 
       <section className="overflow-hidden relative pb-20 pt-5 lg:pt-20 xl:pt-28 bg-[#f3f4f6]">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -126,7 +127,7 @@ export default function CatalogView({
                     <div className="flex items-center justify-between gap-4">
                       <p>{t("catalog.filters")}</p>
                       <Link
-                        href={pathname}
+                        href={buildCatalogHref(baseQuery, routeContext)}
                         className="text-blue text-custom-sm"
                       >
                         {t("common.cleanAll")}
@@ -167,13 +168,18 @@ export default function CatalogView({
                     </h3>
                     <div className="flex flex-col gap-3">
                       {filters.categories.map((category) => {
-                        const href = buildQueryString(pathname, query, {
-                          category:
-                            query.category === category.slug
-                              ? undefined
-                              : category.slug,
-                          page: undefined,
-                        });
+                        const href = buildCatalogHref(
+                          {
+                            ...query,
+                            category:
+                              query.category === category.slug
+                                ? undefined
+                                : category.slug,
+                            page: undefined,
+                          },
+                          routeContext,
+                          "category",
+                        );
 
                         return (
                           <Link
@@ -201,11 +207,16 @@ export default function CatalogView({
                     </h3>
                     <div className="flex flex-col gap-3">
                       {filters.brands.slice(0, 12).map((brand) => {
-                        const href = buildQueryString(pathname, query, {
-                          brand:
-                            query.brand === brand.slug ? undefined : brand.slug,
-                          page: undefined,
-                        });
+                        const href = buildCatalogHref(
+                          {
+                            ...query,
+                            brand:
+                              query.brand === brand.slug ? undefined : brand.slug,
+                            page: undefined,
+                          },
+                          routeContext,
+                          "brand",
+                        );
 
                         return (
                           <Link
@@ -238,13 +249,17 @@ export default function CatalogView({
                       ].map((item) => (
                         <Link
                           key={item.value}
-                          href={buildQueryString(pathname, query, {
-                            availability:
-                              query.availability === item.value
-                                ? undefined
-                                : item.value,
-                            page: undefined,
-                          })}
+                          href={buildCatalogHref(
+                            {
+                              ...query,
+                              availability:
+                                query.availability === item.value
+                                  ? undefined
+                                  : item.value,
+                              page: undefined,
+                            },
+                            routeContext,
+                          )}
                           className={
                             query.availability === item.value
                               ? "text-blue"
@@ -268,10 +283,14 @@ export default function CatalogView({
                       value={query.sort || "popular"}
                       onChange={(event) =>
                         router.push(
-                          buildQueryString(pathname, query, {
-                            sort: event.target.value,
-                            page: undefined,
-                          }),
+                          buildCatalogHref(
+                            {
+                              ...query,
+                              sort: event.target.value,
+                              page: undefined,
+                            },
+                            routeContext,
+                          ),
                         )
                       }
                       className="rounded-md border border-gray-3 bg-gray-1 px-3 py-2 outline-none"
@@ -327,7 +346,9 @@ export default function CatalogView({
               <div
                 className={
                   productStyle === "grid"
-                    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9"
+                    ? variant === "sidebar"
+                      ? "grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3"
+                      : "grid grid-cols-1 gap-x-7.5 gap-y-9 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                     : "flex flex-col gap-7.5"
                 }
               >
@@ -347,9 +368,13 @@ export default function CatalogView({
                       {pages.map((pageNumber) => (
                         <li key={pageNumber}>
                           <Link
-                            href={buildQueryString(pathname, query, {
-                              page: String(pageNumber),
-                            })}
+                            href={buildCatalogHref(
+                              {
+                                ...query,
+                                page: String(pageNumber),
+                              },
+                              routeContext,
+                            )}
                             className={`flex py-1.5 px-3.5 rounded-[3px] duration-200 ${
                               pageNumber === page
                                 ? "bg-blue text-white"

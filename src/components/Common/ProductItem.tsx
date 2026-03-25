@@ -21,6 +21,19 @@ const STATUS_CLASS_BY_STATUS = {
   out_of_stock: "border-red/10 bg-red/10 text-red",
 } as const;
 
+const buildProductMeta = (
+  item: Product,
+  t: (key: string) => string,
+) =>
+  [
+    item.sku
+      ? {
+          label: t("common.sku"),
+          value: item.sku,
+        }
+      : null,
+  ].filter(Boolean) as Array<{ label: string; value: string }>;
+
 const ProductItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t, formatPrice } = useI18n();
@@ -52,6 +65,7 @@ const ProductItem = ({ item }: { item: Product }) => {
     hasDiscount && item.price > 0
       ? Math.round(((item.price - item.discountedPrice) / item.price) * 100)
       : 0;
+  const productMeta = buildProductMeta(item, t);
 
   const handleQuickViewUpdate = () => {
     setQuickViewProduct({ ...item });
@@ -167,7 +181,7 @@ const ProductItem = ({ item }: { item: Product }) => {
           </button>
         </div>
 
-        <div className="flex min-h-[236px] items-center justify-center px-4 pb-4 pt-14">
+        <div className="flex min-h-[248px] items-center justify-center px-4 pb-5 pt-16">
           <Image
             src={imageSrc}
             alt={item.title}
@@ -176,26 +190,17 @@ const ProductItem = ({ item }: { item: Product }) => {
             className="relative z-[1] h-auto max-h-[190px] w-auto object-contain drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)] transition-transform duration-300 group-hover:scale-[1.05]"
           />
         </div>
-
-        {hasDiscount ? (
-          <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/88 px-3 py-1.5 text-[11px] font-semibold text-dark shadow-sm backdrop-blur-sm">
-            <span className="text-red">-{discountPercent}%</span>
-            <span className="text-dark-4 line-through">
-              {formatPrice(item.price)}
-            </span>
-          </div>
-        ) : null}
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col px-1">
         <div
-          className={`mb-2.5 flex items-start gap-3 ${
+          className={`mb-3 flex flex-wrap items-start gap-2.5 ${
             item.reviews > 0 ? "justify-between" : "justify-end"
           }`}
         >
           {item.reviews > 0 ? (
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <div className="flex items-center gap-1">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <Image
@@ -208,7 +213,7 @@ const ProductItem = ({ item }: { item: Product }) => {
                   ))}
                 </div>
 
-                <p className="text-[12px] font-medium text-dark-4">
+                <p className="text-[12px] font-medium leading-4 text-dark-4">
                   {t("common.reviewsLabel", { count: item.reviews })}
                 </p>
               </div>
@@ -216,38 +221,63 @@ const ProductItem = ({ item }: { item: Product }) => {
           ) : null}
 
           <span
-            className={`inline-flex shrink-0 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${availabilityClass}`}
+            className={`inline-flex max-w-full rounded-full border px-3 py-1.5 text-center text-[11px] font-semibold leading-4 ${availabilityClass}`}
           >
             {availabilityLabel}
           </span>
         </div>
 
         <h3
-          className="min-h-[44px] overflow-hidden text-[17px] font-semibold leading-6 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
+          className="min-h-[48px] overflow-hidden text-[17px] font-semibold leading-6 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
           onClick={handleProductDetails}
         >
+          {item.brand ? (
+            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.24em] text-blue/85">
+              {item.brand}
+            </span>
+          ) : null}
           <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>
         </h3>
 
         {item.shortDescription ? (
-          <p className="mt-1.5 overflow-hidden text-[13px] leading-5 text-dark-4 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:1]">
+          <p className="mt-1.5 min-h-[40px] overflow-hidden text-[13px] leading-5 text-dark-4 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
             {item.shortDescription}
           </p>
         ) : null}
 
-        <div className="mt-4 grid gap-3 rounded-[22px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
+        {productMeta.length ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {productMeta.map((meta) => (
+              <span
+                key={meta.label}
+                className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50/90 px-3 py-1.5 text-[11px] text-slate-600"
+              >
+                <span className="shrink-0 font-semibold text-slate-500">
+                  {meta.label}
+                </span>
+                <span className="truncate font-medium text-slate-700">
+                  {meta.value}
+                </span>
+              </span>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-3 h-[34px]" />
+        )}
+
+        <div className="mt-4 grid gap-3 rounded-[22px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-3.5">
+          <div className="flex flex-wrap items-start justify-between gap-2.5">
+            <div className="min-w-0 flex-1">
               <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
                 {t("common.price")}
               </p>
 
-              <div className="flex flex-wrap items-end gap-x-2 gap-y-1 break-words">
-                <span className="text-[24px] font-semibold leading-none text-dark">
+              <div className="flex flex-wrap items-end gap-x-2 gap-y-2 break-words">
+                <span className="max-w-full break-words text-[21px] font-semibold leading-tight text-dark sm:text-[23px]">
                   {formatPrice(item.discountedPrice)}
                 </span>
                 {hasDiscount ? (
-                  <span className="inline-flex rounded-full bg-white px-2.5 py-1 text-xs font-medium text-dark-4 line-through shadow-[0_10px_24px_-20px_rgba(15,23,42,0.45)]">
+                  <span className="inline-flex max-w-full rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-dark-4 line-through shadow-[0_10px_24px_-20px_rgba(15,23,42,0.45)]">
                     {formatPrice(item.price)}
                   </span>
                 ) : null}
@@ -255,7 +285,7 @@ const ProductItem = ({ item }: { item: Product }) => {
             </div>
 
             {hasDiscount ? (
-              <span className="shrink-0 rounded-full border border-green/10 bg-green/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-green-dark">
+              <span className="shrink-0 rounded-full border border-green/10 bg-green/10 px-3 py-1 text-[11px] font-semibold text-green-dark">
                 -{discountPercent}%
               </span>
             ) : null}

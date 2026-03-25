@@ -4,8 +4,16 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import BlogMedia from "@/components/Storefront/BlogMedia";
 import { useI18n } from "@/i18n/provider";
+import {
+  buildBlogCategoryPath,
+  buildBlogHref,
+  buildBlogPath,
+  buildLegacyBlogListPath,
+  buildLegacyBlogPostPath,
+} from "@/storefront/blog-routing";
 import { useStorefrontBlogQuery } from "@/storefront/hooks";
 import Link from "next/link";
+import Image from "next/image";
 
 type BlogPostViewProps = {
   slug: string;
@@ -29,17 +37,34 @@ const formatBlogDate = (value?: string) => {
   });
 };
 
+const findMatchingCategory = (
+  categoryName?: string,
+  categories?: Array<{ slug: string; name: string }>,
+) => {
+  if (!categoryName) {
+    return null;
+  }
+
+  const normalizedCategoryName = categoryName.trim().toLowerCase();
+
+  return (
+    categories?.find(
+      (item) => item.name.trim().toLowerCase() === normalizedCategoryName,
+    ) || null
+  );
+};
+
 export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
   const { t, formatPrice } = useI18n();
   const { data: post, isPending, isError, refetch } = useStorefrontBlogQuery(slug);
   const listPath =
     variant === "sidebar"
       ? "/blogs/blog-grid-with-sidebar"
-      : "/blogs/blog-grid";
+      : buildBlogPath();
   const detailPath =
     variant === "sidebar"
       ? "/blogs/blog-details-with-sidebar"
-      : "/blogs/blog-details";
+      : undefined;
 
   if (isPending && !post) {
     return (
@@ -94,6 +119,11 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
     );
   }
 
+  const matchedCategory = findMatchingCategory(post.category, post.categories);
+  const categoryHref = matchedCategory
+    ? buildBlogCategoryPath(matchedCategory.slug)
+    : undefined;
+
   const article = (
     <article className="rounded-[10px] bg-white p-5 shadow-1 sm:p-7.5">
       {post.coverImageUrl || post.coverVideoUrl ? (
@@ -118,7 +148,13 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
           {post.category ? (
             <>
               <span className="block w-px h-4 bg-gray-4"></span>
-              <span>{post.category}</span>
+              {categoryHref ? (
+                <Link href={categoryHref} className="hover:text-blue">
+                  {post.category}
+                </Link>
+              ) : (
+                <span>{post.category}</span>
+              )}
             </>
           ) : null}
         </span>
@@ -142,7 +178,11 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
               <Link
                 key={tag}
                 className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                href={`${listPath}?tag=${encodeURIComponent(tag)}`}
+                href={
+                  variant === "sidebar"
+                    ? buildLegacyBlogListPath({ tag }, listPath)
+                    : buildBlogHref({ tag })
+                }
               >
                 {tag}
               </Link>
@@ -187,7 +227,7 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
                       {post.recentPosts.map((item) => (
                         <div className="flex items-center gap-4" key={item.slug}>
                           <Link
-                            href={`${detailPath}?slug=${item.slug}`}
+                            href={buildLegacyBlogPostPath(item.slug, detailPath)}
                             className="max-w-[110px] w-full rounded-[10px] overflow-hidden"
                           >
                             <BlogMedia
@@ -201,7 +241,9 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
 
                           <div>
                             <h3 className="text-dark leading-[22px] ease-out duration-200 mb-1.5 hover:text-blue">
-                              <Link href={`${detailPath}?slug=${item.slug}`}>
+                              <Link
+                                href={buildLegacyBlogPostPath(item.slug, detailPath)}
+                              >
                                 {item.title}
                               </Link>
                             </h3>
@@ -228,9 +270,11 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
                         <div className="flex items-center gap-6" key={product.id}>
                           <div className="flex items-center justify-center rounded-[10px] bg-gray-3 max-w-[90px] w-full h-22.5 overflow-hidden">
                             {product.mainImage ? (
-                              <img
+                              <Image
                                 src={product.mainImage}
                                 alt={product.name}
+                                width={180}
+                                height={180}
                                 className="h-full w-full object-cover"
                               />
                             ) : (
@@ -265,7 +309,10 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
                       {post.categories.map((category) => (
                         <Link
                           key={category.slug}
-                          href={`${listPath}?category=${category.slug}`}
+                          href={buildLegacyBlogListPath(
+                            { category: category.slug },
+                            listPath,
+                          )}
                           className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue"
                         >
                           {category.name}
@@ -287,7 +334,7 @@ export default function BlogPostView({ slug, variant }: BlogPostViewProps) {
                       {post.availableTags.map((tag) => (
                         <Link
                           key={tag.slug}
-                          href={`${listPath}?tag=${tag.slug}`}
+                          href={buildLegacyBlogListPath({ tag: tag.slug }, listPath)}
                           className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
                         >
                           {tag.name}

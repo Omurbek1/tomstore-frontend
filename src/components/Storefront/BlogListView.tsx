@@ -4,36 +4,27 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import BlogMedia from "@/components/Storefront/BlogMedia";
 import { useI18n } from "@/i18n/provider";
+import type { BlogRouteContext } from "@/storefront/blog-routing";
+import {
+  buildBlogHref,
+  buildBlogPostPath,
+  buildLegacyBlogListPath,
+  buildLegacyBlogPostPath,
+} from "@/storefront/blog-routing";
 import { useStorefrontBlogsQuery } from "@/storefront/hooks";
 import type { StorefrontBlogRouteQuery } from "@/storefront/query-keys";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type BlogListViewProps = {
   pathname: string;
   query: StorefrontBlogRouteQuery;
+  routeContext?: BlogRouteContext;
+  title?: string;
+  breadcrumbCurrent?: string;
   variant: "grid" | "sidebar";
-};
-
-const buildBlogQueryString = (
-  pathname: string,
-  query: StorefrontBlogRouteQuery,
-  overrides: Partial<StorefrontBlogRouteQuery> = {},
-) => {
-  const nextQuery = { ...query, ...overrides };
-  const searchParams = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(nextQuery)) {
-    if (!value || value === "all") {
-      continue;
-    }
-
-    searchParams.set(key, value);
-  }
-
-  const serialized = searchParams.toString();
-  return serialized ? `${pathname}?${serialized}` : pathname;
 };
 
 const formatBlogDate = (value?: string) => {
@@ -56,6 +47,11 @@ const formatBlogDate = (value?: string) => {
 export default function BlogListView({
   pathname,
   query,
+  routeContext = {
+    type: "blogs",
+  },
+  title,
+  breadcrumbCurrent,
   variant,
 }: BlogListViewProps) {
   const router = useRouter();
@@ -70,18 +66,34 @@ export default function BlogListView({
   const detailPath =
     variant === "sidebar"
       ? "/blogs/blog-details-with-sidebar"
-      : "/blogs/blog-details";
-  const title =
-    variant === "sidebar" ? t("blog.blogGridSidebar") : t("blog.blogGrid");
+      : undefined;
+  const resolvedTitle =
+    title ||
+    (variant === "sidebar" ? t("blog.blogGridSidebar") : t("blog.blogGrid"));
   const posts = data?.items || [];
   const recentPosts = data?.recentPosts || [];
   const categories = data?.categories || [];
   const tags = data?.tags || [];
   const featuredProducts = data?.featuredProducts || [];
 
+  const buildListHref = (
+    overrides: Partial<StorefrontBlogRouteQuery> = {},
+  ) => {
+    const nextQuery = { ...query, ...overrides };
+
+    return variant === "sidebar"
+      ? buildLegacyBlogListPath(nextQuery, pathname)
+      : buildBlogHref(nextQuery, routeContext);
+  };
+
+  const buildPostHref = (slug: string) =>
+    variant === "sidebar"
+      ? buildLegacyBlogPostPath(slug, detailPath)
+      : buildBlogPostPath(slug);
+
   const applySearch = () => {
     router.push(
-      buildBlogQueryString(pathname, query, {
+      buildListHref({
         q: searchValue.trim() || undefined,
       }),
     );
@@ -136,7 +148,7 @@ export default function BlogListView({
             className="shadow-1 bg-white rounded-xl px-4 sm:px-5 pt-5 pb-4"
           >
             <Link
-              href={`${detailPath}?slug=${blog.slug}`}
+              href={buildPostHref(blog.slug)}
               className="block rounded-md overflow-hidden"
             >
               <BlogMedia
@@ -157,13 +169,13 @@ export default function BlogListView({
               </span>
 
               <h2 className="font-medium text-dark text-lg sm:text-xl ease-out duration-200 mb-3 hover:text-blue">
-                <Link href={`${detailPath}?slug=${blog.slug}`}>{blog.title}</Link>
+                <Link href={buildPostHref(blog.slug)}>{blog.title}</Link>
               </h2>
 
               <p className="mb-4 text-custom-sm text-dark-4">{blog.excerpt}</p>
 
               <Link
-                href={`${detailPath}?slug=${blog.slug}`}
+                href={buildPostHref(blog.slug)}
                 className="text-custom-sm inline-flex items-center gap-2 py-2 ease-out duration-200 hover:text-blue"
               >
                 {t("common.readMore")}
@@ -177,7 +189,10 @@ export default function BlogListView({
 
   return (
     <>
-      <Breadcrumb title={title} pages={[title]} />
+      <Breadcrumb
+        title={resolvedTitle}
+        pages={[breadcrumbCurrent || resolvedTitle]}
+      />
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           {variant === "sidebar" ? (
@@ -227,7 +242,7 @@ export default function BlogListView({
                       {recentPosts.map((blog) => (
                         <div className="flex items-center gap-4" key={blog.slug}>
                           <Link
-                            href={`${detailPath}?slug=${blog.slug}`}
+                            href={buildPostHref(blog.slug)}
                             className="max-w-[110px] w-full rounded-[10px] overflow-hidden"
                           >
                             <BlogMedia
@@ -241,7 +256,7 @@ export default function BlogListView({
 
                           <div>
                             <h3 className="text-dark leading-[22px] ease-out duration-200 mb-1.5 hover:text-blue">
-                              <Link href={`${detailPath}?slug=${blog.slug}`}>
+                              <Link href={buildPostHref(blog.slug)}>
                                 {blog.title}
                               </Link>
                             </h3>
@@ -273,9 +288,11 @@ export default function BlogListView({
                         <div className="flex items-center gap-6" key={product.id}>
                           <div className="flex items-center justify-center rounded-[10px] bg-gray-3 max-w-[90px] w-full h-22.5 overflow-hidden">
                             {product.mainImage ? (
-                              <img
+                              <Image
                                 src={product.mainImage}
                                 alt={product.name}
+                                width={180}
+                                height={180}
                                 className="h-full w-full object-cover"
                               />
                             ) : (
@@ -311,7 +328,7 @@ export default function BlogListView({
                       {categories.map((category) => (
                         <Link
                           key={category.slug}
-                          href={buildBlogQueryString(pathname, query, {
+                          href={buildListHref({
                             category:
                               query.category === category.slug
                                 ? undefined
@@ -339,7 +356,7 @@ export default function BlogListView({
                       {tags.map((tag) => (
                         <Link
                           key={tag.slug}
-                          href={buildBlogQueryString(pathname, query, {
+                          href={buildListHref({
                             tag: query.tag === tag.slug ? undefined : tag.slug,
                           })}
                           className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"

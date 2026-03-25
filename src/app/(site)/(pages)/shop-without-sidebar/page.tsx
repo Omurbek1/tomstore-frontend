@@ -7,6 +7,7 @@ import {
 } from "@/storefront/query-options";
 import { makeQueryClient } from "@/tanstack-query/query-client";
 import { buildNoIndexMetadata } from "@/seo/metadata";
+import { normalizeCatalogQuery } from "@/storefront/catalog-routing";
 
 export const metadata: Metadata = {
   ...buildNoIndexMetadata(
@@ -22,25 +23,7 @@ type Props = {
 
 const ShopWithoutSidebarPage = async ({ searchParams }: Props) => {
   const params = await searchParams;
-  const q = typeof params.q === "string" ? params.q : undefined;
-  const category = typeof params.category === "string" ? params.category : undefined;
-  const brand = typeof params.brand === "string" ? params.brand : undefined;
-  const availability =
-    typeof params.availability === "string" ? params.availability : undefined;
-  const label = typeof params.label === "string" ? params.label : undefined;
-  const sort = typeof params.sort === "string" ? params.sort : undefined;
-  const page = typeof params.page === "string" ? params.page : undefined;
-  const view = typeof params.view === "string" ? params.view : undefined;
-  const query: StorefrontCatalogRouteQuery = {
-    q,
-    category,
-    brand,
-    availability,
-    label,
-    sort,
-    page,
-    view,
-  };
+  const query: StorefrontCatalogRouteQuery = normalizeCatalogQuery(params);
   const queryClient = makeQueryClient();
   await queryClient.prefetchQuery(storefrontCatalogQueryOptions(query));
 
@@ -48,8 +31,10 @@ const ShopWithoutSidebarPage = async ({ searchParams }: Props) => {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <main>
         <CatalogView
-          title="Explore All Products"
-          pathname="/shop-without-sidebar"
+          routeContext={{
+            type: "catalog",
+            path: "/shop-without-sidebar",
+          }}
           query={query}
           variant="full"
         />

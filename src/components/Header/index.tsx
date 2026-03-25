@@ -274,9 +274,11 @@ const Header = () => {
               href="/"
             >
               {companyLogoUrl ? (
-                <img
+                <Image
                   src={companyLogoUrl}
                   alt={companyName}
+                  width={168}
+                  height={56}
                   className={`w-auto flex-shrink-0 object-contain transition-all duration-300 ${
                     compactHeader ? "h-6 max-w-[62px]" : "h-8 max-w-[84px]"
                   }`}
@@ -442,9 +444,11 @@ const Header = () => {
                 className="flex min-w-0 items-center gap-3"
               >
                 {companyLogoUrl ? (
-                  <img
+                  <Image
                     src={companyLogoUrl}
                     alt={companyName}
+                    width={168}
+                    height={56}
                     className="h-8 w-auto max-w-[84px] flex-shrink-0 object-contain"
                   />
                 ) : (
@@ -649,9 +653,11 @@ const Header = () => {
               href="/"
             >
               {companyLogoUrl ? (
-                <img
+                <Image
                   src={companyLogoUrl}
                   alt={companyName}
+                  width={240}
+                  height={64}
                   className={`w-auto flex-shrink-0 object-contain transition-all duration-300 ${
                     compactHeader
                       ? "h-7 max-w-[104px] sm:max-w-[124px]"

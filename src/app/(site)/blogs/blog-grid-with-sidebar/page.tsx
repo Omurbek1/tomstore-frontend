@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...buildNoIndexMetadata(
     "Блог",
     "Альтернативный вариант списка статей TOMSTORE.",
-    "/blogs/blog-grid",
+    "/blogs",
   ),
 };
 

@@ -2,6 +2,7 @@
 
 import BlogMedia from "@/components/Storefront/BlogMedia";
 import { useI18n } from "@/i18n/provider";
+import { buildBlogPath, buildBlogPostPath } from "@/storefront/blog-routing";
 import { useStorefrontBlogsQuery } from "@/storefront/hooks";
 import Link from "next/link";
 
@@ -51,7 +52,7 @@ export default function LatestBlogPosts({
           </div>
 
           <Link
-            href="/blogs/blog-grid"
+            href={buildBlogPath()}
             className="inline-flex rounded-full border border-white bg-white px-5 py-3 text-sm font-medium text-dark transition-all duration-200 hover:-translate-y-0.5 hover:bg-dark hover:text-white"
           >
             {t("common.viewAll")}
@@ -65,7 +66,7 @@ export default function LatestBlogPosts({
               className="rounded-[26px] border border-white/80 bg-white/90 p-4 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.34)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_64px_-36px_rgba(60,80,224,0.22)]"
             >
               <Link
-                href={`/blogs/blog-details?slug=${post.slug}`}
+                href={buildBlogPostPath(post.slug)}
                 className="block overflow-hidden rounded-[20px]"
               >
                 <BlogMedia
@@ -86,7 +87,7 @@ export default function LatestBlogPosts({
                 </div>
 
                 <h3 className="mb-3 text-xl font-medium text-dark transition-colors duration-200 hover:text-blue">
-                  <Link href={`/blogs/blog-details?slug=${post.slug}`}>
+                  <Link href={buildBlogPostPath(post.slug)}>
                     {post.title}
                   </Link>
                 </h3>
@@ -94,7 +95,7 @@ export default function LatestBlogPosts({
                 <p className="mb-5 text-custom-sm text-dark-4">{post.excerpt}</p>
 
                 <Link
-                  href={`/blogs/blog-details?slug=${post.slug}`}
+                  href={buildBlogPostPath(post.slug)}
                   className="inline-flex items-center gap-2 text-custom-sm font-medium text-blue"
                 >
                   {t("common.readMore")}
