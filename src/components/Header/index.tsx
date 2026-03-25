@@ -126,11 +126,11 @@ const Header = () => {
   const headerOnDark =
     !stickyMenu && headerContrastMode === "dark" && !navigationOpen;
   const surfaceClass = headerOnDark
-    ? "border-white/10 bg-[#08111f]/44 shadow-[0_24px_60px_-38px_rgba(8,17,31,0.92)] backdrop-blur-xl"
-    : "border-white/70 bg-white/78 shadow-[0_22px_44px_-32px_rgba(15,23,42,0.24)]";
+    ? "border-white/10 bg-[#0b1730]/46 shadow-[0_24px_60px_-38px_rgba(8,17,31,0.92)] backdrop-blur-xl"
+    : "border-blue/10 bg-[linear-gradient(180deg,rgba(251,253,255,0.9)_0%,rgba(239,246,255,0.84)_100%)] shadow-[0_22px_44px_-32px_rgba(60,80,224,0.18)]";
   const mobileSurfaceClass = headerOnDark
-    ? "border-white/10 bg-[#08111f]/48 shadow-[0_22px_40px_-30px_rgba(8,17,31,0.88)] backdrop-blur-xl"
-    : "border-white/70 bg-white/86 shadow-[0_22px_40px_-30px_rgba(15,23,42,0.26)]";
+    ? "border-white/10 bg-[#0b1730]/50 shadow-[0_22px_40px_-30px_rgba(8,17,31,0.88)] backdrop-blur-xl"
+    : "border-blue/10 bg-[linear-gradient(180deg,rgba(251,253,255,0.94)_0%,rgba(239,246,255,0.88)_100%)] shadow-[0_22px_40px_-30px_rgba(60,80,224,0.2)]";
   const primaryTextClass = headerOnDark ? "text-white" : "text-dark";
   const secondaryTextClass = headerOnDark ? "text-white/68" : "text-dark-4";
 
@@ -254,8 +254,8 @@ const Header = () => {
       ref={headerRef}
       className={`fixed left-0 top-0 z-9999 w-full transition-all duration-300 ease-in-out ${
         headerOnDark
-          ? "border-b border-white/10 bg-[#08111f]/8 backdrop-blur-md"
-          : "border-b border-white/50 bg-white/74 backdrop-blur-xl"
+          ? "border-b border-white/10 bg-[#0b1730]/10 backdrop-blur-md"
+          : "border-b border-blue/10 bg-[rgba(244,248,255,0.84)] backdrop-blur-xl"
       } ${
         stickyMenu ? "shadow-[0_18px_50px_-34px_rgba(15,23,42,0.35)]" : ""
       }`}
@@ -878,10 +878,10 @@ const Header = () => {
       </div>
 
       <div
-        className={`hidden overflow-hidden transition-all duration-300 ease-in-out xl:block ${
+        className={`hidden transition-all duration-300 ease-in-out xl:block ${
           supplementaryNavHidden
-            ? "pointer-events-none max-h-0 -translate-y-3 pb-0 opacity-0"
-            : "max-h-[180px] translate-y-0 pb-4 opacity-100"
+            ? "pointer-events-none max-h-0 -translate-y-3 overflow-hidden pb-0 opacity-0"
+            : "max-h-[180px] translate-y-0 overflow-visible pb-4 opacity-100"
         }`}
       >
         <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">

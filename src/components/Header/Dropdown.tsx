@@ -35,9 +35,9 @@ const Dropdown = ({
 
   return (
     <li
-      className={`group relative before:w-0 before:h-[3px] before:bg-blue before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full ${
+      className={`group relative z-0 before:w-0 before:h-[3px] before:bg-blue before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:z-[10020] focus-within:z-[10020] hover:before:w-full ${
         isActive && "before:!w-full"
-      } ${mobile ? "before:hidden" : ""}`}
+      } ${dropdownToggler ? "z-[10020]" : ""} ${mobile ? "before:hidden" : ""}`}
     >
       <button
         type="button"
@@ -89,7 +89,7 @@ const Dropdown = ({
           mobile
             ? "mt-2 rounded-xl border border-gray-3 bg-gray-1/70 p-2 shadow-none"
             : darkMode
-              ? "border-white/10 bg-[#08111f]/92 backdrop-blur-xl"
+              ? "z-[10020] border-white/10 bg-[#08111f]/92 backdrop-blur-xl"
             : ""
         }`}
       >

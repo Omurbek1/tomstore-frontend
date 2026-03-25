@@ -44,7 +44,7 @@ const SingleItem = ({ testimonial }: { testimonial: Testimonial }) => {
 
       <p className="mb-6 text-dark">{testimonial.review}</p>
 
-      <a href="#" className="flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="h-12.5 w-12.5 overflow-hidden rounded-full ring-4 ring-white">
           <Image
             src={testimonial.authorImg}
@@ -59,7 +59,7 @@ const SingleItem = ({ testimonial }: { testimonial: Testimonial }) => {
           <h3 className="font-medium text-dark">{testimonial.authorName}</h3>
           <p className="text-custom-sm">{testimonial.authorRole}</p>
         </div>
-      </a>
+      </div>
     </div>
   );
 };

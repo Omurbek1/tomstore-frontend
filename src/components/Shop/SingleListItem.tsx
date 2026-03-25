@@ -223,29 +223,31 @@ const SingleListItem = ({ item }: { item: Product }) => {
           </div>
 
           <div className="grid gap-3 border-t border-gray-3/70 pt-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-            <div className="flex items-start justify-between gap-3 rounded-[24px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-4">
-              <div className="min-w-0">
-                <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
-                  {t("common.price")}
-                </p>
+            <div className="grid gap-3 rounded-[24px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
+                    {t("common.price")}
+                  </p>
 
-                <div className="flex flex-wrap items-end gap-x-3 gap-y-1">
-                  <span className="text-[28px] font-semibold leading-none text-dark">
-                    {formatPrice(item.discountedPrice)}
-                  </span>
-                  {hasDiscount ? (
-                    <span className="inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-dark-4 line-through shadow-[0_10px_24px_-20px_rgba(15,23,42,0.45)]">
-                      {formatPrice(item.price)}
+                  <div className="flex flex-wrap items-end gap-x-3 gap-y-1">
+                    <span className="text-[28px] font-semibold leading-none text-dark">
+                      {formatPrice(item.discountedPrice)}
                     </span>
-                  ) : null}
+                    {hasDiscount ? (
+                      <span className="inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-dark-4 line-through shadow-[0_10px_24px_-20px_rgba(15,23,42,0.45)]">
+                        {formatPrice(item.price)}
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
 
-              {hasDiscount ? (
-                <span className="shrink-0 rounded-full border border-green/10 bg-green/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-green-dark">
-                  -{discountPercent}%
-                </span>
-              ) : null}
+                {hasDiscount ? (
+                  <span className="shrink-0 rounded-full border border-green/10 bg-green/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-green-dark">
+                    -{discountPercent}%
+                  </span>
+                ) : null}
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-3 lg:justify-end">

@@ -126,11 +126,6 @@ const Footer = () => {
               </li>
               <li>
                 <a className="transition-colors duration-200 hover:text-white" href="#">
-                  {t("footer.refundPolicy")}
-                </a>
-              </li>
-              <li>
-                <a className="transition-colors duration-200 hover:text-white" href="#">
                   {t("footer.termsOfUse")}
                 </a>
               </li>

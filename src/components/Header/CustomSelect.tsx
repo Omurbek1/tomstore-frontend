@@ -83,6 +83,8 @@ const CustomSelect = ({
   return (
     <div
       className={`dropdown-content custom-select relative ${
+        isOpen ? "z-[10020]" : "z-0"
+      } ${
         className || "w-[132px] sm:w-[200px]"
       }`}
     >

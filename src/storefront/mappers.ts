@@ -16,6 +16,11 @@ const CATEGORY_FALLBACK_IMAGES = [
   "/images/categories/categories-07.png",
 ];
 
+const normalizeTextValue = (value?: string | null) => {
+  const normalized = String(value || "").trim();
+  return normalized.length > 0 ? normalized : undefined;
+};
+
 const ensureGallery = (gallery: string[], fallback?: string) => {
   const unique = Array.from(new Set(gallery.filter(Boolean)));
 
@@ -28,6 +33,27 @@ const ensureGallery = (gallery: string[], fallback?: string) => {
   }
 
   return ["/images/products/product-1-sm-1.png"];
+};
+
+export const getStorefrontProductBrand = (
+  product: StorefrontProductCard | StorefrontProductDetails,
+) => {
+  const directBrand = normalizeTextValue(product.brand);
+
+  if (directBrand) {
+    return directBrand;
+  }
+
+  if (!("attributes" in product)) {
+    return undefined;
+  }
+
+  const brandAttribute = product.attributes.find((attribute) => {
+    const attributeName = normalizeTextValue(attribute.name)?.toLowerCase();
+    return attributeName === "brand" || attributeName === "бренд";
+  });
+
+  return normalizeTextValue(brandAttribute?.value);
 };
 
 export const mapStorefrontProductToProduct = (
@@ -48,8 +74,8 @@ export const mapStorefrontProductToProduct = (
     price: originalPrice,
     discountedPrice,
     sku: product.sku,
-    brand: product.brand,
-    category: product.category,
+    brand: getStorefrontProductBrand(product),
+    category: normalizeTextValue(product.category),
     shortDescription: product.shortDescription,
     description:
       "fullDescription" in product ? product.fullDescription : product.shortDescription,

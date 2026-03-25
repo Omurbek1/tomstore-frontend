@@ -57,6 +57,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.category": "Категория",
     "common.sku": "Артикул",
     "common.contactManager": "Связаться с менеджером",
+    "common.contactManagerWhatsappMessage":
+      "Здравствуйте! Интересует товар {product}. Хочу сразу связаться с менеджером.",
     "common.backToCatalog": "Назад в каталог",
     "common.recommended": "Рекомендуем",
     "common.youMayAlsoLike": "Вам может понравиться",
@@ -83,6 +85,21 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.errorHint": "Запрос не завершился. Попробуйте ещё раз.",
     "common.retry": "Повторить",
     "common.refreshing": "Обновляем...",
+    "common.installment": "Рассрочка",
+    "common.installmentFrom": "от {price}/мес",
+    "common.installmentFirstPayment": "Первый взнос {price}",
+    "common.installmentTerm": "до {months} мес",
+    "common.installmentCardText":
+      "Заберите товар сейчас и платите частями. Удобный срок до {months} месяцев.",
+    "common.installmentDetailText":
+      "Можно оформить сразу через WhatsApp без большого первого взноса. Менеджер подберёт удобный график платежей.",
+    "common.installmentQuickApproval":
+      "Напишите нам, и мы быстро подскажем доступные условия рассрочки.",
+    "common.installmentCta": "Оформить в рассрочку",
+    "common.installmentWhatsappMessage":
+      "Здравствуйте! Хочу оформить {product} в рассрочку. Цена: {price}. Предварительно получается {monthly} в месяц на {months} мес. Подскажите условия, пожалуйста.",
+    "common.installmentManagerNote":
+      "Рассрочку можно уточнить и оформить через менеджера при подтверждении заказа.",
 
     "header.language": "Язык",
     "header.languageSystem": "Системный",
@@ -447,6 +464,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.category": "Category",
     "common.sku": "SKU",
     "common.contactManager": "Contact manager",
+    "common.contactManagerWhatsappMessage":
+      "Hello! I am interested in {product}. I would like to contact a manager right away.",
     "common.backToCatalog": "Back to catalog",
     "common.recommended": "Recommended",
     "common.youMayAlsoLike": "You may also like",
@@ -473,6 +492,21 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.errorHint": "The request did not complete. Please try again.",
     "common.retry": "Retry",
     "common.refreshing": "Refreshing...",
+    "common.installment": "Installment",
+    "common.installmentFrom": "from {price}/mo",
+    "common.installmentFirstPayment": "Down payment {price}",
+    "common.installmentTerm": "up to {months} mo",
+    "common.installmentCardText":
+      "Take the product now and pay in parts. Flexible term up to {months} months.",
+    "common.installmentDetailText":
+      "You can apply right away in WhatsApp without a large upfront payment. Our manager will help choose a comfortable payment plan.",
+    "common.installmentQuickApproval":
+      "Message us and we will quickly explain the available installment options.",
+    "common.installmentCta": "Apply for installment",
+    "common.installmentWhatsappMessage":
+      "Hello! I would like to buy {product} in installments. Price: {price}. Estimated payment is {monthly} per month for {months} months. Please share the conditions.",
+    "common.installmentManagerNote":
+      "Installment options can be confirmed and arranged with the manager during order confirmation.",
 
     "header.language": "Language",
     "header.languageSystem": "System",
@@ -836,6 +870,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.category": "Категория",
     "common.sku": "SKU",
     "common.contactManager": "Менеджер менен байланышуу",
+    "common.contactManagerWhatsappMessage":
+      "Салам! Мени {product} товары кызыктырат. Менеджер менен дароо байланышкым келет.",
     "common.backToCatalog": "Каталогго кайтуу",
     "common.recommended": "Сунушталат",
     "common.youMayAlsoLike": "Сизге дагы жагышы мүмкүн",
@@ -862,6 +898,21 @@ export const messages: Record<Locale, Record<string, string>> = {
     "common.errorHint": "Сурам аягына чыккан жок. Кайра аракет кылыңыз.",
     "common.retry": "Кайра аракет кылуу",
     "common.refreshing": "Жаңыланып жатат...",
+    "common.installment": "Бөлүп төлөө",
+    "common.installmentFrom": "{price}/айдан",
+    "common.installmentFirstPayment": "Алгачкы төлөм {price}",
+    "common.installmentTerm": "{months} айга чейин",
+    "common.installmentCardText":
+      "Товарды азыр алыңыз да, бөлүп төлөңүз. Ыңгайлуу мөөнөт {months} айга чейин.",
+    "common.installmentDetailText":
+      "WhatsApp аркылуу дароо бөлүп төлөөгө болот, чоң баштапкы төлөм талап кылынбайт. Менеджер сизге ыңгайлуу графикти тандап берет.",
+    "common.installmentQuickApproval":
+      "Бизге жазыңыз, бөлүп төлөөнүн жеткиликтүү шарттарын бат айтып беребиз.",
+    "common.installmentCta": "Бөлүп төлөөгө өтүнмө берүү",
+    "common.installmentWhatsappMessage":
+      "Салам! {product} товарын бөлүп төлөө менен алгым келет. Баасы: {price}. Алдын ала эсеп боюнча айына {monthly}, мөөнөтү {months} ай болуп жатат. Шарттарын айтып бериңизчи.",
+    "common.installmentManagerNote":
+      "Бөлүп төлөө шарттарын менеджер заказды ырастоодо тактап, ошол жерде жол-жобосун бүтүрөт.",
 
     "header.language": "Тил",
     "header.languageSystem": "Системалык",

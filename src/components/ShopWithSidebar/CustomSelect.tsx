@@ -33,7 +33,9 @@ const CustomSelect = ({ options }) => {
 
   return (
     <div
-      className="custom-select custom-select-2 flex-shrink-0 relative"
+      className={`custom-select custom-select-2 relative flex-shrink-0 ${
+        isOpen ? "z-[10020]" : "z-0"
+      }`}
       ref={selectRef}
     >
       <div

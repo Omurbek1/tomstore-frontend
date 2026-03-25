@@ -43,7 +43,10 @@ export const getPhoneHref = (value?: string) => {
   return normalized ? `tel:${normalized}` : "#";
 };
 
-export const getWhatsAppHref = (value?: string) => {
+export const getWhatsAppHref = (value?: string, message?: string) => {
   const normalized = String(value || "").replace(/\D/g, "");
-  return normalized ? `https://wa.me/${normalized}` : "#";
+  const query = message?.trim()
+    ? `?text=${encodeURIComponent(message.trim())}`
+    : "";
+  return normalized ? `https://wa.me/${normalized}${query}` : "#";
 };

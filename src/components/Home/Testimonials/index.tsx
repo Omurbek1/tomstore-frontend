@@ -1,8 +1,7 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useCallback, useRef } from "react";
-import testimonialsData from "./testimonialsData";
-import Image from "next/image";
+import { getTestimonialsData } from "./testimonialsData";
 import { useI18n } from "@/i18n/provider";
 
 // Import Swiper styles
@@ -11,8 +10,9 @@ import "swiper/css";
 import SingleItem from "./SingleItem";
 
 const Testimonials = () => {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const sliderRef = useRef(null);
+  const testimonialsData = getTestimonialsData(locale);
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;

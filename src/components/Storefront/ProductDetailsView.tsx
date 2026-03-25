@@ -6,8 +6,12 @@ import ProductItem from "@/components/Common/ProductItem";
 import ProductLabelBadges from "@/components/Common/ProductLabelBadges";
 import QueryStatusCard from "@/components/Common/QueryStatusCard";
 import { useI18n } from "@/i18n/provider";
-import { useStorefrontProductQuery } from "@/storefront/hooks";
-import { mapStorefrontProductsToProducts } from "@/storefront/mappers";
+import { useStorefrontConfigQuery, useStorefrontProductQuery } from "@/storefront/hooks";
+import {
+  getStorefrontProductBrand,
+  mapStorefrontProductsToProducts,
+} from "@/storefront/mappers";
+import { getStorefrontWhatsappPhone, getWhatsAppHref } from "@/storefront/contact";
 import {
   getAvailabilityMessageKey,
 } from "@/i18n/utils";
@@ -20,6 +24,7 @@ type ProductDetailsViewProps = {
 
 export default function ProductDetailsView({ slug }: ProductDetailsViewProps) {
   const { t, formatPrice } = useI18n();
+  const { data: storefrontConfig } = useStorefrontConfigQuery();
   const { data: product, isPending, isError, refetch } =
     useStorefrontProductQuery(slug);
 
@@ -71,6 +76,13 @@ export default function ProductDetailsView({ slug }: ProductDetailsViewProps) {
   const relatedProducts = mapStorefrontProductsToProducts(product.relatedProducts);
   const recommendedProducts = mapStorefrontProductsToProducts(
     product.recommendedProducts,
+  );
+  const productBrand = getStorefrontProductBrand(product);
+  const whatsappHref = getWhatsAppHref(
+    getStorefrontWhatsappPhone(storefrontConfig),
+    t("common.contactManagerWhatsappMessage", {
+      product: product.name,
+    }),
   );
 
   return (
@@ -132,11 +144,22 @@ export default function ProductDetailsView({ slug }: ProductDetailsViewProps) {
                 ) : null}
               </div>
 
+              <div className="mb-7.5 rounded-2xl border border-blue/10 bg-blue/5 px-4 py-3">
+                <p className="text-sm font-medium text-dark">
+                  {t("common.installment")}
+                </p>
+                <p className="mt-1 text-sm leading-6 text-dark-4">
+                  {t("common.installmentManagerNote")}
+                </p>
+              </div>
+
               <div className="grid gap-3 rounded-lg bg-gray-1 p-5 mb-7.5">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-dark-4">{t("common.brand")}</span>
-                  <span className="text-dark font-medium">{product.brand}</span>
-                </div>
+                {productBrand ? (
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="text-dark-4">{t("common.brand")}</span>
+                    <span className="text-dark font-medium">{productBrand}</span>
+                  </div>
+                ) : null}
                 <div className="flex items-center justify-between gap-4">
                   <span className="text-dark-4">{t("common.category")}</span>
                   <span className="text-dark font-medium">{product.category}</span>
@@ -156,12 +179,14 @@ export default function ProductDetailsView({ slug }: ProductDetailsViewProps) {
                 >
                   {t("common.backToCatalog")}
                 </Link>
-                <Link
-                  href="/contact"
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noreferrer"
                   className="inline-flex font-medium text-dark bg-gray-1 py-3 px-7 rounded-md ease-out duration-200 hover:bg-dark hover:text-white"
                 >
                   {t("common.contactManager")}
-                </Link>
+                </a>
               </div>
 
               <div className="rounded-lg bg-white shadow-1 p-5 sm:p-7.5">
