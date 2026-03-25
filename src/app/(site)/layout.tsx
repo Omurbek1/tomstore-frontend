@@ -45,6 +45,7 @@ import LazyScrollToTop from "@/components/Common/LazyScrollToTop";
 import LazyQuickViewModal from "@/components/Common/LazyQuickViewModal";
 import LazyCartSidebarModal from "@/components/Common/LazyCartSidebarModal";
 import LazyPreviewSliderModal from "@/components/Common/LazyPreviewSliderModal";
+import { Analytics } from '@vercel/analytics/next';
 
 const fetchStorefrontConfig = async () => {
   const queryClient = makeQueryClient();
@@ -234,6 +235,7 @@ export default async function RootLayout({
             </StorefrontContactProvider>
           </I18nProvider>
         </TanStackQueryProvider>
+        <Analytics />
       </body>
     </html>
   );
