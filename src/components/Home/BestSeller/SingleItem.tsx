@@ -105,7 +105,11 @@ const SingleItem = ({ item }: { item: Product }) => {
               <p className="text-xs text-white/55">{t("common.reviewsLabel", { count: item.reviews })}</p>
             </div>
           )}
-          <h3 className="mb-2 line-clamp-2 text-sm font-semibold leading-snug text-white transition-colors duration-200 hover:text-white/80">
+          <h3 className={`mb-2 line-clamp-2 font-semibold leading-snug text-white transition-colors duration-200 hover:text-white/80 ${
+            item.title.length > 70 ? "text-[11px]" :
+            item.title.length > 45 ? "text-xs" :
+            "text-sm"
+          }`}>
             <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>
           </h3>
           <div className="flex items-center gap-2">

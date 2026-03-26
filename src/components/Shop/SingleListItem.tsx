@@ -206,7 +206,11 @@ const SingleListItemComponent = ({ item }: { item: Product }) => {
           <div className="flex flex-col gap-2.5">
             <div className="flex min-h-[80px] flex-col gap-2.5 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0 flex-1">
-                <h3 className="overflow-hidden text-xl font-semibold leading-8 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                <h3 className={`overflow-hidden font-semibold text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
+                  item.title.length > 70 ? "text-sm leading-6" :
+                  item.title.length > 45 ? "text-base leading-7" :
+                  "text-xl leading-8"
+                }`}>
                   <Link
                     href={`/shop-details/${item.slug}`}
                     onClick={(event) => {

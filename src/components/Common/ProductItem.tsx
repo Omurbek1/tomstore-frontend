@@ -236,7 +236,11 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
           </div>
 
           <div className="min-h-[15px]">
-            <h3 className="overflow-hidden text-[14px] font-semibold leading-5 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] sm:text-[17px] sm:leading-6 xl:text-[16px] xl:leading-6">
+            <h3 className={`overflow-hidden font-semibold leading-5 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
+              item.title.length > 70 ? "text-[12px] sm:text-[13px] xl:text-[13px]" :
+              item.title.length > 45 ? "text-[13px] sm:text-[15px] xl:text-[14px]" :
+              "text-[14px] sm:text-[17px] xl:text-[16px]"
+            }`}>
               <Link
                 href={`/shop-details/${item.slug}`}
                 onClick={(event) => {
