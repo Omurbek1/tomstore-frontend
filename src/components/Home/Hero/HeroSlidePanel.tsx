@@ -15,7 +15,7 @@ export default function HeroSlidePanel({
 }: HeroSlidePanelProps) {
   return (
     <div
-      className={`relative grid min-h-[430px] items-center gap-8 overflow-hidden px-5 pb-12 pt-8 sm:px-8 sm:pb-14 sm:pt-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(280px,360px)] lg:px-12 xl:min-h-[560px] ${
+      className={`relative grid min-h-[400px] items-center gap-8 overflow-hidden px-5 pb-12 pt-8 sm:px-8 sm:pb-14 sm:pt-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(280px,360px)] lg:px-12 xl:min-h-[560px] ${
         hasPreviewRail ? "xl:pr-[268px]" : "xl:pr-14"
       } xl:pl-14`}
     >
@@ -24,14 +24,7 @@ export default function HeroSlidePanel({
       <div className="pointer-events-none absolute bottom-0 right-[12%] h-44 w-44 rounded-full bg-blue/18 blur-3xl sm:h-60 sm:w-60" />
 
       <div className="relative z-10 max-w-[600px]">
-        <div className="mb-5 flex flex-wrap items-center gap-2 sm:mb-7">
-          <span className="inline-flex rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/72">
-            {slide.eyebrow || "TOMSTORE"}
-          </span>
-          <span className="inline-flex rounded-full border border-sky-300/18 bg-sky-400/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-100">
-            Delivery Across Kyrgyzstan
-          </span>
-        </div>
+      
 
         <h1 className="max-w-[12ch] text-4xl font-semibold leading-[1.02] text-white sm:text-5xl xl:text-[64px]">
           {slide.title}
@@ -56,39 +49,11 @@ export default function HeroSlidePanel({
           </Link>
         </div>
 
-        <div className="mt-8 grid max-w-[540px] grid-cols-2 gap-3 sm:grid-cols-3">
-          <div className="rounded-[20px] border border-white/10 bg-white/6 px-4 py-3 backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
-              Delivery
-            </p>
-            <p className="mt-1 text-sm font-semibold text-white">
-              All Kyrgyzstan
-            </p>
-          </div>
-          <div className="rounded-[20px] border border-white/10 bg-white/6 px-4 py-3 backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
-              Support
-            </p>
-            <p className="mt-1 text-sm font-semibold text-white">
-              WhatsApp Order
-            </p>
-          </div>
-          <div className="rounded-[20px] border border-white/10 bg-white/6 px-4 py-3 backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
-              Store
-            </p>
-            <p className="mt-1 text-sm font-semibold text-white">
-              Kalyk Akiev 66
-            </p>
-          </div>
-        </div>
+       
       </div>
 
       <div className="relative z-10 flex justify-center lg:justify-end">
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-[22px] border border-white/12 bg-slate-950/40 px-4 py-3 shadow-[0_28px_60px_-42px_rgba(8,17,31,0.95)] backdrop-blur-xl sm:bottom-8 sm:left-0 sm:translate-x-0">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">
-            Order Line
-          </p>
           <p className="mt-1 text-sm font-semibold text-white">
             +996 508 724 365
           </p>
