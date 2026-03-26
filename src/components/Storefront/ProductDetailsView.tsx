@@ -53,6 +53,11 @@ type ProductDetailsViewProps = {
   whatsappPhone?: string;
 };
 
+type ShareMenuPlacement = {
+  horizontal: "left" | "right";
+  vertical: "bottom" | "top";
+};
+
 export default function ProductDetailsView({
   categoryHref,
   brandHref,
@@ -64,6 +69,12 @@ export default function ProductDetailsView({
   const [isCopied, setIsCopied] = useState(false);
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const shareMenuRef = useRef<HTMLDivElement>(null);
+  const shareMenuDropdownRef = useRef<HTMLDivElement>(null);
+  const [shareMenuPlacement, setShareMenuPlacement] =
+    useState<ShareMenuPlacement>({
+      horizontal: "left",
+      vertical: "bottom",
+    });
   const relatedProducts = useMemo(
     () => mapStorefrontProductsToProducts(product.relatedProducts),
     [product.relatedProducts],
@@ -101,6 +112,38 @@ export default function ProductDetailsView({
       return;
     }
 
+    const updateShareMenuPlacement = () => {
+      if (
+        typeof window === "undefined" ||
+        !shareMenuRef.current ||
+        !shareMenuDropdownRef.current
+      ) {
+        return;
+      }
+
+      const containerRect = shareMenuRef.current.getBoundingClientRect();
+      const dropdownRect = shareMenuDropdownRef.current.getBoundingClientRect();
+      const viewportPadding = 12;
+
+      const horizontal: ShareMenuPlacement["horizontal"] =
+        dropdownRect.right > window.innerWidth - viewportPadding &&
+        containerRect.right >= dropdownRect.width
+          ? "right"
+          : "left";
+
+      const vertical: ShareMenuPlacement["vertical"] =
+        dropdownRect.bottom > window.innerHeight - viewportPadding &&
+        containerRect.top >= dropdownRect.height + 8
+          ? "top"
+          : "bottom";
+
+      setShareMenuPlacement((current) =>
+        current.horizontal === horizontal && current.vertical === vertical
+          ? current
+          : { horizontal, vertical },
+      );
+    };
+
     const handlePointerDown = (event: MouseEvent) => {
       if (!shareMenuRef.current?.contains(event.target as Node)) {
         setIsShareMenuOpen(false);
@@ -113,12 +156,17 @@ export default function ProductDetailsView({
       }
     };
 
+    const frameId = window.requestAnimationFrame(updateShareMenuPlacement);
+
     document.addEventListener("mousedown", handlePointerDown);
     document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("resize", updateShareMenuPlacement);
 
     return () => {
+      window.cancelAnimationFrame(frameId);
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("resize", updateShareMenuPlacement);
     };
   }, [isShareMenuOpen]);
 
@@ -295,31 +343,71 @@ export default function ProductDetailsView({
                     type="button"
                     aria-expanded={isShareMenuOpen}
                     aria-haspopup="menu"
+                    aria-label={isCopied ? t("product.linkCopied") : t("product.share")}
+                    title={isCopied ? t("product.linkCopied") : t("product.share")}
                     onClick={() => {
-                      setIsShareMenuOpen((current) => !current);
+                      setIsShareMenuOpen((current) => {
+                        if (!current) {
+                          setShareMenuPlacement({
+                            horizontal: "left",
+                            vertical: "bottom",
+                          });
+                        }
+
+                        return !current;
+                      });
                     }}
-                    className="inline-flex min-h-[48px] items-center gap-2 rounded-md border border-gray-3 bg-white px-5 py-3 font-medium text-dark transition-all duration-200 hover:border-blue/20 hover:bg-blue/5 hover:text-blue"
+                    className="inline-flex h-12 w-12 items-center justify-center rounded-md border border-gray-3 bg-white text-dark transition-all duration-200 hover:border-blue/20 hover:bg-blue/5 hover:text-blue"
                   >
-                    {isCopied ? t("product.linkCopied") : t("product.share")}
                     <svg
-                      className={`h-4 w-4 transition-transform duration-200 ${isShareMenuOpen ? "rotate-180" : ""}`}
-                      viewBox="0 0 16 16"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                       aria-hidden="true"
                     >
                       <path
-                        d="M4 6L8 10L12 6"
+                        d="M13.3333 6.66667C14.714 6.66667 15.8333 5.54738 15.8333 4.16667C15.8333 2.78596 14.714 1.66667 13.3333 1.66667C11.9526 1.66667 10.8333 2.78596 10.8333 4.16667C10.8333 4.49433 10.8963 4.80727 11.0111 5.09398L8.36227 6.63916C7.91238 6.08237 7.22367 5.72682 6.45192 5.72682C5.09568 5.72682 3.99609 6.82642 3.99609 8.18266C3.99609 9.53889 5.09568 10.6385 6.45192 10.6385C7.22377 10.6385 7.91255 10.2829 8.36244 9.72603L11.011 11.2711C10.8962 11.5579 10.8333 11.8709 10.8333 12.1987C10.8333 13.5794 11.9526 14.6987 13.3333 14.6987C14.714 14.6987 15.8333 13.5794 15.8333 12.1987C15.8333 10.818 14.714 9.69873 13.3333 9.69873C12.5615 9.69873 11.8728 10.0543 11.4229 10.6111L8.77426 9.06603C8.88899 8.77932 8.95192 8.46638 8.95192 8.13872C8.95192 7.81106 8.88899 7.49812 8.77426 7.21141L11.4228 5.66637C11.8727 6.22338 12.5614 6.57917 13.3333 6.57917V6.66667Z"
                         stroke="currentColor"
                         strokeWidth="1.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       />
                     </svg>
+                    {isCopied ? (
+                      <span className="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-green text-white">
+                        <svg
+                          className="h-2.5 w-2.5"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M2.5 6.25L4.75 8.5L9.5 3.75"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    ) : null}
                   </button>
 
                   {isShareMenuOpen ? (
-                    <div className="absolute left-0 top-full z-20 mt-2 min-w-[220px] overflow-hidden rounded-2xl border border-gray-3 bg-white p-2 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.28)]">
+                    <div
+                      ref={shareMenuDropdownRef}
+                      className={`absolute z-20 min-w-[220px] overflow-hidden rounded-2xl border border-gray-3 bg-white p-2 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.28)] ${
+                        shareMenuPlacement.horizontal === "left"
+                          ? "left-0"
+                          : "right-0"
+                      } ${
+                        shareMenuPlacement.vertical === "bottom"
+                          ? "top-full mt-2"
+                          : "bottom-full mb-2"
+                      }`}
+                    >
                       <button
                         type="button"
                         onClick={() => {
