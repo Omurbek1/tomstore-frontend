@@ -201,6 +201,29 @@ export default function ProductDetailsView({
   const [shareUrl, setShareUrl] = useState("");
   const [isCopied, setIsCopied] = useState(false);
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
+  const gallery = product.gallery.length > 0 ? product.gallery : ["/images/products/product-1-sm-1.png"];
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIdx, setLightboxIdx] = useState(0);
+
+  const openLightbox = (idx: number) => {
+    setLightboxIdx(idx);
+    setLightboxOpen(true);
+  };
+  const closeLightbox = () => setLightboxOpen(false);
+  const lightboxPrev = () => setLightboxIdx((i) => (i - 1 + gallery.length) % gallery.length);
+  const lightboxNext = () => setLightboxIdx((i) => (i + 1) % gallery.length);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") lightboxPrev();
+      if (e.key === "ArrowRight") lightboxNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxOpen, gallery.length]);
   const shareMenuRef = useRef<HTMLDivElement>(null);
   const shareMenuDropdownRef = useRef<HTMLDivElement>(null);
   const [shareMenuPlacement, setShareMenuPlacement] =
@@ -354,37 +377,121 @@ export default function ProductDetailsView({
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,570px)_minmax(0,1fr)]">
             <div>
-              <div className="rounded-lg shadow-1 bg-gray-2 p-4 sm:p-7.5 flex items-center justify-center">
+              {/* Main image — click to open lightbox */}
+              <div
+                className="rounded-lg shadow-1 bg-gray-2 p-4 sm:p-7.5 flex items-center justify-center cursor-zoom-in relative group"
+                onClick={() => openLightbox(activeIdx)}
+              >
                 <Image
-                  src={product.gallery[0] || "/images/products/product-1-sm-1.png"}
+                  src={gallery[activeIdx]}
                   alt={product.name}
                   width={420}
                   height={420}
                   priority
                   sizes="(min-width: 1280px) 420px, (min-width: 1024px) 36vw, 92vw"
-                  className="h-auto w-full max-w-[420px] object-contain"
+                  className="h-auto w-full max-w-[420px] object-contain transition-transform duration-200 group-hover:scale-105"
                 />
+                <span className="absolute bottom-3 right-3 bg-black/40 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  🔍 Увеличить
+                </span>
               </div>
 
-              {product.gallery.length > 1 ? (
-                <div className="grid grid-cols-4 gap-4 mt-6">
-                  {product.gallery.slice(0, 4).map((image, index) => (
-                    <div
+              {/* Thumbnails */}
+              {gallery.length > 1 && (
+                <div className="grid grid-cols-4 gap-3 mt-4">
+                  {gallery.slice(0, 8).map((image, index) => (
+                    <button
                       key={`${image}-${index}`}
-                      className="rounded-lg bg-gray-2 shadow-1 p-3 flex items-center justify-center"
+                      type="button"
+                      onClick={() => setActiveIdx(index)}
+                      className={`rounded-lg bg-gray-2 shadow-1 p-2 flex items-center justify-center transition-all ${
+                        activeIdx === index
+                          ? "ring-2 ring-blue ring-offset-1"
+                          : "opacity-60 hover:opacity-100"
+                      }`}
                     >
                       <Image
                         src={image}
-                        alt={product.name}
-                        width={100}
-                        height={100}
-                        sizes="100px"
+                        alt={`${product.name} ${index + 1}`}
+                        width={80}
+                        height={80}
+                        sizes="80px"
+                        className="object-contain h-16 w-16"
                       />
-                    </div>
+                    </button>
                   ))}
                 </div>
-              ) : null}
+              )}
             </div>
+
+            {/* Lightbox */}
+            {lightboxOpen && (
+              <div
+                className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center"
+                onClick={closeLightbox}
+              >
+                {/* Close button */}
+                <button
+                  type="button"
+                  onClick={closeLightbox}
+                  className="absolute top-4 right-4 text-white bg-white/20 hover:bg-white/40 rounded-full w-10 h-10 flex items-center justify-center text-2xl leading-none transition-colors"
+                >
+                  ×
+                </button>
+
+                {/* Prev */}
+                {gallery.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); lightboxPrev(); }}
+                    className="absolute left-4 text-white bg-white/20 hover:bg-white/40 rounded-full w-10 h-10 flex items-center justify-center text-xl transition-colors"
+                  >
+                    ‹
+                  </button>
+                )}
+
+                {/* Image */}
+                <div
+                  className="max-w-[90vw] max-h-[90vh] flex items-center justify-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Image
+                    src={gallery[lightboxIdx]}
+                    alt={product.name}
+                    width={900}
+                    height={900}
+                    sizes="90vw"
+                    className="max-w-[90vw] max-h-[90vh] object-contain"
+                    priority
+                  />
+                </div>
+
+                {/* Next */}
+                {gallery.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); lightboxNext(); }}
+                    className="absolute right-4 text-white bg-white/20 hover:bg-white/40 rounded-full w-10 h-10 flex items-center justify-center text-xl transition-colors"
+                  >
+                    ›
+                  </button>
+                )}
+
+                {/* Dots */}
+                {gallery.length > 1 && (
+                  <div className="absolute bottom-4 flex gap-2">
+                    {gallery.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setLightboxIdx(i); }}
+                        className={`w-2 h-2 rounded-full transition-colors ${i === lightboxIdx ? "bg-white" : "bg-white/40"}`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             <div>
               <div className="flex flex-wrap items-center gap-3 mb-4">
