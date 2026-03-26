@@ -58,6 +58,139 @@ type ShareMenuPlacement = {
   vertical: "bottom" | "top";
 };
 
+type StructuredProductAttributes = {
+  highlights: string[];
+  specs: Array<{
+    name: string;
+    value: string;
+  }>;
+  useCases: string[];
+};
+
+const GENERIC_ATTRIBUTE_NAMES = new Set([
+  "характеристика",
+  "характеристики",
+  "feature",
+  "features",
+  "specification",
+  "specifications",
+  "мүнөздөмө",
+  "мүнөздөмөлөр",
+]);
+
+const BULLET_MARKER_PATTERN = /^[\s]*[•●▪■-]\s*/;
+const HIGHLIGHT_MARKER_PATTERN = /^[\s]*(✓|✔|✅)\s*/;
+const LEADING_MARKER_PATTERN = /^[\s•●▪■✓✔✅-]+/;
+
+const normalizeAttributeText = (value?: string | null) =>
+  String(value || "").replace(/\s+/g, " ").trim();
+
+const normalizeComparableText = (value: string) =>
+  normalizeAttributeText(value).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+
+const isGenericAttributeName = (name: string) => {
+  const normalized = normalizeAttributeText(name).toLowerCase();
+  return (
+    GENERIC_ATTRIBUTE_NAMES.has(normalized) ||
+    normalized.startsWith("характерист")
+  );
+};
+
+const stripAttributeMarker = (value: string) =>
+  normalizeAttributeText(value.replace(LEADING_MARKER_PATTERN, ""));
+
+const toSentenceCaseStart = (value: string) => {
+  const normalized = normalizeAttributeText(value);
+  const [first = "", second = ""] = Array.from(normalized);
+
+  if (
+    first &&
+    first === first.toUpperCase() &&
+    second &&
+    second === second.toLowerCase()
+  ) {
+    return `${first.toLowerCase()}${normalized.slice(first.length)}`;
+  }
+
+  return normalized;
+};
+
+const structureProductAttributes = (
+  product: StorefrontProductDetails,
+): StructuredProductAttributes => {
+  const comparableProductName = normalizeComparableText(product.name);
+  const seenSpecs = new Set<string>();
+  const seenUseCases = new Set<string>();
+  const seenHighlights = new Set<string>();
+
+  return product.attributes.reduce<StructuredProductAttributes>(
+    (result, attribute) => {
+      const name = normalizeAttributeText(attribute.name);
+      const rawValue = normalizeAttributeText(attribute.value);
+      const value = stripAttributeMarker(rawValue);
+
+      if (!name || !value) {
+        return result;
+      }
+
+      const comparableValue = normalizeComparableText(value);
+
+      if (
+        comparableValue &&
+        comparableProductName &&
+        (comparableValue === comparableProductName ||
+          comparableValue.includes(comparableProductName))
+      ) {
+        return result;
+      }
+
+      if (!isGenericAttributeName(name)) {
+        const specKey = `${name.toLowerCase()}::${comparableValue}`;
+
+        if (!seenSpecs.has(specKey)) {
+          seenSpecs.add(specKey);
+          result.specs.push({ name, value });
+        }
+
+        return result;
+      }
+
+      if (HIGHLIGHT_MARKER_PATTERN.test(rawValue)) {
+        if (!seenHighlights.has(comparableValue)) {
+          seenHighlights.add(comparableValue);
+          result.highlights.push(value);
+        }
+
+        return result;
+      }
+
+      if (
+        BULLET_MARKER_PATTERN.test(rawValue) ||
+        value.length <= 56
+      ) {
+        if (!seenUseCases.has(comparableValue)) {
+          seenUseCases.add(comparableValue);
+          result.useCases.push(value);
+        }
+
+        return result;
+      }
+
+      if (!seenHighlights.has(comparableValue)) {
+        seenHighlights.add(comparableValue);
+        result.highlights.push(value);
+      }
+
+      return result;
+    },
+    {
+      highlights: [],
+      specs: [],
+      useCases: [],
+    },
+  );
+};
+
 export default function ProductDetailsView({
   categoryHref,
   brandHref,
@@ -97,6 +230,10 @@ export default function ProductDetailsView({
   const shareText = useMemo(
     () => `${product.name}. ${t("common.price")}: ${formatPrice(product.price)}`,
     [formatPrice, product.name, product.price, t],
+  );
+  const structuredAttributes = useMemo(
+    () => structureProductAttributes(product),
+    [product],
   );
 
   useEffect(() => {
@@ -471,24 +608,88 @@ export default function ProductDetailsView({
                   {product.fullDescription}
                 </p>
 
-                {product.attributes.length > 0 ? (
+                {structuredAttributes.specs.length > 0 ||
+                structuredAttributes.useCases.length > 0 ||
+                structuredAttributes.highlights.length > 0 ? (
                   <>
                     <h3 className="font-semibold text-lg text-dark mt-8 mb-4">
                       {t("common.specifications")}
                     </h3>
-                    <div className="grid gap-3">
-                      {product.attributes.map((attribute) => (
-                        <div
-                          key={`${attribute.name}-${attribute.value}`}
-                          className="flex items-start justify-between gap-4 border-b border-gray-3 pb-3"
-                        >
-                          <span className="text-dark-4">{attribute.name}</span>
-                          <span className="text-dark font-medium text-right">
-                            {attribute.value}
-                          </span>
+
+                    {structuredAttributes.specs.length > 0 ? (
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {structuredAttributes.specs.map((attribute) => (
+                          <div
+                            key={`${attribute.name}-${attribute.value}`}
+                            className="rounded-[22px] border border-gray-3 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-4 shadow-[0_18px_34px_-30px_rgba(15,23,42,0.18)]"
+                          >
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
+                              {attribute.name}
+                            </p>
+                            <p className="mt-2 text-sm font-medium leading-6 text-dark">
+                              {attribute.value}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {structuredAttributes.useCases.length > 0 ? (
+                      <div className="mt-6">
+                        <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-dark-4">
+                          {t("product.bestFor")}
+                        </h4>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {structuredAttributes.useCases.map((item) => (
+                            <span
+                              key={item}
+                              className="inline-flex rounded-full border border-blue/10 bg-blue/5 px-3 py-2 text-sm font-medium text-blue-dark"
+                            >
+                              {t("product.useCaseLabel", {
+                                item: toSentenceCaseStart(item),
+                              })}
+                            </span>
+                          ))}
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ) : null}
+
+                    {structuredAttributes.highlights.length > 0 ? (
+                      <div className="mt-6">
+                        <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-dark-4">
+                          {t("product.highlights")}
+                        </h4>
+                        <div className="mt-3 grid gap-2.5">
+                          {structuredAttributes.highlights.map((item) => (
+                            <div
+                              key={item}
+                              className="flex items-start gap-3 rounded-[20px] border border-green/10 bg-green/10 px-4 py-3"
+                            >
+                              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-green-dark shadow-[0_12px_24px_-18px_rgba(15,23,42,0.35)]">
+                                <svg
+                                  className="h-3.5 w-3.5"
+                                  viewBox="0 0 12 12"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    d="M2.5 6.25L4.75 8.5L9.5 3.75"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </span>
+                              <p className="text-sm leading-6 text-dark">
+                                {item}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
                   </>
                 ) : null}
               </div>

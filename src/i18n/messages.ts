@@ -303,6 +303,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "product.share": "Поделиться",
     "product.copyLink": "Копировать ссылку",
     "product.linkCopied": "Ссылка скопирована",
+    "product.bestFor": "Подходит для",
+    "product.highlights": "Преимущества",
+    "product.useCaseLabel": "Для {item}",
 
     "cart.title": "Корзина",
     "cart.yourCart": "Ваша корзина",
@@ -749,6 +752,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "product.share": "Share",
     "product.copyLink": "Copy link",
     "product.linkCopied": "Link copied",
+    "product.bestFor": "Best for",
+    "product.highlights": "Highlights",
+    "product.useCaseLabel": "For {item}",
 
     "cart.title": "Cart",
     "cart.yourCart": "Your Cart",
@@ -1196,6 +1202,9 @@ export const messages: Record<Locale, Record<string, string>> = {
     "product.share": "Бөлүшүү",
     "product.copyLink": "Шилтемени көчүрүү",
     "product.linkCopied": "Шилтеме көчүрүлдү",
+    "product.bestFor": "Ылайыктуу",
+    "product.highlights": "Артыкчылыктар",
+    "product.useCaseLabel": "{item} үчүн",
 
     "cart.title": "Себет",
     "cart.yourCart": "Сиздин себет",
