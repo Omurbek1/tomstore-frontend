@@ -297,6 +297,12 @@ export const messages: Record<Locale, Record<string, string>> = {
     "product.notFoundDescription": "Такой товар не найден.",
     "product.loading": "Загружаем товар",
     "product.error": "Не удалось загрузить товар",
+    "product.shareTitle": "Поделиться товаром",
+    "product.shareDescription":
+      "Отправьте ссылку на товар клиенту, другу или в чат.",
+    "product.share": "Поделиться",
+    "product.copyLink": "Копировать ссылку",
+    "product.linkCopied": "Ссылка скопирована",
 
     "cart.title": "Корзина",
     "cart.yourCart": "Ваша корзина",
@@ -737,6 +743,12 @@ export const messages: Record<Locale, Record<string, string>> = {
     "product.notFoundDescription": "This product could not be found.",
     "product.loading": "Loading product",
     "product.error": "Could not load product",
+    "product.shareTitle": "Share this product",
+    "product.shareDescription":
+      "Send the product link to a customer, friend, or chat.",
+    "product.share": "Share",
+    "product.copyLink": "Copy link",
+    "product.linkCopied": "Link copied",
 
     "cart.title": "Cart",
     "cart.yourCart": "Your Cart",
@@ -1178,6 +1190,12 @@ export const messages: Record<Locale, Record<string, string>> = {
     "product.notFoundDescription": "Бул товар табылган жок.",
     "product.loading": "Товар жүктөлүүдө",
     "product.error": "Товарды жүктөө мүмкүн болгон жок",
+    "product.shareTitle": "Товарды бөлүшүү",
+    "product.shareDescription":
+      "Товар шилтемесин кардарга, доско же чатка жөнөтүңүз.",
+    "product.share": "Бөлүшүү",
+    "product.copyLink": "Шилтемени көчүрүү",
+    "product.linkCopied": "Шилтеме көчүрүлдү",
 
     "cart.title": "Себет",
     "cart.yourCart": "Сиздин себет",

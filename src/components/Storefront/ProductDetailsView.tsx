@@ -13,7 +13,13 @@ import type { StorefrontProductDetails } from "@/storefront/types";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import {
+  TelegramIcon,
+  TelegramShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from "react-share";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const ProductDetailsSectionPlaceholder = ({
   minHeightClassName,
@@ -54,6 +60,10 @@ export default function ProductDetailsView({
   whatsappPhone,
 }: ProductDetailsViewProps) {
   const { t, formatPrice } = useI18n();
+  const [shareUrl, setShareUrl] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
+  const shareMenuRef = useRef<HTMLDivElement>(null);
   const relatedProducts = useMemo(
     () => mapStorefrontProductsToProducts(product.relatedProducts),
     [product.relatedProducts],
@@ -73,6 +83,83 @@ export default function ProductDetailsView({
       ),
     [product.name, t, whatsappPhone],
   );
+  const shareText = useMemo(
+    () => `${product.name}. ${t("common.price")}: ${formatPrice(product.price)}`,
+    [formatPrice, product.name, product.price, t],
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    setShareUrl(window.location.href);
+  }, [product.slug]);
+
+  useEffect(() => {
+    if (!isShareMenuOpen || typeof document === "undefined") {
+      return;
+    }
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!shareMenuRef.current?.contains(event.target as Node)) {
+        setIsShareMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsShareMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isShareMenuOpen]);
+
+  const handleCopyLink = async () => {
+    if (!shareUrl || typeof navigator === "undefined") {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setIsCopied(true);
+      setIsShareMenuOpen(false);
+      window.setTimeout(() => {
+        setIsCopied(false);
+      }, 1800);
+    } catch {
+      // Ignore clipboard failures for unsupported browsers.
+    }
+  };
+
+  const handleNativeShare = async () => {
+    if (!shareUrl || typeof navigator === "undefined") {
+      return;
+    }
+
+    if (!navigator.share) {
+      await handleCopyLink();
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: product.name,
+        text: shareText,
+        url: shareUrl,
+      });
+      setIsShareMenuOpen(false);
+    } catch {
+      // Ignore share sheet dismissals.
+    }
+  };
 
   return (
     <main>
@@ -203,6 +290,89 @@ export default function ProductDetailsView({
                 >
                   {t("common.contactManager")}
                 </a>
+                <div className="relative" ref={shareMenuRef}>
+                  <button
+                    type="button"
+                    aria-expanded={isShareMenuOpen}
+                    aria-haspopup="menu"
+                    onClick={() => {
+                      setIsShareMenuOpen((current) => !current);
+                    }}
+                    className="inline-flex min-h-[48px] items-center gap-2 rounded-md border border-gray-3 bg-white px-5 py-3 font-medium text-dark transition-all duration-200 hover:border-blue/20 hover:bg-blue/5 hover:text-blue"
+                  >
+                    {isCopied ? t("product.linkCopied") : t("product.share")}
+                    <svg
+                      className={`h-4 w-4 transition-transform duration-200 ${isShareMenuOpen ? "rotate-180" : ""}`}
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M4 6L8 10L12 6"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+
+                  {isShareMenuOpen ? (
+                    <div className="absolute left-0 top-full z-20 mt-2 min-w-[220px] overflow-hidden rounded-2xl border border-gray-3 bg-white p-2 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.28)]">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void handleNativeShare();
+                        }}
+                        disabled={!shareUrl}
+                        className="flex min-h-[44px] w-full items-center rounded-xl px-3 py-2 text-left text-sm font-medium text-dark transition-colors duration-200 hover:bg-gray-1 hover:text-blue"
+                      >
+                        {t("product.share")}
+                      </button>
+
+                      <WhatsappShareButton
+                        url={shareUrl}
+                        title={shareText}
+                        separator="\n"
+                        resetButtonStyle={false}
+                        beforeOnClick={() => {
+                          setIsShareMenuOpen(false);
+                        }}
+                        disabled={!shareUrl}
+                        className="flex min-h-[44px] w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-dark transition-colors duration-200 hover:bg-green/10 hover:text-green-dark disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <WhatsappIcon round size={22} />
+                        WhatsApp
+                      </WhatsappShareButton>
+
+                      <TelegramShareButton
+                        url={shareUrl}
+                        title={shareText}
+                        resetButtonStyle={false}
+                        beforeOnClick={() => {
+                          setIsShareMenuOpen(false);
+                        }}
+                        disabled={!shareUrl}
+                        className="flex min-h-[44px] w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-dark transition-colors duration-200 hover:bg-blue/10 hover:text-blue-dark disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <TelegramIcon round size={22} />
+                        Telegram
+                      </TelegramShareButton>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void handleCopyLink();
+                        }}
+                        disabled={!shareUrl}
+                        className="flex min-h-[44px] w-full items-center rounded-xl px-3 py-2 text-left text-sm font-medium text-dark transition-colors duration-200 hover:bg-gray-1 hover:text-dark"
+                      >
+                        {t("product.copyLink")}
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
               </div>
 
               <div className="rounded-lg bg-white shadow-1 p-5 sm:p-7.5">
