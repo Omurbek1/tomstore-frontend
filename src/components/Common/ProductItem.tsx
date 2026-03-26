@@ -109,7 +109,7 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
   };
 
   return (
-    <article className="group flex h-full flex-col rounded-[24px] border border-white/80 bg-white/92 p-2.5 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.38)] backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:border-blue/20 hover:shadow-[0_38px_75px_-40px_rgba(60,80,224,0.3)] sm:rounded-[30px] sm:p-3.5">
+    <article className="group flex h-full flex-col rounded-[24px] border border-white/80 bg-white/92 p-2.5 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.38)] backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:border-blue/20 hover:shadow-[0_38px_75px_-40px_rgba(60,80,224,0.3)] sm:rounded-[30px] sm:p-3.5 xl:p-3.5">
       <div className="relative mb-2 overflow-hidden rounded-[22px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)] sm:mb-2.5 sm:rounded-[26px]">
         <div className="absolute left-1/2 top-4 h-18 w-18 -translate-x-1/2 rounded-full bg-blue/15 blur-2xl sm:top-5 sm:h-24 sm:w-24" />
         <div className="absolute -right-4 bottom-0 h-16 w-16 rounded-full bg-blue/10 blur-2xl sm:h-20 sm:w-20" />
@@ -188,14 +188,14 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
           </div>
         </div>
 
-        <div className="flex min-h-[176px] items-center justify-center px-3 pb-3 pt-14 sm:min-h-[244px] sm:px-4 sm:pb-4 sm:pt-20">
+        <div className="flex min-h-[176px] items-center justify-center px-3 pb-3 pt-14 sm:min-h-[244px] sm:px-4 sm:pb-4 sm:pt-20 xl:min-h-[236px] xl:px-4 xl:pb-4 xl:pt-18">
           <Image
             src={imageSrc}
             alt={item.title}
             width={260}
             height={240}
-            sizes="(min-width: 1536px) 220px, (min-width: 1280px) 18vw, (min-width: 1024px) 22vw, (min-width: 640px) 28vw, 46vw"
-            className="relative z-[1] h-auto max-h-[132px] w-auto object-contain drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)] transition-transform duration-300 group-hover:scale-[1.05] sm:max-h-[190px]"
+            sizes="(min-width: 1536px) 220px, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 28vw, 46vw"
+            className="relative z-[1] h-auto max-h-[132px] w-auto object-contain drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)] transition-transform duration-300 group-hover:scale-[1.05] sm:max-h-[190px] xl:max-h-[176px]"
           />
         </div>
       </div>
@@ -237,7 +237,7 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
           </div>
 
           <div className="min-h-[15px]">
-            <h3 className="overflow-hidden text-[14px] font-semibold leading-5 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] sm:text-[17px] sm:leading-6">
+            <h3 className="overflow-hidden text-[14px] font-semibold leading-5 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] sm:text-[17px] sm:leading-6 xl:text-[16px] xl:leading-6">
               <Link
                 href={`/shop-details/${item.slug}`}
                 onClick={(event) => {
@@ -270,7 +270,7 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
           </div>
 
           <div className="mt-auto pt-2.5 sm:pt-3">
-            <div className="grid min-h-[112px] gap-2 rounded-[18px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-2.5 sm:min-h-[122px] sm:gap-2.5 sm:rounded-[22px] sm:p-3">
+            <div className="grid min-h-[112px] gap-2 rounded-[18px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-2.5 sm:min-h-[122px] sm:gap-2.5 sm:rounded-[22px] sm:p-3 xl:min-h-[120px] xl:p-3">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
                   <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
@@ -278,7 +278,7 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
                   </p>
 
                   <div className="flex min-h-[36px] flex-wrap items-end gap-x-2 gap-y-1.5 break-words">
-                    <span className="max-w-full break-words text-[18px] font-semibold leading-tight text-dark sm:text-[23px]">
+                    <span className="max-w-full break-words text-[18px] font-semibold leading-tight text-dark sm:text-[23px] xl:text-[21px]">
                       {formatPrice(item.discountedPrice)}
                     </span>
                     {hasDiscount ? (

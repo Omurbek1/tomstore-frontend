@@ -1,7 +1,6 @@
 "use client";
 
 import { useI18n } from "@/i18n/provider";
-import { getAvailabilityMessageKey } from "@/i18n/utils";
 import {
   buildCatalogHref,
   type CatalogRouteContext,
@@ -23,6 +22,8 @@ type CatalogSidebarFiltersProps = {
     brands: StorefrontBrand[];
     categories: StorefrontCategory[];
   };
+  mode?: "desktop" | "drawer";
+  onNavigate?: () => void;
   query: StorefrontCatalogRouteQuery;
   routeContext: CatalogRouteContext;
 };
@@ -30,6 +31,8 @@ type CatalogSidebarFiltersProps = {
 export default function CatalogSidebarFilters({
   baseQuery,
   filters,
+  mode = "desktop",
+  onNavigate,
   query,
   routeContext,
 }: CatalogSidebarFiltersProps) {
@@ -37,12 +40,14 @@ export default function CatalogSidebarFilters({
   const { t } = useI18n();
   const [searchValue, setSearchValue] = useState(query.q || "");
   const [isPending, startTransition] = useTransition();
+  const isDrawer = mode === "drawer";
 
   useEffect(() => {
     setSearchValue(query.q || "");
   }, [query.q]);
 
   const applySearch = () => {
+    onNavigate?.();
     startTransition(() => {
       router.push(
         buildCatalogHref(
@@ -58,21 +63,40 @@ export default function CatalogSidebarFilters({
   };
 
   return (
-    <div className="flex flex-col gap-6 sticky top-28">
-      <div className="bg-white shadow-1 rounded-lg py-4 px-5">
+    <div
+      className={
+        isDrawer ? "flex flex-col gap-4" : "sticky top-28 flex flex-col gap-4"
+      }
+    >
+      <div className="rounded-[28px] border border-white/80 bg-white/94 px-5 py-5 shadow-[0_20px_55px_-40px_rgba(15,23,42,0.28)] backdrop-blur-sm">
         <div className="flex items-center justify-between gap-4">
-          <p>{t("catalog.filters")}</p>
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
+              {t("catalog.filters")}
+            </p>
+            <p className="mt-1 text-lg font-semibold text-dark">
+              {t("catalog.filters")}
+            </p>
+          </div>
           <Link
             href={buildCatalogHref(baseQuery, routeContext)}
-            className="text-blue text-custom-sm"
+            onClick={() => onNavigate?.()}
+            className="inline-flex rounded-full border border-blue/15 bg-blue/5 px-3.5 py-2 text-[13px] font-medium text-blue transition-colors duration-200 hover:bg-blue hover:text-white"
           >
             {t("common.cleanAll")}
           </Link>
         </div>
       </div>
 
-      <div className="bg-white shadow-1 rounded-lg py-5 px-6">
-        <h3 className="font-medium text-dark mb-4">{t("catalog.search")}</h3>
+      <div className="rounded-[28px] border border-white/80 bg-white/94 px-5 py-5 shadow-[0_20px_55px_-40px_rgba(15,23,42,0.28)] backdrop-blur-sm">
+        <div className="mb-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
+            {t("catalog.search")}
+          </p>
+          <h3 className="mt-1 text-base font-semibold text-dark">
+            {t("catalog.search")}
+          </h3>
+        </div>
         <div className="flex gap-2">
           <input
             value={searchValue}
@@ -85,21 +109,28 @@ export default function CatalogSidebarFilters({
             }}
             type="search"
             placeholder={t("catalog.searchPlaceholder")}
-            className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-4 outline-none"
+            className="w-full rounded-[18px] border border-gray-3 bg-gray-1 px-4 py-3 text-sm text-dark outline-none transition-all duration-200 placeholder:text-dark-5 focus:border-blue/30 focus:bg-white focus:ring-2 focus:ring-blue/10"
           />
           <button
             onClick={applySearch}
             disabled={isPending}
-            className="inline-flex items-center justify-center rounded-md bg-blue px-4 text-white disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex min-w-[52px] items-center justify-center rounded-[18px] bg-blue px-4 text-white shadow-[0_18px_30px_-22px_rgba(60,80,224,0.8)] transition-all duration-200 hover:bg-blue-dark disabled:cursor-not-allowed disabled:opacity-70"
           >
             {t("common.go")}
           </button>
         </div>
       </div>
 
-      <div className="bg-white shadow-1 rounded-lg py-5 px-6">
-        <h3 className="font-medium text-dark mb-4">{t("catalog.categories")}</h3>
-        <div className="flex flex-col gap-3">
+      <div className="rounded-[28px] border border-white/80 bg-white/94 px-5 py-5 shadow-[0_20px_55px_-40px_rgba(15,23,42,0.28)] backdrop-blur-sm">
+        <div className="mb-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
+            {t("catalog.categories")}
+          </p>
+          <h3 className="mt-1 text-base font-semibold text-dark">
+            {t("catalog.categories")}
+          </h3>
+        </div>
+        <div className="flex flex-col gap-2.5">
           {filters.categories.map((category) => {
             const href = buildCatalogHref(
               {
@@ -116,12 +147,21 @@ export default function CatalogSidebarFilters({
               <Link
                 key={category.slug}
                 href={href}
-                className={`flex items-center justify-between gap-3 ${
-                  query.category === category.slug ? "text-blue" : "text-dark"
+                onClick={() => onNavigate?.()}
+                className={`group flex items-center justify-between gap-3 rounded-[18px] border px-4 py-3 transition-all duration-200 ${
+                  query.category === category.slug
+                    ? "border-blue/20 bg-blue/5 text-blue shadow-[0_18px_34px_-28px_rgba(60,80,224,0.45)]"
+                    : "border-gray-3/80 bg-white text-dark hover:border-blue/15 hover:bg-blue/5 hover:text-blue"
                 }`}
               >
-                <span>{category.name}</span>
-                <span className="inline-flex rounded-full bg-gray-2 px-2 py-0.5 text-custom-xs">
+                <span className="truncate text-sm font-medium">{category.name}</span>
+                <span
+                  className={`inline-flex min-w-[34px] shrink-0 items-center justify-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                    query.category === category.slug
+                      ? "bg-blue/10 text-blue"
+                      : "bg-gray-2 text-dark-4"
+                  }`}
+                >
                   {category.totalProducts}
                 </span>
               </Link>
@@ -130,9 +170,16 @@ export default function CatalogSidebarFilters({
         </div>
       </div>
 
-      <div className="bg-white shadow-1 rounded-lg py-5 px-6">
-        <h3 className="font-medium text-dark mb-4">{t("catalog.brands")}</h3>
-        <div className="flex flex-col gap-3">
+      <div className="rounded-[28px] border border-white/80 bg-white/94 px-5 py-5 shadow-[0_20px_55px_-40px_rgba(15,23,42,0.28)] backdrop-blur-sm">
+        <div className="mb-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
+            {t("catalog.brands")}
+          </p>
+          <h3 className="mt-1 text-base font-semibold text-dark">
+            {t("catalog.brands")}
+          </h3>
+        </div>
+        <div className="flex flex-col gap-2.5">
           {filters.brands.slice(0, 12).map((brand) => {
             const href = buildCatalogHref(
               {
@@ -148,12 +195,21 @@ export default function CatalogSidebarFilters({
               <Link
                 key={brand.slug}
                 href={href}
-                className={`flex items-center justify-between gap-3 ${
-                  query.brand === brand.slug ? "text-blue" : "text-dark"
+                onClick={() => onNavigate?.()}
+                className={`group flex items-center justify-between gap-3 rounded-[18px] border px-4 py-3 transition-all duration-200 ${
+                  query.brand === brand.slug
+                    ? "border-blue/20 bg-blue/5 text-blue shadow-[0_18px_34px_-28px_rgba(60,80,224,0.45)]"
+                    : "border-gray-3/80 bg-white text-dark hover:border-blue/15 hover:bg-blue/5 hover:text-blue"
                 }`}
               >
-                <span>{brand.name}</span>
-                <span className="inline-flex rounded-full bg-gray-2 px-2 py-0.5 text-custom-xs">
+                <span className="truncate text-sm font-medium">{brand.name}</span>
+                <span
+                  className={`inline-flex min-w-[34px] shrink-0 items-center justify-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                    query.brand === brand.slug
+                      ? "bg-blue/10 text-blue"
+                      : "bg-gray-2 text-dark-4"
+                  }`}
+                >
                   {brand.totalProducts}
                 </span>
               </Link>
@@ -162,35 +218,6 @@ export default function CatalogSidebarFilters({
         </div>
       </div>
 
-      <div className="bg-white shadow-1 rounded-lg py-5 px-6">
-        <h3 className="font-medium text-dark mb-4">{t("catalog.availability")}</h3>
-        <div className="flex flex-col gap-3">
-          {[
-            { value: "in_stock" },
-            { value: "on_order" },
-            { value: "in_transit" },
-            { value: "out_of_stock" },
-          ].map((item) => (
-            <Link
-              key={item.value}
-              href={buildCatalogHref(
-                {
-                  ...query,
-                  availability:
-                    query.availability === item.value ? undefined : item.value,
-                  page: undefined,
-                },
-                routeContext,
-              )}
-              className={
-                query.availability === item.value ? "text-blue" : "text-dark"
-              }
-            >
-              {t(getAvailabilityMessageKey(item.value) || item.value)}
-            </Link>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

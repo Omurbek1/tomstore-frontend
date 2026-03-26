@@ -19,8 +19,8 @@ const getCatalogResultsClassName = (
 ) =>
   productStyle === "grid"
     ? variant === "sidebar"
-      ? "grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-x-5 sm:gap-y-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-6 xl:gap-y-8"
-      : "grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-x-5 sm:gap-y-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-6 xl:gap-y-8"
+      ? "grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-x-5 sm:gap-y-6 lg:grid-cols-4 xl:grid-cols-5 xl:gap-x-5 xl:gap-y-8 2xl:gap-x-6"
+      : "grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-x-5 sm:gap-y-6 lg:grid-cols-4 xl:grid-cols-5 xl:gap-x-5 xl:gap-y-8 2xl:gap-x-6"
     : "flex flex-col gap-7.5";
 
 const CatalogGridSkeleton = ({ index }: { index: number }) => (
