@@ -635,16 +635,9 @@ export default function CatalogView({
                       ) : null}
                     </div>
 
-                    <h2 className="mt-3 text-[24px] font-semibold leading-tight text-dark sm:text-[28px] xl:text-[32px]">
-                      {pageTitle}
-                    </h2>
+                 
 
-                    <p className="mt-2 text-sm leading-6 text-dark-4 sm:text-[15px]">
-                      {t("common.showingOfProducts", {
-                        shown: loadedCount,
-                        total,
-                      })}
-                    </p>
+                   
 
                     {activeFilterCount > 0 ? (
                       <div className="mt-4 flex flex-wrap items-center gap-2.5">
@@ -682,100 +675,6 @@ export default function CatalogView({
                       </div>
                     ) : null}
 
-                    {hasQuickFilterShelves ? (
-                      <div className="mt-5 grid gap-4">
-                        {quickCategories.length > 0 ? (
-                          <div className="grid gap-2">
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
-                                {t("catalog.categories")}
-                              </span>
-                            </div>
-                            <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-                              {quickCategories.map((category) => {
-                                const isActive = query.category === category.slug;
-
-                                return (
-                                  <Link
-                                    key={category.slug}
-                                    href={buildFilterHref(
-                                      {
-                                        ...query,
-                                        category: isActive ? undefined : category.slug,
-                                        page: undefined,
-                                      },
-                                      "category",
-                                    )}
-                                    className={`inline-flex min-w-fit items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
-                                      isActive
-                                        ? "border-blue/20 bg-blue text-white shadow-[0_20px_34px_-24px_rgba(60,80,224,0.75)]"
-                                        : "border-gray-3 bg-white text-dark hover:border-blue/20 hover:bg-blue/5 hover:text-blue"
-                                    }`}
-                                  >
-                                    <span>{category.name}</span>
-                                    <span
-                                      className={`inline-flex min-w-[24px] items-center justify-center rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-                                        isActive
-                                          ? "bg-white/18 text-white"
-                                          : "bg-gray-2 text-dark-4"
-                                      }`}
-                                    >
-                                      {category.totalProducts}
-                                    </span>
-                                  </Link>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        ) : null}
-
-                        {quickBrands.length > 0 ? (
-                          <div className="grid gap-2">
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
-                                {t("catalog.brands")}
-                              </span>
-                            </div>
-                            <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-                              {quickBrands.map((brand) => {
-                                const isActive = query.brand === brand.slug;
-
-                                return (
-                                  <Link
-                                    key={brand.slug}
-                                    href={buildFilterHref(
-                                      {
-                                        ...query,
-                                        brand: isActive ? undefined : brand.slug,
-                                        page: undefined,
-                                      },
-                                      "brand",
-                                    )}
-                                    className={`inline-flex min-w-fit items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
-                                      isActive
-                                        ? "border-blue/20 bg-blue text-white shadow-[0_20px_34px_-24px_rgba(60,80,224,0.75)]"
-                                        : "border-gray-3 bg-white text-dark hover:border-blue/20 hover:bg-blue/5 hover:text-blue"
-                                    }`}
-                                  >
-                                    <span>{brand.name}</span>
-                                    <span
-                                      className={`inline-flex min-w-[24px] items-center justify-center rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-                                        isActive
-                                          ? "bg-white/18 text-white"
-                                          : "bg-gray-2 text-dark-4"
-                                      }`}
-                                    >
-                                      {brand.totalProducts}
-                                    </span>
-                                  </Link>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        ) : null}
-
-                      </div>
-                    ) : null}
                   </div>
 
                   <div className="grid gap-3 lg:grid-cols-[minmax(210px,auto)_minmax(230px,1fr)_auto] lg:items-end">
