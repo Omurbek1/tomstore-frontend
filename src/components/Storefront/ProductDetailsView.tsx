@@ -202,6 +202,14 @@ export default function ProductDetailsView({
   const [isCopied, setIsCopied] = useState(false);
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const gallery = product.gallery.length > 0 ? product.gallery : ["/images/products/product-1-sm-1.png"];
+  const videoEmbedUrl = (() => {
+    const url = product.videoUrl;
+    if (!url) return null;
+    const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+    return null;
+  })();
+  const videoDirectUrl = product.videoUrl && !videoEmbedUrl ? product.videoUrl : null;
   const [activeIdx, setActiveIdx] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState(0);
@@ -420,6 +428,28 @@ export default function ProductDetailsView({
                       />
                     </button>
                   ))}
+                </div>
+              )}
+
+              {/* Video player */}
+              {(videoEmbedUrl || videoDirectUrl) && (
+                <div className="mt-4 rounded-lg overflow-hidden shadow-1">
+                  {videoEmbedUrl ? (
+                    <iframe
+                      src={videoEmbedUrl}
+                      title={product.name}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="w-full aspect-video border-0"
+                    />
+                  ) : (
+                    <video
+                      src={videoDirectUrl!}
+                      controls
+                      playsInline
+                      className="w-full aspect-video bg-black"
+                    />
+                  )}
                 </div>
               )}
             </div>
