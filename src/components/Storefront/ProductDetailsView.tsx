@@ -741,9 +741,16 @@ export default function ProductDetailsView({
                 <h2 className="font-semibold text-xl text-dark mb-4">
                   {t("common.description")}
                 </h2>
-                <p className="text-dark-4 whitespace-pre-line">
-                  {product.fullDescription}
-                </p>
+                {/<[a-z][\s\S]*>/i.test(product.fullDescription) ? (
+                  <div
+                    className="text-dark-4 text-sm leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-dark [&_ul]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mb-1 [&_h1]:font-semibold [&_h1]:text-dark [&_h1]:text-lg [&_h1]:mb-2 [&_h2]:font-semibold [&_h2]:text-dark [&_h2]:mb-2 [&_h3]:font-semibold [&_h3]:text-dark [&_h3]:mb-1"
+                    dangerouslySetInnerHTML={{ __html: product.fullDescription }}
+                  />
+                ) : (
+                  <p className="text-dark-4 whitespace-pre-line">
+                    {product.fullDescription}
+                  </p>
+                )}
 
                 {structuredAttributes.specs.length > 0 ||
                 structuredAttributes.useCases.length > 0 ||
