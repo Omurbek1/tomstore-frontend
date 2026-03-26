@@ -140,13 +140,12 @@ const SingleItem = ({ item }: { item: Product }) => {
         </div>
 
         <div className="flex items-center justify-center px-4 pb-6">
-          <div className="flex h-[220px] w-full max-w-[240px] items-center justify-center rounded-[28px] bg-white/8">
+          <div className="aspect-square w-full max-w-[240px] relative rounded-[28px] bg-white/8 overflow-hidden">
             <Image
               src={item.imgs.previews[0]}
               alt={item.title}
-              width={240}
-              height={220}
-              className="h-auto max-h-[88%] w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+              fill
+              className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.03]"
             />
           </div>
         </div>

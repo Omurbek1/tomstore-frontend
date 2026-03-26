@@ -81,13 +81,12 @@ const SingleItem = ({ item }: { item: WishlistItem }) => {
           </svg>
         </button>
 
-        <div className="flex min-h-[250px] items-center justify-center px-4 py-8">
+        <div className="aspect-square relative overflow-hidden">
           <Image
             src={item.imgs?.previews?.[0] || item.imgs?.thumbnails?.[0] || FALLBACK_IMAGE}
             alt={item.title}
-            width={240}
-            height={220}
-            className="h-auto max-h-[210px] w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+            fill
+            className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </div>
       </div>

@@ -384,74 +384,76 @@ export default function ProductDetailsView({
       <section className="overflow-hidden relative pb-20 pt-5 lg:pt-20 xl:pt-28">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,570px)_minmax(0,1fr)]">
-            <div>
-              {/* Main image — click to open lightbox */}
-              <div
-                className="rounded-lg shadow-1 bg-gray-2 p-4 sm:p-7.5 flex items-center justify-center cursor-zoom-in relative group"
-                onClick={() => openLightbox(activeIdx)}
-              >
-                <Image
-                  src={gallery[activeIdx]}
-                  alt={product.name}
-                  width={420}
-                  height={420}
-                  priority
-                  sizes="(min-width: 1280px) 420px, (min-width: 1024px) 36vw, 92vw"
-                  className="h-auto w-full max-w-[420px] object-contain transition-transform duration-200 group-hover:scale-105"
-                />
-                <span className="absolute bottom-3 right-3 bg-black/40 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  🔍 Увеличить
-                </span>
-              </div>
-
-              {/* Thumbnails */}
+            <div className="flex gap-3">
+              {/* Thumbnails — vertical strip on the left (hidden if only 1 image) */}
               {gallery.length > 1 && (
-                <div className="grid grid-cols-4 gap-3 mt-4">
-                  {gallery.slice(0, 8).map((image, index) => (
+                <div className="flex flex-col gap-2 w-[72px] shrink-0">
+                  {gallery.slice(0, 9).map((image, index) => (
                     <button
                       key={`${image}-${index}`}
                       type="button"
                       onClick={() => setActiveIdx(index)}
-                      className={`rounded-lg bg-gray-2 shadow-1 p-2 flex items-center justify-center transition-all ${
+                      className={`aspect-square w-full rounded-lg overflow-hidden border-2 transition-all bg-white ${
                         activeIdx === index
-                          ? "ring-2 ring-blue ring-offset-1"
-                          : "opacity-60 hover:opacity-100"
+                          ? "border-blue"
+                          : "border-transparent hover:border-gray-3"
                       }`}
                     >
                       <Image
                         src={image}
                         alt={`${product.name} ${index + 1}`}
-                        width={80}
-                        height={80}
-                        sizes="80px"
-                        className="object-contain h-16 w-16"
+                        width={72}
+                        height={72}
+                        sizes="72px"
+                        className="w-full h-full object-contain p-1"
                       />
                     </button>
                   ))}
                 </div>
               )}
 
-              {/* Video player */}
-              {(videoEmbedUrl || videoDirectUrl) && (
-                <div className="mt-4 rounded-lg overflow-hidden shadow-1">
-                  {videoEmbedUrl ? (
-                    <iframe
-                      src={videoEmbedUrl}
-                      title={product.name}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      className="w-full aspect-video border-0"
-                    />
-                  ) : (
-                    <video
-                      src={videoDirectUrl!}
-                      controls
-                      playsInline
-                      className="w-full aspect-video bg-black"
-                    />
-                  )}
+              {/* Main image + video */}
+              <div className="flex-1 min-w-0 flex flex-col gap-3">
+                {/* Main image — full-block square like Ozon */}
+                <div
+                  className="aspect-square w-full rounded-xl overflow-hidden bg-white border border-gray-2 cursor-zoom-in relative group"
+                  onClick={() => openLightbox(activeIdx)}
+                >
+                  <Image
+                    src={gallery[activeIdx]}
+                    alt={product.name}
+                    fill
+                    priority
+                    sizes="(min-width: 1280px) 480px, (min-width: 1024px) 40vw, 92vw"
+                    className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <span className="absolute bottom-3 right-3 bg-black/40 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none select-none">
+                    🔍 Увеличить
+                  </span>
                 </div>
-              )}
+
+                {/* Video player */}
+                {(videoEmbedUrl || videoDirectUrl) && (
+                  <div className="rounded-xl overflow-hidden border border-gray-2">
+                    {videoEmbedUrl ? (
+                      <iframe
+                        src={videoEmbedUrl}
+                        title={product.name}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="w-full aspect-video border-0"
+                      />
+                    ) : (
+                      <video
+                        src={videoDirectUrl!}
+                        controls
+                        playsInline
+                        className="w-full aspect-video bg-black"
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Lightbox */}

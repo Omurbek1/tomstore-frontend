@@ -188,14 +188,13 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
           </div>
         </div>
 
-        <div className="flex min-h-[176px] items-center justify-center px-3 pb-3 pt-14 sm:min-h-[244px] sm:px-4 sm:pb-4 sm:pt-20 xl:min-h-[236px] xl:px-4 xl:pb-4 xl:pt-18">
+        <div className="aspect-square relative">
           <Image
             src={imageSrc}
             alt={item.title}
-            width={260}
-            height={240}
+            fill
             sizes="(min-width: 1536px) 220px, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 28vw, 46vw"
-            className="relative z-[1] h-auto max-h-[132px] w-auto object-contain drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)] transition-transform duration-300 group-hover:scale-[1.05] sm:max-h-[190px] xl:max-h-[176px]"
+            className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.05] drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)]"
           />
         </div>
       </div>
