@@ -1,0 +1,7 @@
+<svg width="116" height="44" viewBox="0 0 116 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="116" height="44" rx="15" fill="#FFF7ED"/>
+  <rect x="0.75" y="0.75" width="114.5" height="42.5" rx="14.25" stroke="#FED7AA" stroke-width="1.5"/>
+  <circle cx="24" cy="22" r="12" fill="#F7931A"/>
+  <text x="24" y="27" text-anchor="middle" fill="white" font-size="16" font-family="Arial, Helvetica, sans-serif" font-weight="700">B</text>
+  <text x="72" y="27" text-anchor="middle" fill="#C86A0A" font-size="16" font-family="Arial, Helvetica, sans-serif" font-weight="700" letter-spacing="0.7">BITCOIN</text>
+</svg>

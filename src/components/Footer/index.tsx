@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import PaymentMethodBadge from "@/components/Common/PaymentMethodBadge";
 import { useI18n } from "@/i18n/provider";
 import {
   getPhoneHref,
@@ -16,6 +17,7 @@ import {
   buildBrandsHubPath,
   buildCategoriesHubPath,
 } from "@/storefront/catalog-routing";
+import { STOREFRONT_PAYMENT_METHODS } from "@/storefront/payments";
 import { buildStorefrontAssetUrl } from "@/storefront/site";
 import type { StorefrontConfig } from "@/storefront/types";
 
@@ -164,52 +166,15 @@ const Footer = ({
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">
                 {t("footer.weAccept")}
               </p>
-              <div className="mt-4 flex flex-wrap items-center gap-5">
-                <a href="#" aria-label="payment system with visa card">
-                  <Image
-                    src="/images/payment/payment-01.svg"
-                    alt="visa card"
-                    width={66}
-                    height={22}
-                    className="brightness-[1.6]"
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                {STOREFRONT_PAYMENT_METHODS.map((method) => (
+                  <PaymentMethodBadge
+                    key={method.id}
+                    methodId={method.id}
+                    label={method.label}
+                    variant="icon"
                   />
-                </a>
-                <a href="#" aria-label="payment system with paypal">
-                  <Image
-                    src="/images/payment/payment-02.svg"
-                    alt="paypal"
-                    width={18}
-                    height={21}
-                    className="brightness-[1.6]"
-                  />
-                </a>
-                <a href="#" aria-label="payment system with master card">
-                  <Image
-                    src="/images/payment/payment-03.svg"
-                    alt="master card"
-                    width={33}
-                    height={24}
-                    className="brightness-[1.6]"
-                  />
-                </a>
-                <a href="#" aria-label="payment system with apple pay">
-                  <Image
-                    src="/images/payment/payment-04.svg"
-                    alt="apple pay"
-                    width={52.94}
-                    height={22}
-                    className="brightness-[1.6]"
-                  />
-                </a>
-                <a href="#" aria-label="payment system with google pay">
-                  <Image
-                    src="/images/payment/payment-05.svg"
-                    alt="google pay"
-                    width={56}
-                    height={22}
-                    className="brightness-[1.6]"
-                  />
-                </a>
+                ))}
               </div>
             </div>
           </div>

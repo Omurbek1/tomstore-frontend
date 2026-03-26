@@ -11,6 +11,7 @@ import { useI18n } from "@/i18n/provider";
 import { selectCartTotalPrice, useAppStore } from "@/store/app-store";
 import { getWhatsAppHref } from "@/storefront/contact";
 import { useStorefrontContact } from "@/storefront/contact-context";
+import { STOREFRONT_PAYMENT_METHOD_LABELS } from "@/storefront/payments";
 import Shipping from "./Shipping";
 import ShippingMethod from "./ShippingMethod";
 import PaymentMethod from "./PaymentMethod";
@@ -47,11 +48,6 @@ const Checkout = () => {
     free: t("checkout.freeShipping"),
     fedex: `FedEx, ${t("checkout.standardShipping")}`,
     dhl: `DHL, ${t("checkout.standardShipping")}`,
-  } as const;
-  const paymentMethodLabels = {
-    bank: t("checkout.directBankTransfer"),
-    cash: t("checkout.cashOnDelivery"),
-    paypal: t("checkout.paypal"),
   } as const;
 
   useEffect(() => {
@@ -114,9 +110,7 @@ const Checkout = () => {
         shippingMethodKey as keyof typeof shippingMethodLabels
       ] || shippingMethodKey;
     const paymentMethod =
-      paymentMethodLabels[
-        paymentMethodKey as keyof typeof paymentMethodLabels
-      ] || paymentMethodKey;
+      STOREFRONT_PAYMENT_METHOD_LABELS[paymentMethodKey] || paymentMethodKey;
     const orderLines = cartItems.map(
       (item, index) =>
         `${index + 1}. ${item.title} x${item.quantity} - ${formatPrice(
