@@ -78,20 +78,22 @@ const SingleItem = ({ item }: { item: Product }) => {
     <div className="group h-full rounded-[28px] border border-white/10 bg-white/8 p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/18 hover:bg-white/10">
       <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-white/6">
         {/* Image — fills full block */}
-        <div className="aspect-square relative overflow-hidden">
-          <Image
-            src={item.imgs.previews[0]}
-            alt={item.title}
-            fill
-            className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.04]"
-          />
-          {/* Labels top-left */}
-          {(item.labels?.length ?? 0) > 0 && (
-            <div className="absolute left-3 top-3 z-10">
-              <ProductLabelBadges labels={item.labels} compact singleLine />
-            </div>
-          )}
-        </div>
+        <Link href={`/shop-details/${item.slug}`} prefetch={false} className="block">
+          <div className="aspect-square relative overflow-hidden">
+            <Image
+              src={item.imgs.previews[0]}
+              alt={item.title}
+              fill
+              className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.04]"
+            />
+            {/* Labels top-left */}
+            {(item.labels?.length ?? 0) > 0 && (
+              <div className="absolute left-3 top-3 z-10">
+                <ProductLabelBadges labels={item.labels} compact singleLine />
+              </div>
+            )}
+          </div>
+        </Link>
 
         {/* Info below image */}
         <div className="px-4 pb-4 pt-3">

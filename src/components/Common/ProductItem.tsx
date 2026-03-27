@@ -188,15 +188,26 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
           </div>
         </div>
 
-        <div className="aspect-square relative">
-          <Image
-            src={imageSrc}
-            alt={item.title}
-            fill
-            sizes="(min-width: 1536px) 220px, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 28vw, 46vw"
-            className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.05] drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)]"
-          />
-        </div>
+        <Link
+          href={`/shop-details/${item.slug}`}
+          onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+            markPendingCatalogRestore();
+            handleProductDetails();
+          }}
+          prefetch={false}
+          className="block"
+        >
+          <div className="aspect-square relative">
+            <Image
+              src={imageSrc}
+              alt={item.title}
+              fill
+              sizes="(min-width: 1536px) 220px, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 28vw, 46vw"
+              className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.05] drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)]"
+            />
+          </div>
+        </Link>
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col px-1">
@@ -266,9 +277,19 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
 
           <div className="min-h-[0] sm:min-h-[48px]">
             {item.shortDescription ? (
-              <p className="mt-1 hidden overflow-hidden text-[13px] leading-5 text-dark-4 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] sm:block">
-                {item.shortDescription}
-              </p>
+              <Link
+                href={`/shop-details/${item.slug}`}
+                onClick={(e) => {
+                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+                  markPendingCatalogRestore();
+                  handleProductDetails();
+                }}
+                prefetch={false}
+              >
+                <p className="mt-1 hidden overflow-hidden text-[13px] leading-5 text-dark-4 transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] sm:block">
+                  {item.shortDescription}
+                </p>
+              </Link>
             ) : null}
           </div>
 
