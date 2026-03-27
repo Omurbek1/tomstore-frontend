@@ -76,15 +76,19 @@ const SingleItem = ({ item }: { item: Product }) => {
 
   return (
     <div className="group h-full rounded-[28px] border border-white/10 bg-white/8 p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/18 hover:bg-white/10">
-      <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-white/6">
+      <div className="relative overflow-hidden rounded-[22px] border border-white/12 bg-white">
         {/* Image — fills full block */}
-        <Link href={`/shop-details/${item.slug}`} prefetch={false} className="block">
+        <Link
+          href={`/shop-details/${item.slug}`}
+          prefetch={false}
+          className="block"
+        >
           <div className="aspect-square relative overflow-hidden">
             <Image
               src={item.imgs.previews[0]}
               alt={item.title}
               fill
-              className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.04]"
+              className="object-contain p-5 transition-transform duration-300 group-hover:scale-[1.04] drop-shadow-[0_18px_28px_rgba(15,23,42,0.16)]"
             />
             {/* Labels top-left */}
             {(item.labels?.length ?? 0) > 0 && (
@@ -101,23 +105,39 @@ const SingleItem = ({ item }: { item: Product }) => {
             <div className="mb-1.5 flex items-center gap-1.5">
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Image key={i} src="/images/icons/icon-star.svg" alt="" width={12} height={12} />
+                  <Image
+                    key={i}
+                    src="/images/icons/icon-star.svg"
+                    alt=""
+                    width={12}
+                    height={12}
+                  />
                 ))}
               </div>
-              <p className="text-xs text-white/55">{t("common.reviewsLabel", { count: item.reviews })}</p>
+              <p className="text-xs text-white/55">
+                {t("common.reviewsLabel", { count: item.reviews })}
+              </p>
             </div>
           )}
-          <h3 className={`mb-2 line-clamp-2 font-semibold leading-snug text-white transition-colors duration-200 hover:text-white/80 ${
-            item.title.length > 70 ? "text-[11px]" :
-            item.title.length > 45 ? "text-xs" :
-            "text-sm"
-          }`}>
+          <h3
+            className={`mb-2 line-clamp-2 font-semibold leading-snug text-white transition-colors duration-200 hover:text-white/80 ${
+              item.title.length > 70
+                ? "text-[11px]"
+                : item.title.length > 45
+                  ? "text-xs"
+                  : "text-sm"
+            }`}
+          >
             <Link href={`/shop-details/${item.slug}`}>{item.title}</Link>
           </h3>
           <div className="flex items-center gap-2">
-            <span className="text-base font-bold text-white">{formatPrice(item.discountedPrice)}</span>
+            <span className="text-base font-bold text-white">
+              {formatPrice(item.discountedPrice)}
+            </span>
             {item.price > item.discountedPrice && (
-              <span className="text-sm text-white/40 line-through">{formatPrice(item.price)}</span>
+              <span className="text-sm text-white/40 line-through">
+                {formatPrice(item.price)}
+              </span>
             )}
           </div>
         </div>

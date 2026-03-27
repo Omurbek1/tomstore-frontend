@@ -110,13 +110,10 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
 
   return (
     <article className="group flex h-full flex-col rounded-[24px] border border-white/80 bg-white/92 p-2.5 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.38)] backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:border-blue/20 hover:shadow-[0_38px_75px_-40px_rgba(60,80,224,0.3)] sm:rounded-[30px] sm:p-3.5 xl:p-3.5">
-      <div className="relative mb-2 overflow-hidden rounded-[22px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)] sm:mb-2.5 sm:rounded-[26px]">
-        <div className="absolute left-1/2 top-4 h-18 w-18 -translate-x-1/2 rounded-full bg-blue/15 blur-2xl sm:top-5 sm:h-24 sm:w-24" />
-        <div className="absolute -right-4 bottom-0 h-16 w-16 rounded-full bg-blue/10 blur-2xl sm:h-20 sm:w-20" />
-
+      <div className="relative mb-2 overflow-hidden rounded-[22px] border border-slate-200 bg-white sm:mb-2.5 sm:rounded-[26px]">
         <div className="pointer-events-none absolute inset-x-2 top-2 z-10 flex items-start gap-2 sm:inset-x-3 sm:top-3 sm:gap-2.5">
           {hasLabels ? (
-            <div className="min-w-0 rounded-[16px] border border-white/80 bg-white/72 p-1 shadow-[0_18px_34px_-28px_rgba(15,23,42,0.32)] backdrop-blur-md sm:rounded-[20px] sm:p-1.5">
+            <div className="min-w-0 rounded-[16px] border border-slate-200 bg-white/96 p-1 shadow-[0_12px_24px_-22px_rgba(15,23,42,0.24)] sm:rounded-[20px] sm:p-1.5">
               <ProductLabelBadges
                 labels={item.labels}
                 compact
@@ -191,7 +188,14 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
         <Link
           href={`/shop-details/${item.slug}`}
           onClick={(e) => {
-            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+            if (
+              e.metaKey ||
+              e.ctrlKey ||
+              e.shiftKey ||
+              e.altKey ||
+              e.button !== 0
+            )
+              return;
             markPendingCatalogRestore();
             handleProductDetails();
           }}
@@ -204,7 +208,7 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
               alt={item.title}
               fill
               sizes="(min-width: 1536px) 220px, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 28vw, 46vw"
-              className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.05] drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)]"
+              className="object-contain p-5 transition-transform duration-300 group-hover:scale-[1.05] drop-shadow-[0_18px_28px_rgba(15,23,42,0.14)] sm:p-6"
             />
           </div>
         </Link>
@@ -247,11 +251,15 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
           </div>
 
           <div className="min-h-[15px]">
-            <h3 className={`overflow-hidden font-semibold leading-5 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
-              item.title.length > 70 ? "text-[12px] sm:text-[13px] xl:text-[13px]" :
-              item.title.length > 45 ? "text-[13px] sm:text-[15px] xl:text-[14px]" :
-              "text-[14px] sm:text-[17px] xl:text-[16px]"
-            }`}>
+            <h3
+              className={`overflow-hidden font-semibold leading-5 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
+                item.title.length > 70
+                  ? "text-[12px] sm:text-[13px] xl:text-[13px]"
+                  : item.title.length > 45
+                    ? "text-[13px] sm:text-[15px] xl:text-[14px]"
+                    : "text-[14px] sm:text-[17px] xl:text-[16px]"
+              }`}
+            >
               <Link
                 href={`/shop-details/${item.slug}`}
                 onClick={(event) => {
@@ -280,7 +288,14 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
               <Link
                 href={`/shop-details/${item.slug}`}
                 onClick={(e) => {
-                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+                  if (
+                    e.metaKey ||
+                    e.ctrlKey ||
+                    e.shiftKey ||
+                    e.altKey ||
+                    e.button !== 0
+                  )
+                    return;
                   markPendingCatalogRestore();
                   handleProductDetails();
                 }}

@@ -111,12 +111,10 @@ const SingleListItemComponent = ({ item }: { item: Product }) => {
   return (
     <article className="group overflow-hidden rounded-[30px] border border-white/80 bg-white/92 p-3 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.34)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-blue/20 hover:shadow-[0_38px_75px_-40px_rgba(60,80,224,0.24)] sm:p-3.5">
       <div className="flex flex-col gap-2.5 lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:items-stretch xl:grid-cols-[260px_minmax(0,1fr)]">
-        <div className="relative overflow-hidden rounded-[26px] border border-white/75 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f3f7ff_52%,#e8efff_100%)] aspect-square lg:aspect-auto lg:min-h-[220px]">
-          <div className="absolute left-1/2 top-5 h-24 w-24 -translate-x-1/2 rounded-full bg-blue/15 blur-2xl" />
-
+        <div className="relative aspect-square overflow-hidden rounded-[26px] border border-slate-200 bg-white lg:aspect-auto lg:min-h-[220px]">
           <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start gap-2.5">
             {hasLabels ? (
-              <div className="min-w-0 rounded-[20px] border border-white/80 bg-white/72 p-1.5 shadow-[0_18px_34px_-28px_rgba(15,23,42,0.32)] backdrop-blur-md">
+              <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white/96 p-1.5 shadow-[0_12px_24px_-22px_rgba(15,23,42,0.24)]">
                 <ProductLabelBadges
                   labels={item.labels}
                   compact
@@ -198,7 +196,7 @@ const SingleListItemComponent = ({ item }: { item: Product }) => {
             alt={item.title}
             fill
             sizes="(min-width: 1280px) 260px, (min-width: 1024px) 240px, 90vw"
-            className="object-contain p-4 drop-shadow-[0_18px_30px_rgba(15,23,42,0.12)] transition-transform duration-300 group-hover:scale-[1.04]"
+            className="object-contain p-5 drop-shadow-[0_18px_28px_rgba(15,23,42,0.14)] transition-transform duration-300 group-hover:scale-[1.04] lg:p-6"
           />
         </div>
 
@@ -206,11 +204,15 @@ const SingleListItemComponent = ({ item }: { item: Product }) => {
           <div className="flex flex-col gap-2.5">
             <div className="flex min-h-[80px] flex-col gap-2.5 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0 flex-1">
-                <h3 className={`overflow-hidden font-semibold text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
-                  item.title.length > 70 ? "text-sm leading-6" :
-                  item.title.length > 45 ? "text-base leading-7" :
-                  "text-xl leading-8"
-                }`}>
+                <h3
+                  className={`overflow-hidden font-semibold text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
+                    item.title.length > 70
+                      ? "text-sm leading-6"
+                      : item.title.length > 45
+                        ? "text-base leading-7"
+                        : "text-xl leading-8"
+                  }`}
+                >
                   <Link
                     href={`/shop-details/${item.slug}`}
                     onClick={(event) => {
