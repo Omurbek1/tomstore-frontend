@@ -29,7 +29,7 @@ const BestSeller = ({
             <span className="section-kicker-dark">
               {t(eyebrowKey)}
             </span>
-            <h2 className="mt-4 text-2xl font-semibold text-white sm:text-[34px]">
+            <h2 className="mt-2 text-xl font-semibold text-white sm:text-2xl">
               {t(titleKey)}
             </h2>
           </div>
