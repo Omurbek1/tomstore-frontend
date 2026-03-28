@@ -51,7 +51,7 @@ const SingleItem = ({ item }: { item: WishlistItem }) => {
   };
 
   return (
-    <article className="group h-full rounded-[28px] border border-white/70 bg-white/88 p-4 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.34)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_34px_66px_-36px_rgba(60,80,224,0.22)]">
+    <article className="group flex h-full flex-col rounded-[28px] border border-white/70 bg-white/88 p-4 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.34)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_34px_66px_-36px_rgba(60,80,224,0.22)]">
       <div className="relative mb-5 overflow-hidden rounded-[24px] bg-[linear-gradient(180deg,#f9fbff_0%,#eef3ff_100%)]">
         <div className="absolute left-1/2 top-6 h-28 w-28 -translate-x-1/2 rounded-full bg-blue/10 blur-2xl" />
         <ProductLabelBadges
@@ -91,7 +91,7 @@ const SingleItem = ({ item }: { item: WishlistItem }) => {
         </div>
       </div>
 
-      <div className="flex h-[calc(100%-270px)] flex-col">
+      <div className="flex flex-1 flex-col">
         <div className="mb-2 flex items-center justify-between gap-3">
           <span
             className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${availabilityClass}`}

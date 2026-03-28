@@ -5,9 +5,9 @@ import { getProductLabelMessageKey } from "@/i18n/utils";
 import type { StorefrontProductLabel } from "@/storefront/types";
 
 const LABEL_CLASSNAMES: Record<StorefrontProductLabel, string> = {
-  hit: "border border-blue/10 bg-blue/10 text-blue-dark shadow-[0_14px_30px_-22px_rgba(60,80,224,0.85)]",
-  new: "border border-green/10 bg-green/10 text-green-dark shadow-[0_14px_30px_-22px_rgba(34,173,92,0.85)]",
-  sale: "border border-red/10 bg-red/10 text-red shadow-[0_14px_30px_-22px_rgba(242,48,48,0.8)]",
+  new:  "border border-[#BBF7D0] bg-[#DCFCE7] text-[#166534]",
+  hit:  "border border-[#FDE68A] bg-[#FEF9C3] text-[#854D0E]",
+  sale: "border border-[#FECACA] bg-[#FEE2E2] text-[#991B1B]",
 };
 
 type ProductLabelBadgesProps = {
