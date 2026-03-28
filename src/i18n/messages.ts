@@ -293,6 +293,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "catalog.closeFilters": "Закрыть фильтры",
     "catalog.activeFilters": "Активные фильтры",
 
+    "product.new": "Новинка",
+    "product.hit": "Хит продаж",
     "product.notFoundTitle": "Товар не найден",
     "product.notFoundDescription": "Такой товар не найден.",
     "product.loading": "Загружаем товар",
@@ -742,6 +744,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "catalog.closeFilters": "Close filters",
     "catalog.activeFilters": "Active filters",
 
+    "product.new": "New",
+    "product.hit": "Bestseller",
     "product.notFoundTitle": "Product not found",
     "product.notFoundDescription": "This product could not be found.",
     "product.loading": "Loading product",
@@ -1192,6 +1196,8 @@ export const messages: Record<Locale, Record<string, string>> = {
     "catalog.closeFilters": "Фильтрлерди жабуу",
     "catalog.activeFilters": "Активдүү фильтрлер",
 
+    "product.new": "Жаңылык",
+    "product.hit": "Хит",
     "product.notFoundTitle": "Товар табылган жок",
     "product.notFoundDescription": "Бул товар табылган жок.",
     "product.loading": "Товар жүктөлүүдө",

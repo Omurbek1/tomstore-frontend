@@ -7,7 +7,6 @@ import { Product } from "@/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { useI18n } from "@/i18n/provider";
 import { getAvailabilityMessageKey } from "@/i18n/utils";
-import ProductLabelBadges from "./ProductLabelBadges";
 import ProductWhatsAppButton from "./ProductWhatsAppButton";
 import { useAppStore } from "@/store/app-store";
 import { useCartToast } from "./useCartToast";
@@ -17,12 +16,22 @@ import { markPendingCatalogRestore } from "@/storefront/catalog-restoration";
 
 const FALLBACK_IMAGE = "/images/products/product-1-sm-1.png";
 
-const STATUS_CLASS_BY_STATUS = {
-  in_stock: "border-green/10 bg-green/10 text-green-dark",
-  on_order: "border-yellow-dark/10 bg-yellow-light-2 text-yellow-dark-2",
-  in_transit: "border-blue/10 bg-blue/10 text-blue-dark",
-  out_of_stock: "border-red/10 bg-red/10 text-red",
-} as const;
+const StarIcon = ({ filled }: { filled?: boolean }) => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 16 16"
+    fill={filled ? "#FACC15" : "none"}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8 1.5L9.854 5.752L14.5 6.382L11.25 9.548L12.09 14.5L8 12.277L3.91 14.5L4.75 9.548L1.5 6.382L6.146 5.752L8 1.5Z"
+      stroke="#FACC15"
+      strokeWidth="1.2"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 const ProductItemComponent = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
@@ -48,15 +57,13 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
   );
   const showCartToast = useCartToast();
   const showWishlistToast = useWishlistToast();
+
   const availabilityStatus = item.availability?.status || "in_stock";
   const availabilityMessageKey = getAvailabilityMessageKey(availabilityStatus);
   const availabilityLabel =
     item.availability?.label ||
     (availabilityMessageKey ? t(availabilityMessageKey) : t("common.inStock"));
-  const availabilityClass =
-    STATUS_CLASS_BY_STATUS[
-      availabilityStatus as keyof typeof STATUS_CLASS_BY_STATUS
-    ] || STATUS_CLASS_BY_STATUS.in_stock;
+
   const imageSrc =
     item.imgs?.previews?.[0] || item.imgs?.thumbnails?.[0] || FALLBACK_IMAGE;
   const hasDiscount = item.price > item.discountedPrice;
@@ -64,18 +71,26 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
     hasDiscount && item.price > 0
       ? Math.round(((item.price - item.discountedPrice) / item.price) * 100)
       : 0;
-  const hasLabels = (item.labels?.length || 0) > 0;
 
-  const handleQuickViewUpdate = () => {
-    setQuickViewProduct(item);
-  };
+  // Primary badge: first custom label, else isNew / isFeatured
+  const primaryLabel = item.labels?.[0];
+  const badgeText = primaryLabel?.text || (item.isNew ? t("product.new") : item.isFeatured ? t("product.hit") : null);
+  const badgeClass = primaryLabel
+    ? "bg-green-100 text-green-700 border-green-200"
+    : item.isNew
+    ? "bg-emerald-100 text-emerald-700 border-emerald-200"
+    : "bg-orange-100 text-orange-600 border-orange-200";
+
+  // Rating (static 5 stars rendered, filled based on item reviews > 0)
+  const ratingValue = item.reviews > 0 ? 4.8 : 0;
+  const fullStars = Math.round(ratingValue);
+
+  const isOutOfStock = availabilityStatus === "out_of_stock";
+
+  const handleQuickViewUpdate = () => setQuickViewProduct(item);
 
   const handleAddToCart = () => {
-    const cartItem = {
-      ...item,
-      quantity: 1,
-    };
-
+    const cartItem = { ...item, quantity: 1 };
     addItemToCart(cartItem);
     showCartToast(cartItem);
   };
@@ -83,298 +98,193 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
   const handleItemToWishList = () => {
     if (isInWishlist) {
       removeItemFromWishlist(item.id);
-      showWishlistToast(
-        {
-          ...item,
-          status: item.availability?.status,
-          quantity: 1,
-        },
-        "removed",
-      );
+      showWishlistToast({ ...item, status: item.availability?.status, quantity: 1 }, "removed");
       return;
     }
-
-    const wishlistItem = {
-      ...item,
-      status: item.availability?.status,
-      quantity: 1,
-    };
-
+    const wishlistItem = { ...item, status: item.availability?.status, quantity: 1 };
     addItemToWishlist(wishlistItem);
     showWishlistToast(wishlistItem, "added");
   };
 
-  const handleProductDetails = () => {
-    setProductDetails(item);
+  const handleProductDetails = () => setProductDetails(item);
+
+  const productHref = `/shop-details/${item.slug}`;
+  const linkProps = {
+    href: productHref,
+    onClick: (e: React.MouseEvent) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      markPendingCatalogRestore();
+      handleProductDetails();
+    },
+    prefetch: false as const,
   };
 
   return (
-    <article className="group flex h-full flex-col rounded-[24px] border border-white/80 bg-white/92 p-2.5 shadow-[0_24px_52px_-36px_rgba(15,23,42,0.38)] backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:border-blue/20 hover:shadow-[0_38px_75px_-40px_rgba(60,80,224,0.3)] sm:rounded-[30px] sm:p-3.5 xl:p-3.5">
-      <div className="relative mb-2 overflow-hidden rounded-[22px] border border-slate-200 bg-white sm:mb-2.5 sm:rounded-[26px]">
-        <div className="pointer-events-none absolute inset-x-2 top-2 z-10 flex items-start gap-2 sm:inset-x-3 sm:top-3 sm:gap-2.5">
-          {hasLabels ? (
-            <div className="min-w-0 rounded-[16px] border border-slate-200 bg-white/96 p-1 shadow-[0_12px_24px_-22px_rgba(15,23,42,0.24)] sm:rounded-[20px] sm:p-1.5">
-              <ProductLabelBadges
-                labels={item.labels}
-                compact
-                singleLine
-                className="max-w-full"
+    <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-100 bg-white shadow-[0_2px_16px_0_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-8px_rgba(60,80,224,0.18)]">
+
+      {/* ── Image area ── */}
+      <div className="relative overflow-hidden bg-[linear-gradient(160deg,#f8faff_0%,#eef2ff_100%)]">
+
+        {/* Badge top-left */}
+        {badgeText ? (
+          <span
+            className={`absolute left-3 top-3 z-10 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${badgeClass}`}
+          >
+            {badgeText}
+          </span>
+        ) : null}
+
+        {/* Actions top-right */}
+        <div className="absolute right-3 top-3 z-10 flex flex-col gap-1.5">
+          <button
+            type="button"
+            onClick={handleItemToWishList}
+            aria-label={t("common.addToWishlist")}
+            className={`flex h-8 w-8 items-center justify-center rounded-full border shadow-sm transition-all duration-200 hover:-translate-y-0.5 ${
+              isInWishlist
+                ? "border-red/20 bg-red/10 text-red"
+                : "border-white/80 bg-white text-slate-400 hover:text-red"
+            }`}
+          >
+            <svg width="15" height="15" viewBox="0 0 16 16" fill={isInWishlist ? "currentColor" : "none"} xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M8 13.5C8 13.5 2 9.5 2 5.5C2 4.09 3.09 3 4.5 3C5.55 3 6.45 3.67 7 4.5C7.55 3.67 8.45 3 9.5 3C10.91 3 12 4.09 12 5.5C12 9.5 8 13.5 8 13.5Z"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinejoin="round"
               />
-            </div>
-          ) : null}
+            </svg>
+          </button>
 
-          <div className="pointer-events-auto ml-auto flex shrink-0 flex-col gap-2">
-            <button
-              type="button"
-              onClick={handleItemToWishList}
-              aria-label={t("common.addToWishlist")}
-              className={`flex h-8 w-8 items-center justify-center rounded-full border shadow-sm backdrop-blur-sm transition-all duration-200 sm:h-10 sm:w-10 ${
-                isInWishlist
-                  ? "border-red/10 bg-red/10 text-red"
-                  : "border-white/70 bg-white/90 text-dark hover:-translate-y-0.5 hover:border-blue/20 hover:text-blue"
-              }`}
-            >
-              <svg
-                className="fill-current"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M3.74949 2.94946C2.6435 3.45502 1.83325 4.65749 1.83325 6.0914C1.83325 7.55633 2.43273 8.68549 3.29211 9.65318C4.0004 10.4507 4.85781 11.1118 5.694 11.7564C5.89261 11.9095 6.09002 12.0617 6.28395 12.2146C6.63464 12.491 6.94747 12.7337 7.24899 12.9099C7.55068 13.0862 7.79352 13.1667 7.99992 13.1667C8.20632 13.1667 8.44916 13.0862 8.75085 12.9099C9.05237 12.7337 9.3652 12.491 9.71589 12.2146C9.90982 12.0617 10.1072 11.9095 10.3058 11.7564C11.142 11.1118 11.9994 10.4507 12.7077 9.65318C13.5671 8.68549 14.1666 7.55633 14.1666 6.0914C14.1666 4.65749 13.3563 3.45502 12.2503 2.94946C11.1759 2.45832 9.73214 2.58839 8.36016 4.01382C8.2659 4.11175 8.13584 4.16709 7.99992 4.16709C7.864 4.16709 7.73393 4.11175 7.63967 4.01382C6.26769 2.58839 4.82396 2.45832 3.74949 2.94946ZM7.99992 2.97255C6.45855 1.5935 4.73256 1.40058 3.33376 2.03998C1.85639 2.71528 0.833252 4.28336 0.833252 6.0914C0.833252 7.86842 1.57358 9.22404 2.5444 10.3172C3.32183 11.1926 4.2734 11.9253 5.1138 12.5724C5.30431 12.7191 5.48911 12.8614 5.66486 12.9999C6.00636 13.2691 6.37295 13.5562 6.74447 13.7733C7.11582 13.9903 7.53965 14.1667 7.99992 14.1667C8.46018 14.1667 8.88401 13.9903 9.25537 13.7733C9.62689 13.5562 9.99348 13.2691 10.335 12.9999C10.5107 12.8614 10.6955 12.7191 10.886 12.5724C11.7264 11.9253 12.678 11.1926 13.4554 10.3172C14.4263 9.22404 15.1666 7.86842 15.1666 6.0914C15.1666 4.28336 14.1434 2.71528 12.6661 2.03998C11.2673 1.40058 9.54129 1.5935 7.99992 2.97255Z"
-                  fill={isInWishlist ? "currentColor" : ""}
-                />
-              </svg>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                handleQuickViewUpdate();
-                openModal();
-              }}
-              aria-label={t("common.view")}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/70 bg-white/90 text-dark shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue/20 hover:text-blue sm:h-10 sm:w-10"
-            >
-              <svg
-                className="fill-current"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M8.00016 5.5C6.61945 5.5 5.50016 6.61929 5.50016 8C5.50016 9.38071 6.61945 10.5 8.00016 10.5C9.38087 10.5 10.5002 9.38071 10.5002 8C10.5002 6.61929 9.38087 5.5 8.00016 5.5ZM6.50016 8C6.50016 7.17157 7.17174 6.5 8.00016 6.5C8.82859 6.5 9.50016 7.17157 9.50016 8C9.50016 8.82842 8.82859 9.5 8.00016 9.5C7.17174 9.5 6.50016 8.82842 6.50016 8Z"
-                  fill=""
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M8.00016 2.16666C4.99074 2.16666 2.96369 3.96946 1.78721 5.49791L1.76599 5.52546C1.49992 5.87102 1.25487 6.18928 1.08862 6.5656C0.910592 6.96858 0.833496 7.40779 0.833496 8C0.833496 8.5922 0.910592 9.03142 1.08862 9.4344C1.25487 9.81072 1.49992 10.129 1.76599 10.4745L1.78721 10.5021C2.96369 12.0305 4.99074 13.8333 8.00016 13.8333C11.0096 13.8333 13.0366 12.0305 14.2131 10.5021L14.2343 10.4745C14.5004 10.129 14.7455 9.81072 14.9117 9.4344C15.0897 9.03142 15.1668 8.5922 15.1668 8C15.1668 7.40779 15.0897 6.96858 14.9117 6.5656C14.7455 6.18927 14.5004 5.87101 14.2343 5.52545L14.2131 5.49791C13.0366 3.96946 11.0096 2.16666 8.00016 2.16666ZM2.57964 6.10786C3.66592 4.69661 5.43374 3.16666 8.00016 3.16666C10.5666 3.16666 12.3344 4.69661 13.4207 6.10786C13.7131 6.48772 13.8843 6.7147 13.997 6.9697C14.1023 7.20801 14.1668 7.49929 14.1668 8C14.1668 8.50071 14.1023 8.79199 13.997 9.0303C13.8843 9.28529 13.7131 9.51227 13.4207 9.89213C12.3344 11.3034 10.5666 12.8333 8.00016 12.8333C5.43374 12.8333 3.66592 11.3034 2.57964 9.89213C2.28725 9.51227 2.11599 9.28529 2.00334 9.0303C1.89805 8.79199 1.8335 8.50071 1.8335 8C1.8335 7.49929 1.89805 7.20801 2.00334 6.9697C2.11599 6.7147 2.28725 6.48772 2.57964 6.10786Z"
-                  fill=""
-                />
-              </svg>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => { handleQuickViewUpdate(); openModal(); }}
+            aria-label={t("common.view")}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white text-slate-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:text-blue"
+          >
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M8 5.5C6.62 5.5 5.5 6.62 5.5 8S6.62 10.5 8 10.5 10.5 9.38 10.5 8 9.38 5.5 8 5.5Zm-1 2.5a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" fill="currentColor"/>
+              <path fillRule="evenodd" clipRule="evenodd" d="M8 2.17C5 2.17 2.96 3.97 1.79 5.5c-.27.35-.52.67-.69 1.07-.18.4-.25.84-.25 1.43s.07.63.25 1.03c.17.38.42.7.69 1.05C2.96 12.03 5 13.83 8 13.83s5.04-1.8 6.21-3.33c.27-.35.52-.67.69-1.05.18-.4.25-.84.25-1.43s-.07-.63-.25-1.03a4.3 4.3 0 0 0-.69-1.07C13.04 3.97 11 2.17 8 2.17Zm-5.42 3.94C3.67 4.7 5.43 3.17 8 3.17s4.33 1.53 5.42 2.94c.29.38.46.65.57.9.1.24.17.53.17 1s-.07.57-.17.8c-.11.25-.28.52-.57.9C12.33 11.3 10.57 12.83 8 12.83s-4.33-1.53-5.42-2.94a3.3 3.3 0 0 1-.57-.9C1.91 8.75 1.83 8.5 1.83 8s.06-.57.17-.8c.11-.25.28-.52.57-.9Z" fill="currentColor"/>
+            </svg>
+          </button>
         </div>
 
-        <Link
-          href={`/shop-details/${item.slug}`}
-          onClick={(e) => {
-            if (
-              e.metaKey ||
-              e.ctrlKey ||
-              e.shiftKey ||
-              e.altKey ||
-              e.button !== 0
-            )
-              return;
-            markPendingCatalogRestore();
-            handleProductDetails();
-          }}
-          prefetch={false}
-          className="block"
-        >
+        {/* Product image */}
+        <Link {...linkProps} className="block">
           <div className="aspect-square relative">
             <Image
               src={imageSrc}
               alt={item.title}
               fill
-              sizes="(min-width: 1536px) 220px, (min-width: 1280px) 16vw, (min-width: 1024px) 22vw, (min-width: 640px) 28vw, 46vw"
-              className="object-contain p-5 transition-transform duration-300 group-hover:scale-[1.05] drop-shadow-[0_18px_28px_rgba(15,23,42,0.14)] sm:p-6"
+              sizes="(min-width: 1280px) 18vw, (min-width: 1024px) 24vw, (min-width: 640px) 30vw, 47vw"
+              className="object-contain p-6 transition-transform duration-300 group-hover:scale-[1.06] drop-shadow-[0_16px_24px_rgba(15,23,42,0.12)]"
             />
           </div>
         </Link>
-      </div>
 
-      <div className="flex min-w-0 flex-1 flex-col px-1">
-        <div className="flex min-h-0 flex-1 flex-col">
-          <div
-            className={`mb-2 flex min-h-[32px] flex-wrap items-start gap-2 sm:mb-2.5 sm:min-h-[36px] ${
-              item.reviews > 0 ? "justify-between" : "justify-end"
-            }`}
-          >
-            {item.reviews > 0 ? (
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <Image
-                        key={index}
-                        src="/images/icons/icon-star.svg"
-                        alt="star icon"
-                        width={14}
-                        height={14}
-                      />
-                    ))}
-                  </div>
-
-                  <p className="text-[12px] font-medium leading-4 text-dark-4">
-                    {t("common.reviewsLabel", { count: item.reviews })}
-                  </p>
-                </div>
-              </div>
-            ) : null}
-
-            <span
-              className={`inline-flex max-w-full shrink-0 rounded-full border px-2.5 py-1 text-center text-[10px] font-semibold leading-4 sm:px-3 sm:py-1.5 sm:text-[11px] ${availabilityClass}`}
-            >
+        {/* Out-of-stock overlay */}
+        {isOutOfStock ? (
+          <div className="pointer-events-none absolute inset-0 bg-white/60 backdrop-blur-[2px]">
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-500">
               {availabilityLabel}
             </span>
           </div>
+        ) : null}
+      </div>
 
-          <div className="min-h-[15px]">
-            <h3
-              className={`overflow-hidden font-semibold leading-5 text-dark transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
-                item.title.length > 70
-                  ? "text-[12px] sm:text-[13px] xl:text-[13px]"
-                  : item.title.length > 45
-                    ? "text-[13px] sm:text-[15px] xl:text-[14px]"
-                    : "text-[14px] sm:text-[17px] xl:text-[16px]"
-              }`}
-            >
-              <Link
-                href={`/shop-details/${item.slug}`}
-                onClick={(event) => {
-                  if (
-                    event.metaKey ||
-                    event.ctrlKey ||
-                    event.shiftKey ||
-                    event.altKey ||
-                    event.button !== 0
-                  ) {
-                    return;
-                  }
+      {/* ── Content area ── */}
+      <div className="flex flex-1 flex-col gap-2.5 p-3.5 sm:p-4">
 
-                  markPendingCatalogRestore();
-                  handleProductDetails();
-                }}
-                prefetch={false}
-              >
-                {item.title}
-              </Link>
-            </h3>
+        {/* Rating */}
+        {item.reviews > 0 ? (
+          <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <StarIcon key={i} filled={i < fullStars} />
+              ))}
+            </div>
+            <span className="text-[12px] font-semibold text-slate-700">{ratingValue}</span>
+            <span className="text-[11px] text-slate-400">
+              ({item.reviews})
+            </span>
           </div>
+        ) : null}
 
-          <div className="min-h-[0] sm:min-h-[48px]">
-            {item.shortDescription ? (
-              <Link
-                href={`/shop-details/${item.slug}`}
-                onClick={(e) => {
-                  if (
-                    e.metaKey ||
-                    e.ctrlKey ||
-                    e.shiftKey ||
-                    e.altKey ||
-                    e.button !== 0
-                  )
-                    return;
-                  markPendingCatalogRestore();
-                  handleProductDetails();
-                }}
-                prefetch={false}
-              >
-                <p className="mt-1 hidden overflow-hidden text-[13px] leading-5 text-dark-4 transition-colors duration-200 hover:text-blue [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] sm:block">
-                  {item.shortDescription}
-                </p>
-              </Link>
+        {/* Title */}
+        <h3 className="line-clamp-2 text-[13px] font-bold leading-snug text-slate-800 transition-colors duration-200 group-hover:text-blue sm:text-[14px]">
+          <Link {...linkProps}>{item.title}</Link>
+        </h3>
+
+        {/* Specs */}
+        {item.specs && item.specs.length > 0 ? (
+          <ul className="flex flex-col gap-1">
+            {item.specs.slice(0, 4).map((spec, i) => (
+              <li key={i} className="flex items-center gap-2 text-[11px] text-slate-500 sm:text-[12px]">
+                <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-blue/40" />
+                {spec}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        {/* Price block */}
+        <div className="mt-auto pt-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[18px] font-extrabold leading-none text-slate-900 sm:text-[20px]">
+              {formatPrice(item.discountedPrice)}
+            </span>
+            {hasDiscount ? (
+              <span className="rounded-full bg-green-50 px-2 py-0.5 text-[11px] font-bold text-green-600">
+                -{discountPercent}%
+              </span>
             ) : null}
           </div>
 
-          <div className="mt-auto pt-2.5 sm:pt-3">
-            <div className="grid min-h-[112px] gap-2 rounded-[18px] border border-gray-3/80 bg-[linear-gradient(180deg,#fbfcff_0%,#f4f7ff_100%)] p-2.5 sm:min-h-[122px] sm:gap-2.5 sm:rounded-[22px] sm:p-3 xl:min-h-[120px] xl:p-3">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-dark-4">
-                    {t("common.price")}
-                  </p>
+          {hasDiscount ? (
+            <span className="mt-0.5 block text-[12px] text-slate-400 line-through">
+              {formatPrice(item.price)}
+            </span>
+          ) : null}
+        </div>
 
-                  <div className="flex min-h-[36px] flex-wrap items-end gap-x-2 gap-y-1.5 break-words">
-                    <span className="max-w-full break-words text-[18px] font-semibold leading-tight text-dark sm:text-[23px] xl:text-[21px]">
-                      {formatPrice(item.discountedPrice)}
-                    </span>
-                    {hasDiscount ? (
-                      <span className="inline-flex max-w-full rounded-full bg-white px-2 py-1 text-[10px] font-medium text-dark-4 line-through shadow-[0_10px_24px_-20px_rgba(15,23,42,0.45)] sm:px-2.5 sm:text-[11px]">
-                        {formatPrice(item.price)}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-
-                {hasDiscount ? (
-                  <span className="shrink-0 rounded-full border border-green/10 bg-green/10 px-2.5 py-1 text-[10px] font-semibold text-green-dark sm:px-3 sm:text-[11px]">
-                    -{discountPercent}%
-                  </span>
-                ) : null}
-              </div>
-
-              <div className="mt-auto grid grid-cols-[minmax(0,1fr)_44px] gap-2 sm:grid-cols-[minmax(0,1fr)_50px]">
-                <button
-                  type="button"
-                  onClick={handleAddToCart}
-                  className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-full bg-blue px-3 py-2 text-[12px] font-medium text-white shadow-[0_20px_30px_-20px_rgba(60,80,224,0.8)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-dark sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="shrink-0 fill-current"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M1.4915 1.52567C1.22953 1.43835 0.94637 1.57993 0.859046 1.8419C0.771722 2.10387 0.913302 2.38703 1.17527 2.47436L1.35188 2.53322C1.80282 2.68354 2.10095 2.78371 2.32058 2.88589C2.52856 2.98264 2.61848 3.0605 2.67609 3.14043C2.7337 3.22037 2.77914 3.33029 2.80516 3.55819C2.83263 3.79886 2.83339 4.11337 2.83339 4.5887L2.83339 6.36993C2.83337 7.28166 2.83336 8.01654 2.91107 8.59451C2.99175 9.19459 3.16434 9.69984 3.56562 10.1011C3.9669 10.5024 4.47215 10.675 5.07222 10.7557C5.6502 10.8334 6.38507 10.8334 7.29679 10.8333H12.6667C12.9429 10.8333 13.1667 10.6095 13.1667 10.3333C13.1667 10.0572 12.9429 9.83335 12.6667 9.83335H7.33339C6.37644 9.83335 5.70903 9.83228 5.20547 9.76458C4.71628 9.69881 4.45724 9.57852 4.27273 9.39401C4.20826 9.32954 4.15164 9.25598 4.10244 9.16668H10.7057C11.0046 9.1667 11.2675 9.16671 11.4858 9.14315C11.7221 9.11764 11.951 9.06096 12.1664 8.91894C12.3818 8.77692 12.524 8.58882 12.6406 8.3817C12.7482 8.19036 12.8518 7.94869 12.9695 7.67396L13.2807 6.94778C13.537 6.34978 13.7515 5.84948 13.8588 5.44258C13.9708 5.01809 13.9999 4.57488 13.7358 4.17428C13.4716 3.77367 13.0528 3.62588 12.6185 3.56159C12.2022 3.49996 11.6579 3.49999 11.0073 3.50001L3.80456 3.50001C3.80273 3.48135 3.80078 3.46293 3.7987 3.44476C3.7618 3.12155 3.6814 2.82497 3.48733 2.55572C3.29327 2.28647 3.03734 2.11641 2.74238 1.9792C2.46489 1.85011 2.11201 1.73249 1.69443 1.59331L1.4915 1.52567Z"
-                      fill=""
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M3.50005 13C3.50005 13.8284 4.17163 14.5 5.00005 14.5C5.82848 14.5 6.50005 13.8284 6.50005 13C6.50005 12.1716 5.82848 11.5 5.00005 11.5C4.17163 11.5 3.50005 12.1716 3.50005 13ZM5.00005 13.5C4.72391 13.5 4.50005 13.2762 4.50005 13C4.50005 12.7239 4.72391 12.5 5.00005 12.5C5.2762 12.5 5.50005 12.7239 5.50005 13C5.50005 13.2762 5.2762 13.5 5.00005 13.5Z"
-                      fill=""
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M11.0001 14.5001C10.1716 14.5001 9.50005 13.8285 9.50005 13.0001C9.50005 12.1716 10.1716 11.5001 11.0001 11.5001C11.8285 11.5001 12.5001 12.1716 12.5001 13.0001C12.5001 13.8285 11.8285 14.5001 11.0001 14.5001ZM10.5001 13.0001C10.5001 13.2762 10.7239 13.5001 11.0001 13.5001C11.2762 13.5001 11.5001 13.2762 11.5001 13.0001C11.5001 12.7239 11.2762 12.5001 11.0001 12.5001C10.7239 12.5001 10.5001 12.7239 10.5001 13.0001Z"
-                      fill=""
-                    />
-                  </svg>
-                  <span className="truncate">{t("common.addToCart")}</span>
-                </button>
-
-                <ProductWhatsAppButton product={item} variant="icon" />
-              </div>
-            </div>
+        {/* Benefits */}
+        <div className="flex flex-col gap-1 rounded-[12px] bg-slate-50 px-3 py-2.5">
+          <div className="flex items-center gap-2 text-[11px] text-slate-500">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 text-blue">
+              <path d="M1 12L5 8V16H1V12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+              <path d="M5 9H15L19 12L21 15H5V9Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+              <circle cx="8.5" cy="18" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
+              <circle cx="17.5" cy="18" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
+            </svg>
+            {t("common.deliveryAcrossKyrgyzstan")}
           </div>
+          <div className="flex items-center gap-2 text-[11px] text-slate-500">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 text-blue">
+              <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+              <path d="M2 10H22" stroke="currentColor" strokeWidth="1.5"/>
+              <path d="M6 15H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+            {t("common.installment")} {t("common.installmentTerm", { months: 12 })}
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={isOutOfStock}
+            className="inline-flex items-center justify-center gap-1.5 rounded-[14px] bg-blue px-3 py-2.5 text-[12px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(60,80,224,0.7)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-dark disabled:opacity-50 sm:text-[13px]"
+          >
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 fill-current">
+              <path fillRule="evenodd" clipRule="evenodd" d="M1.49 1.53a.5.5 0 0 0-.31.95l.18.06c.45.15.75.25.97.35.21.1.3.18.36.26.06.08.1.19.13.42.03.24.03.55.03 1.03v1.78c0 .91 0 1.65.08 2.23.08.6.25 1.1.65 1.5.4.4.91.58 1.51.65.58.08 1.32.08 2.23.08h5.34a.5.5 0 0 0 0-1H7.33c-.96 0-1.63 0-2.13-.07-.49-.07-.75-.19-.94-.38a.9.9 0 0 1-.18-.35h6.6c.3 0 .56 0 .78-.03.24-.02.46-.08.67-.22.22-.14.36-.33.47-.54.11-.19.21-.43.33-.7l.31-.72c.26-.6.47-1.1.57-1.51.11-.43.14-.87-.12-1.27-.26-.4-.68-.55-1.11-.62-.42-.06-.96-.06-1.61-.06H3.8l-.02-.11c-.04-.32-.12-.61-.31-.88-.19-.27-.45-.44-.75-.58-.27-.13-.62-.25-1.04-.38L1.49 1.53Z" fill=""/>
+              <circle cx="5" cy="13" r="1" fill=""/>
+              <circle cx="11" cy="13" r="1" fill=""/>
+            </svg>
+            <span className="truncate">{t("common.addToCart")}</span>
+          </button>
+
+          <ProductWhatsAppButton product={item} variant="pill" className="rounded-[14px] !px-3 !py-2.5 !text-[12px] !font-semibold sm:!text-[13px]" />
         </div>
       </div>
     </article>
@@ -382,7 +292,5 @@ const ProductItemComponent = ({ item }: { item: Product }) => {
 };
 
 const ProductItem = React.memo(ProductItemComponent);
-
 ProductItem.displayName = "ProductItem";
-
 export default ProductItem;

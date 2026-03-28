@@ -77,6 +77,7 @@ export const mapStorefrontProductToProduct = (
     brand: getStorefrontProductBrand(product),
     category: normalizeTextValue(product.category),
     shortDescription: product.shortDescription,
+    specs: product.specs,
     description:
       "fullDescription" in product ? product.fullDescription : product.shortDescription,
     availability: product.availability,

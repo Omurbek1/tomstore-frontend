@@ -42,6 +42,7 @@ export type StorefrontProductCard = {
   sku?: string;
   name: string;
   shortDescription: string;
+  specs?: string[];
   price: number;
   oldPrice?: number | null;
   availability: StorefrontAvailability;

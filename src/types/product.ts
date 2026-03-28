@@ -15,6 +15,7 @@ export type Product = {
   category?: string;
   shortDescription?: string;
   description?: string;
+  specs?: string[];
   availability?: StorefrontAvailability;
   labels?: StorefrontProductLabel[];
   isFeatured?: boolean;
