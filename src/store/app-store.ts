@@ -1,6 +1,5 @@
 "use client";
 
-import { trackAddToCart } from "@/analytics/ecommerce";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { Product } from "@/types/product";
@@ -102,6 +101,16 @@ const normalizeWishlistItems = (items: WishlistItem[] = []) =>
     [],
   );
 
+const trackCartAddition = (item: CartItem) => {
+  void import("@/analytics/ecommerce")
+    .then(({ trackAddToCart }) => {
+      trackAddToCart(item);
+    })
+    .catch(() => {
+      // Analytics must never block cart updates.
+    });
+};
+
 export const useAppStore = create<AppStoreState>()(
   persist(
     (set) => ({
@@ -110,7 +119,7 @@ export const useAppStore = create<AppStoreState>()(
       quickViewProduct: EMPTY_PRODUCT,
       productDetails: EMPTY_PRODUCT,
       addItemToCart: (item) => {
-        trackAddToCart(item);
+        trackCartAddition(item);
         set((state) => ({
           cartItems: upsertCartItem(state.cartItems, item),
         }));
