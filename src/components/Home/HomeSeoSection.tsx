@@ -7,8 +7,14 @@ import {
   buildElectronicsPath,
   buildBrandsHubPath,
   buildCategoriesHubPath,
+  buildLaptopStudentsBishkekPath,
+  buildLaptopStudentsPath,
+  buildLaptopTeachersOshPath,
+  buildLaptopTeachersPath,
   buildComputersPath,
   buildLaptopsPath,
+  buildOfficePrinterPath,
+  buildOfficePrinterTalasPath,
   buildPrintersPath,
 } from "@/storefront/catalog-routing";
 
@@ -97,16 +103,78 @@ const HomeSeoSection = () => {
                 {t("header.categoryLaptop")}
               </Link>
               <Link
+                href={buildLaptopStudentsPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {locale === "en"
+                  ? "Student laptops"
+                  : locale === "ky"
+                    ? "Студенттерге ноутбуктар"
+                    : "Ноутбук для студентов"}
+              </Link>
+              <Link
+                href={buildLaptopTeachersPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {locale === "en"
+                  ? "Teacher laptops"
+                  : locale === "ky"
+                    ? "Мугалимдерге ноутбуктар"
+                    : "Ноутбук для учителей"}
+              </Link>
+              <Link
                 href={buildPrintersPath()}
                 className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
               >
                 {printerLabel}
               </Link>
               <Link
+                href={buildOfficePrinterPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {locale === "en"
+                  ? "Office printer"
+                  : locale === "ky"
+                    ? "Офис принтери"
+                    : "Офисный принтер"}
+              </Link>
+              <Link
                 href={buildComputersPath()}
                 className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
               >
                 {t("header.categoryDesktop")}
+              </Link>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href={buildLaptopStudentsBishkekPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {locale === "en"
+                  ? "Student laptops in Bishkek"
+                  : locale === "ky"
+                    ? "Бишкекте студенттер үчүн ноутбук"
+                    : "Ноутбук для студентов в Бишкеке"}
+              </Link>
+              <Link
+                href={buildLaptopTeachersOshPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {locale === "en"
+                  ? "Teacher laptops in Osh"
+                  : locale === "ky"
+                    ? "Ошто мугалимдер үчүн ноутбук"
+                    : "Ноутбук для учителей в Оше"}
+              </Link>
+              <Link
+                href={buildOfficePrinterTalasPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {locale === "en"
+                  ? "Office printer in Talas"
+                  : locale === "ky"
+                    ? "Таласта офис принтери"
+                    : "Офисный принтер в Таласе"}
               </Link>
             </div>
           </div>

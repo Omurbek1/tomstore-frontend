@@ -1,4 +1,7 @@
-import type { CatalogHubSeoContent } from "@/seo/content";
+import type {
+  CatalogHubSeoContent,
+  CatalogLandingSeoContent,
+} from "@/seo/content";
 import { buildAbsoluteUrl } from "@/storefront/site";
 import {
   buildBrandPath,
@@ -7,8 +10,10 @@ import {
 import type { StorefrontBrand, StorefrontCategory } from "@/storefront/types";
 import CatalogHubSection from "./CatalogHubSection";
 
+type CatalogHubPageContent = CatalogHubSeoContent | CatalogLandingSeoContent;
+
 type CatalogHubPageProps = {
-  content: CatalogHubSeoContent;
+  content: CatalogHubPageContent;
   items: Array<StorefrontCategory | StorefrontBrand>;
   type: "category" | "brand";
   path: string;
@@ -16,6 +21,10 @@ type CatalogHubPageProps = {
   sectionLabel: string;
   sectionHref: string;
   currentLabel: string;
+  cardLabel?: string;
+  itemCountLabel?: string;
+  sectionTitle?: string;
+  sectionDescription?: string;
 };
 
 export default function CatalogHubPage({
@@ -27,7 +36,33 @@ export default function CatalogHubPage({
   sectionLabel,
   sectionHref,
   currentLabel,
+  cardLabel,
+  itemCountLabel,
+  sectionTitle,
+  sectionDescription,
 }: CatalogHubPageProps) {
+  const hubContent: CatalogHubSeoContent = {
+    ...content,
+    cardLabel:
+      cardLabel ??
+      ("cardLabel" in content
+        ? content.cardLabel
+        : type === "brand"
+          ? "Brand"
+          : "Category"),
+    itemCountLabel:
+      itemCountLabel ??
+      ("itemCountLabel" in content ? content.itemCountLabel : "products"),
+    sectionTitle:
+      sectionTitle ??
+      ("sectionTitle" in content ? content.sectionTitle : content.summaryTitle),
+    sectionDescription:
+      sectionDescription ??
+      ("sectionDescription" in content
+        ? content.sectionDescription
+        : content.summaryDescription),
+  };
+
   const collectionStructuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -106,7 +141,7 @@ export default function CatalogHubPage({
           __html: JSON.stringify(faqStructuredData),
         }}
       />
-      <CatalogHubSection content={content} type={type} items={items} />
+      <CatalogHubSection content={hubContent} type={type} items={items} />
     </>
   );
 }

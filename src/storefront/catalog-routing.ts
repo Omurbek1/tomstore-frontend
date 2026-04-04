@@ -135,6 +135,18 @@ export const buildPrintersPath = () => "/printers";
 
 export const buildComputersPath = () => "/computers";
 
+export const buildLaptopStudentsPath = () => "/laptops/students";
+
+export const buildLaptopTeachersPath = () => "/laptops/teachers";
+
+export const buildOfficePrinterPath = () => "/printers/office";
+
+export const buildLaptopStudentsBishkekPath = () => "/laptops/students/bishkek";
+
+export const buildLaptopTeachersOshPath = () => "/laptops/teachers/osh";
+
+export const buildOfficePrinterTalasPath = () => "/printers/office/talas";
+
 export const buildLegacyCatalogPath = (query: StorefrontCatalogRouteQuery = {}) => {
   const searchParams = new URLSearchParams();
 

@@ -9,6 +9,12 @@ import {
   buildComputersPath,
   buildLaptopsPath,
   buildPrintersPath,
+  buildLaptopStudentsPath,
+  buildLaptopTeachersPath,
+  buildOfficePrinterPath,
+  buildLaptopStudentsBishkekPath,
+  buildLaptopTeachersOshPath,
+  buildOfficePrinterTalasPath,
 } from "@/storefront/catalog-routing";
 import {
   buildBlogCategoryPath,
@@ -169,6 +175,42 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
+    },
+    {
+      url: buildAbsoluteUrl(buildLaptopStudentsPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.86,
+    },
+    {
+      url: buildAbsoluteUrl(buildLaptopTeachersPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.86,
+    },
+    {
+      url: buildAbsoluteUrl(buildOfficePrinterPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.86,
+    },
+    {
+      url: buildAbsoluteUrl(buildLaptopStudentsBishkekPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.84,
+    },
+    {
+      url: buildAbsoluteUrl(buildLaptopTeachersOshPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.84,
+    },
+    {
+      url: buildAbsoluteUrl(buildOfficePrinterTalasPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.84,
     },
     {
       url: buildAbsoluteUrl("/contact"),

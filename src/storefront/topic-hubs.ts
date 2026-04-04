@@ -49,12 +49,12 @@ export const selectTopicCategories = (
     const searchText = `${category.name} ${category.slug}`.toLowerCase();
     return matchers.some((matcher) => matcher.test(searchText));
   });
-  const matchedSlugs = new Set(matchedCategories.map((category) => category.slug));
-  const fallbackCategories = sortedCategories.filter(
-    (category) => !matchedSlugs.has(category.slug),
-  );
 
-  return [...matchedCategories, ...fallbackCategories].slice(0, limit);
+  if (matchedCategories.length > 0) {
+    return matchedCategories.slice(0, limit);
+  }
+
+  return sortedCategories.slice(0, limit);
 };
 
 export const getTopicBreadcrumbLabels = (
