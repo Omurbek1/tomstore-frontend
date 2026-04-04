@@ -550,3 +550,578 @@ export const getOfficePrinterTalasSeoContent = (
     getOfficePrinterSeoContent(locale),
     OFFICE_PRINTER_TALAS_OVERRIDES[locale],
   );
+
+type CityKey = "bishkek" | "osh" | "talas";
+
+const CITY_IN = {
+  bishkek: { ru: "в Бишкеке", en: "in Bishkek", ky: "Бишкекте" },
+  osh: { ru: "в Оше", en: "in Osh", ky: "Ошто" },
+  talas: { ru: "в Таласе", en: "in Talas", ky: "Таласта" },
+} satisfies Record<CityKey, { ru: string; en: string; ky: string }>;
+
+const CITY_NAME = {
+  bishkek: { ru: "Бишкек", en: "Bishkek", ky: "Бишкек" },
+  osh: { ru: "Ош", en: "Osh", ky: "Ош" },
+  talas: { ru: "Талас", en: "Talas", ky: "Талас" },
+} satisfies Record<CityKey, { ru: string; en: string; ky: string }>;
+
+const buildStudentLaptopCityContent = (
+  locale: Locale,
+  city: CityKey,
+): CatalogHubSeoContent => {
+  const base = getStudentLaptopSeoContent(locale);
+  const cityIn = CITY_IN[city][locale];
+  const cityName = CITY_NAME[city][locale];
+
+  switch (locale) {
+    case "en":
+      return mergeCityHubContent(base, {
+        metaTitle: `Student laptops ${cityIn} | TOMSTORE`,
+        metaDescription:
+          `Laptops for students ${cityIn}: light models for study, online classes and document work, with fast WhatsApp ordering and manager support.`,
+        eyebrow: "TOMSTORE Laptops",
+        introTitle: `Student laptops ${cityIn}`,
+        introDescription:
+          `If you are looking for a student laptop ${cityIn}, this page helps narrow the choice by weight, battery life, SSD storage and memory. It is a practical starting point for study, online classes and everyday work.`,
+        summaryTitle: `How to choose a student laptop ${cityIn}`,
+        summaryDescription:
+          "Focus on weight, battery life, SSD storage and 8-16 GB RAM first. For study and documents, lighter laptops that are easy to carry every day are usually the best fit.",
+        countLabel: "Student laptop picks",
+        catalogLabel: "Open laptops",
+        contactLabel: "Talk to manager",
+        cardLabel: "Category",
+        itemCountLabel: "products",
+        sectionTitle: `Student laptops ${cityIn}`,
+        sectionDescription:
+          `Browse laptop categories that fit study, online classes and daily work ${cityIn}, then continue to a quick order through WhatsApp.`,
+        highlights: [
+          `Student laptops ${cityIn}`,
+          "Light models for study and documents",
+          "Fast access to categories and catalog pages",
+          "Manager support for stock and selection",
+        ],
+        guideTitle: `What matters before buying ${cityIn}`,
+        guideParagraphs: [
+          `For students ${cityIn}, SSD storage, 8-16 GB RAM, good battery life and a comfortable display matter most. If the laptop is mainly for online classes and documents, there is no need to overspend on extra power.`,
+          "If you want a more universal option for study and city life, choose a model with a comfortable keyboard and a bit more memory. Before ordering, you can quickly confirm the price and stock with TOMSTORE.",
+        ],
+        faqs: [
+          {
+            question: `Which laptop is best for a student ${cityIn}?`,
+            answer:
+              "A light laptop with SSD storage, 8-16 GB RAM and good battery life is usually the best fit for study, video calls and document work.",
+          },
+          {
+            question: `Is this page useful for school and college students ${cityIn}?`,
+            answer:
+              "Yes. It is a practical starting point for school, college and university students who need an everyday laptop.",
+          },
+          {
+            question: `Can I order a laptop through WhatsApp ${cityIn}?`,
+            answer:
+              "Yes. You can confirm stock, price and configuration with a manager and place the order from ${cityName} or any other region of Kyrgyzstan.",
+          },
+        ],
+        keywords: [
+          `student laptop ${cityName}`,
+          `student laptops in ${cityName}`,
+          `laptop for study ${cityName}`,
+          `buy laptop in ${cityName}`,
+          `${cityName} laptops`,
+        ],
+      });
+    case "ky":
+      return mergeCityHubContent(base, {
+        metaTitle: `${cityIn} студенттер үчүн ноутбук | TOMSTORE`,
+        metaDescription:
+          `${cityIn} студенттер үчүн ноутбуктар: окуу, онлайн сабак жана документ менен иштөө үчүн жеңил моделдер, WhatsApp аркылуу тез заказ жана менеджердин жардамы.`,
+        eyebrow: "TOMSTORE Ноутбуктары",
+        introTitle: `${cityIn} студенттер үчүн ноутбук`,
+        introDescription:
+          `Эгер ${cityIn} студенттер үчүн ноутбук издеп жатсаңыз, бул барак салмак, батарея, SSD жана эс тутум боюнча тандоону тез тарылтууга жардам берет. Окуу, онлайн сабак жана күнүмдүк иш үчүн ыңгайлуу баштапкы чекит.`,
+        summaryTitle: `${cityIn} студенттер үчүн ноутбук кантип тандалат`,
+        summaryDescription:
+          "Алгач салмакка, батареяга, SSDге жана 8-16 ГБ эс тутумга көңүл буруңуз. Окуу жана документ үчүн жеңил, күн сайын көтөрүп жүрүүгө ыңгайлуу моделдер жакшыраак.",
+        countLabel: "Студенттер үчүн тандоолор",
+        catalogLabel: "Ноутбуктарды ачуу",
+        contactLabel: "Менеджерге жазуу",
+        cardLabel: "Категория",
+        itemCountLabel: "товар",
+        sectionTitle: `${cityIn} студенттер үчүн ноутбуктар`,
+        sectionDescription:
+          `${cityIn} окуу, онлайн сабак жана күнүмдүк иш үчүн ылайыктуу ноутбук категорияларын карап, андан кийин WhatsApp аркылуу тез заказ кылыңыз.`,
+        highlights: [
+          `${cityIn} студенттер үчүн ноутбуктар`,
+          "Окуу жана документ үчүн жеңил моделдер",
+          "Категорияларга жана каталогго тез өтүү",
+          "Бар-жогу жана тандоо боюнча менеджердин жардамы",
+        ],
+        guideTitle: `${cityIn} сатып алардан мурда эмнени караш керек`,
+        guideParagraphs: [
+          `${cityIn} студент үчүн SSD, 8-16 ГБ эс тутум, жакшы батарея жана ыңгайлуу экран маанилүү. Эгер ноутбук негизинен онлайн сабак жана документтер үчүн керек болсо, ашыкча кубаттуулук үчүн төлөөнүн кажети жок.`,
+          "Эгер окуу менен шаар ичинде жүрүүгө да ылайыктуу универсалдуу вариант керек болсо, ыңгайлуу клавиатурасы жана бир аз көбүрөөк эс тутуму бар моделди тандаңыз. Заказдан мурда TOMSTORE менен баасын жана бар-жогун тактаса болот.",
+        ],
+        faqs: [
+          {
+            question: `${cityIn} студент үчүн кайсы ноутбук жакшы?`,
+            answer:
+              "SSD, 8-16 ГБ эс тутум жана жакшы батареясы бар жеңил ноутбук көбүнчө окуу, видеосүйлөшүү жана документ менен иштөө үчүн эң туура келет.",
+          },
+          {
+            question: `Бул барак ${cityIn} мектеп же колледж үчүн да ылайыктуубу?`,
+            answer:
+              "Ооба. Бул жерден мектеп, колледж жана университет үчүн күнүмдүк колдонууга ыңгайлуу ноутбук тандаса болот.",
+          },
+          {
+            question: `${cityIn} WhatsApp аркылуу заказ кылса болобу?`,
+            answer:
+              `Ооба. Менеджер менен бар-жогун, баасын жана комплектациясын тактап, ${cityName} шаарынан же Кыргызстандагы башка аймактардан заказ берсе болот.`,
+          },
+        ],
+        keywords: [
+          `${cityIn} студенттер үчүн ноутбук`,
+          `${cityIn} окууга ноутбук`,
+          `студенттер үчүн ноутбук ${cityName}`,
+          `ноутбук сатып алуу ${cityName}`,
+          `${cityName} ноутбуктары`,
+        ],
+      });
+    case "ru":
+    default:
+      return mergeCityHubContent(base, {
+        metaTitle: `Ноутбук для студентов ${cityIn} | TOMSTORE`,
+        metaDescription:
+          `Ноутбуки для студентов ${cityIn}: легкие модели для учебы, онлайн-занятий и работы с документами, быстрый заказ через WhatsApp и помощь менеджера.`,
+        eyebrow: "TOMSTORE Ноутбуки",
+        introTitle: `Ноутбук для студентов ${cityIn}`,
+        introDescription:
+          `Если вы ищете ноутбук для студентов ${cityIn}, эта страница помогает быстро сузить выбор по весу, автономности, SSD и памяти. Здесь удобно подобрать модель для учебы, онлайн-пар и повседневной работы.`,
+        summaryTitle: `Как выбрать ноутбук для студентов ${cityIn}`,
+        summaryDescription:
+          "Сначала смотрите на вес, батарею, SSD и 8-16 ГБ памяти. Для учебы и документов обычно лучше легкие модели, которые удобно носить каждый день.",
+        countLabel: "Подборок для студентов",
+        catalogLabel: "Открыть ноутбуки",
+        contactLabel: "Связаться с менеджером",
+        cardLabel: "Категория",
+        itemCountLabel: "товаров",
+        sectionTitle: `Ноутбуки для студентов ${cityIn}`,
+        sectionDescription:
+          `Смотрите категории ноутбуков, которые подходят для учебы, онлайн-занятий и повседневной работы ${cityIn}, а затем быстро переходите к заказу.`,
+        highlights: [
+          `Ноутбуки для студентов ${cityIn}`,
+          "Легкие модели для учебы и документов",
+          "Быстрый переход к категориям и каталогу",
+          "Помощь менеджера с наличием и подбором",
+        ],
+        guideTitle: `Что важно перед покупкой ${cityIn}`,
+        guideParagraphs: [
+          `Для студента ${cityIn} важны SSD, 8-16 ГБ памяти, автономность и удобный экран. Если ноутбук нужен для онлайн-занятий и рефератов, не стоит переплачивать за лишнюю производительность.`,
+          "Если нужен более универсальный вариант для учебы и поездок по городу, смотрите на модели с хорошей клавиатурой и запасом по памяти. Перед заказом можно быстро уточнить цену и наличие у менеджера TOMSTORE.",
+        ],
+        faqs: [
+          {
+            question: `Какой ноутбук лучше студенту ${cityIn}?`,
+            answer:
+              "Обычно подходит легкий ноутбук с SSD, 8-16 ГБ оперативной памяти и нормальной автономностью. Такой вариант удобен для учебы, видеосвязи и работы с документами.",
+          },
+          {
+            question: `Подойдет ли эта страница для школьников и колледжа ${cityIn}?`,
+            answer:
+              "Да. Здесь удобно подобрать ноутбук для учебы в школе, колледже или университете, если нужен практичный и недорогой вариант.",
+          },
+          {
+            question: `Можно ли заказать ноутбук через WhatsApp ${cityIn}?`,
+            answer:
+              "Да. Можно быстро уточнить наличие, цену и комплектацию и оформить заказ через менеджера ${cityName} и по всему Кыргызстану.",
+          },
+        ],
+        keywords: [
+          `ноутбук для студентов ${cityName}`,
+          `ноутбук для студентов в ${cityName}`,
+          `ноутбук для учебы ${cityName}`,
+          `купить ноутбук в ${cityName}`,
+          `${cityName} ноутбуки`,
+        ],
+      });
+  }
+};
+
+const buildTeacherLaptopCityContent = (
+  locale: Locale,
+  city: CityKey,
+): CatalogHubSeoContent => {
+  const base = getTeacherLaptopSeoContent(locale);
+  const cityIn = CITY_IN[city][locale];
+  const cityName = CITY_NAME[city][locale];
+
+  switch (locale) {
+    case "en":
+      return mergeCityHubContent(base, {
+        metaTitle: `Teacher laptops ${cityIn} | TOMSTORE`,
+        metaDescription:
+          `Laptops for teachers ${cityIn}: practical models for lessons, presentations and online classes, with fast WhatsApp ordering and manager support.`,
+        eyebrow: "TOMSTORE Laptops",
+        introTitle: `Teacher laptops ${cityIn}`,
+        introDescription:
+          `If you need a teacher laptop ${cityIn}, this page helps compare models for lessons, presentations and document work. It is a practical starting point for a quick decision.`,
+        summaryTitle: `What teachers ${cityIn} should look for`,
+        summaryDescription:
+          "For lessons and presentations, comfort, battery life, a good display and stable performance in browsers, video and presentation apps matter most.",
+        countLabel: "Teacher laptop picks",
+        catalogLabel: "Open laptops",
+        contactLabel: "Talk to manager",
+        cardLabel: "Category",
+        itemCountLabel: "products",
+        sectionTitle: `Teacher laptops ${cityIn}`,
+        sectionDescription:
+          `Browse laptops that fit lessons, presentations and document work ${cityIn}, then continue to a quick order through WhatsApp.`,
+        highlights: [
+          `Teacher laptops ${cityIn}`,
+          "Practical models for lessons and presentations",
+          "Fast access to categories and catalog pages",
+          "Manager support for stock and selection",
+        ],
+        guideTitle: `What configuration a teacher ${cityIn} needs`,
+        guideParagraphs: [
+          `For everyday work ${cityIn}, a laptop with SSD storage, good battery life and 8-16 GB RAM is usually enough. It should handle documents, presentations and online platforms without issues.`,
+          "If lessons use more tabs, video and course materials, a model with more memory and a more comfortable display is a safer choice.",
+        ],
+        faqs: [
+          {
+            question: `Does a teacher ${cityIn} need a powerful laptop?`,
+            answer:
+              "Usually not. For lessons, presentations and documents, reliability, battery life and comfort matter more than extra raw power.",
+          },
+          {
+            question: `Is this page useful for schools and training centers ${cityIn}?`,
+            answer:
+              "Yes. It helps when choosing laptops for teachers, online classes and educational work.",
+          },
+          {
+            question: `Can I order through WhatsApp ${cityIn}?`,
+            answer:
+              "Yes. You can confirm price, stock and configuration with a manager and place the order from ${cityName} or any other region of Kyrgyzstan.",
+          },
+        ],
+        keywords: [
+          `teacher laptop ${cityName}`,
+          `teacher laptops in ${cityName}`,
+          `school laptop ${cityName}`,
+          `buy laptop in ${cityName}`,
+          `${cityName} laptops`,
+        ],
+      });
+    case "ky":
+      return mergeCityHubContent(base, {
+        metaTitle: `Мугалимдер үчүн ноутбук ${cityName} | TOMSTORE`,
+        metaDescription:
+          `${cityName} шаарында мугалимдер үчүн ноутбуктар: сабак, презентация жана онлайн сабак үчүн практикалык моделдер, WhatsApp аркылуу тез заказ жана менеджердин жардамы.`,
+        eyebrow: "TOMSTORE Ноутбуктары",
+        introTitle: `${cityName} шаарында мугалимдер үчүн ноутбук`,
+        introDescription:
+          `Эгер ${cityName} шаарында мугалимдер үчүн ноутбук керек болсо, бул барак сабак, презентация жана документ менен иштөө үчүн моделдерди тез салыштырууга жардам берет. Тандоону жөнөкөйлөтүү үчүн практикалык баштапкы чекит.`,
+        summaryTitle: `${cityName} шаарында мугалимдер үчүн ноутбукта эмнени караш керек`,
+        summaryDescription:
+          "Сабак жана презентация үчүн ыңгайлуулук, батарея, жакшы экран жана браузер, видео менен туруктуу иштөө маанилүү.",
+        countLabel: "Мугалимдер үчүн тандоолор",
+        catalogLabel: "Ноутбуктарды ачуу",
+        contactLabel: "Менеджерге жазуу",
+        cardLabel: "Категория",
+        itemCountLabel: "товар",
+        sectionTitle: `${cityName} шаарында мугалимдер үчүн ноутбуктар`,
+        sectionDescription:
+          `${cityName} шаарында сабак, презентация жана документ менен иштөө үчүн ылайыктуу ноутбуктарды карап чыгып, андан кийин WhatsApp аркылуу тез заказ кылыңыз.`,
+        highlights: [
+          `${cityName} шаарында мугалимдер үчүн ноутбуктар`,
+          "Сабак жана презентация үчүн практикалык моделдер",
+          "Категорияларга жана каталогго тез өтүү",
+          "Бар-жогу жана тандоо боюнча менеджердин жардамы",
+        ],
+        guideTitle: `${cityName} шаарында мугалимге кандай конфигурация керек`,
+        guideParagraphs: [
+          `Күнүмдүк иш үчүн ${cityName} шаарында SSD, жакшы батарея жана 8-16 ГБ эс тутуму бар ноутбук жетиштүү. Ал документ, презентация жана онлайн платформалар менен көйгөйсүз иштеши керек.`,
+          "Эгер сабакта көп өтмөк, видео жана окуу материалдары колдонулса, эс тутуму көбүрөөк жана экраны ыңгайлуу модель жакшыраак.",
+        ],
+        faqs: [
+          {
+            question: `${cityName} шаарында мугалимге күчтүү ноутбук керекпи?`,
+            answer:
+              "Адатта жок. Сабак, презентация жана документтер үчүн ашыкча кубаттан көрө ишенимдүүлүк, батарея жана ыңгайлуулук маанилүүрөөк.",
+          },
+          {
+            question: `Бул барак ${cityName} шаарындагы мектептер жана окуу борборлору үчүн ылайыктуубу?`,
+            answer:
+              "Ооба. Мугалимдер, онлайн сабактар жана билим берүү иши үчүн ноутбук тандаганда бул барак пайдалуу болот.",
+          },
+          {
+            question: `${cityName} шаарында WhatsApp аркылуу заказ кылса болобу?`,
+            answer:
+              `Ооба. Баасын, бар-жогун жана комплектациясын менеджер менен тактап, ${cityName} шаарынан жана Кыргызстандагы башка аймактардан заказ берсе болот.`,
+          },
+        ],
+        keywords: [
+          `мугалимдер үчүн ноутбук ${cityName}`,
+          `${cityName} шаарында мугалимдер үчүн ноутбук`,
+          `мектеп үчүн ноутбук ${cityName}`,
+          `ноутбук сатып алуу ${cityName}`,
+          `${cityName} ноутбуктары`,
+        ],
+      });
+    case "ru":
+    default:
+      return mergeCityHubContent(base, {
+        metaTitle: `Ноутбук для учителей ${cityIn} | TOMSTORE`,
+        metaDescription:
+          `Ноутбуки для учителей ${cityIn}: удобные модели для уроков, презентаций и онлайн-занятий, быстрый заказ через WhatsApp и помощь менеджера.`,
+        eyebrow: "TOMSTORE Ноутбуки",
+        introTitle: `Ноутбук для учителей ${cityIn}`,
+        introDescription:
+          `Если нужен ноутбук для учителя ${cityIn}, здесь можно быстро сравнить модели для уроков, презентаций и работы с документами. Страница помогает выбрать практичный вариант без лишнего поиска.`,
+        summaryTitle: `Что важно учителю ${cityIn} при выборе ноутбука`,
+        summaryDescription:
+          "Для уроков и презентаций важны удобство, автономность, хороший экран и стабильная работа с браузером, видео и презентациями.",
+        countLabel: "Подборок для учителей",
+        catalogLabel: "Открыть ноутбуки",
+        contactLabel: "Связаться с менеджером",
+        cardLabel: "Категория",
+        itemCountLabel: "товаров",
+        sectionTitle: `Ноутбуки для учителей ${cityIn}`,
+        sectionDescription:
+          `Смотрите ноутбуки, которые подходят для уроков, презентаций и работы с документами ${cityIn}, а затем быстро переходите к заказу.`,
+        highlights: [
+          `Ноутбуки для учителей ${cityIn}`,
+          "Удобные модели для уроков и презентаций",
+          "Быстрый переход к категориям и каталогу",
+          "Помощь менеджера с наличием и подбором",
+        ],
+        guideTitle: `Какая конфигурация нужна учителю ${cityIn}`,
+        guideParagraphs: [
+          `Для повседневной работы учителю ${cityIn} достаточно ноутбука с SSD, хорошей батареей и 8-16 ГБ памяти. Он должен без проблем открывать документы, презентации и онлайн-платформы.`,
+          "Если планируются уроки с большим количеством вкладок, видео и материалов, лучше взять модель с запасом по памяти и более комфортным экраном.",
+        ],
+        faqs: [
+          {
+            question: `Нужен ли учителю ${cityIn} мощный ноутбук?`,
+            answer:
+              "Обычно нет. Для уроков, презентаций и документов важнее надежность, автономность и комфорт, чем избыточная мощность.",
+          },
+          {
+            question: `Подходит ли эта страница для школ и учебных центров ${cityIn}?`,
+            answer:
+              "Да. Она полезна, когда нужно выбрать ноутбук для преподавателей, онлайн-уроков и рабочих задач учебного заведения.",
+          },
+          {
+            question: `Можно ли заказать через WhatsApp ${cityIn}?`,
+            answer:
+              "Да. Вы можете уточнить цену, наличие и комплектацию через менеджера и оформить заказ ${cityName} и по всему Кыргызстану.",
+          },
+        ],
+        keywords: [
+          `ноутбук для учителей ${cityName}`,
+          `ноутбук для учителей в ${cityName}`,
+          `ноутбук для школы ${cityName}`,
+          `купить ноутбук в ${cityName}`,
+          `${cityName} ноутбуки`,
+        ],
+      });
+  }
+};
+
+const buildOfficePrinterCityContent = (
+  locale: Locale,
+  city: CityKey,
+): CatalogHubSeoContent => {
+  const base = getOfficePrinterSeoContent(locale);
+  const cityIn = CITY_IN[city][locale];
+  const cityName = CITY_NAME[city][locale];
+
+  switch (locale) {
+    case "en":
+      return mergeCityHubContent(base, {
+        metaTitle: `Office printer ${cityIn} | TOMSTORE`,
+        metaDescription:
+          `Office printers ${cityIn}: laser, inkjet and MFP models for school, company and home use, with fast WhatsApp ordering and manager support.`,
+        eyebrow: "TOMSTORE Printers",
+        introTitle: `Office printer ${cityIn}`,
+        introDescription:
+          `If you need an office printer ${cityIn}, this page helps you quickly compare models for documents, reports and study materials. It is a practical starting point for a fast decision.`,
+        summaryTitle: `How to choose an office printer ${cityIn}`,
+        summaryDescription:
+          "Focus on print volume, speed, consumables and maintenance. For school and office use, laser printers or MFPs are usually the best fit.",
+        countLabel: "Office printer picks",
+        catalogLabel: "Open printers",
+        contactLabel: "Talk to manager",
+        cardLabel: "Category",
+        itemCountLabel: "products",
+        sectionTitle: `Office printers ${cityIn}`,
+        sectionDescription:
+          `Browse printers and multifunction devices that fit documents, reports and study materials ${cityIn}, then continue to a quick order through WhatsApp.`,
+        highlights: [
+          `Office printers ${cityIn}`,
+          "Laser printers and multifunction devices",
+          "Fast access to categories and catalog pages",
+          "Manager support for consumables and stock",
+        ],
+        guideTitle: `What matters for office printing ${cityIn}`,
+        guideParagraphs: [
+          `If the printer ${cityIn} will be used for regular document printing, a laser model with simple maintenance and available consumables is usually the safest choice.`,
+          "For a school or small office, an MFP is also a good option when scanning and copying are needed. You can confirm price and stock through WhatsApp before ordering.",
+        ],
+        faqs: [
+          {
+            question: `Which printer is best for an office ${cityIn}?`,
+            answer:
+              "For office use, a laser printer or multifunction device is usually the best option because it handles regular document printing and is easier to maintain.",
+          },
+          {
+            question: `Is this page useful for schools ${cityIn} too?`,
+            answer:
+              "Yes. Schools need reliability, speed and easy maintenance, and office printers and MFPs are a strong fit for those tasks.",
+          },
+          {
+            question: `Can I order a printer through WhatsApp ${cityIn}?`,
+            answer:
+              "Yes. You can confirm price, stock and cartridges with a manager and place the order from ${cityName} or any other region of Kyrgyzstan.",
+          },
+        ],
+        keywords: [
+          `office printer ${cityName}`,
+          `printer for office ${cityName}`,
+          `printer for school ${cityName}`,
+          `buy printer in ${cityName}`,
+          `${cityName} printers`,
+        ],
+      });
+    case "ky":
+      return mergeCityHubContent(base, {
+        metaTitle: `Офис принтери ${cityName} | TOMSTORE`,
+        metaDescription:
+          `${cityName} шаарында офис принтерлери: мектеп, компания жана үй үчүн лазердик, сыя жана МФУ моделдер, WhatsApp аркылуу тез заказ жана менеджердин жардамы.`,
+        eyebrow: "TOMSTORE Принтерлери",
+        introTitle: `${cityName} шаарында офис принтери`,
+        introDescription:
+          `Эгер ${cityName} шаарында офис принтери керек болсо, бул барак документ, отчет жана окуу материалдары үчүн моделдерди тез салыштырууга жардам берет. Ыкчам тандоо үчүн практикалык баштапкы чекит.`,
+        summaryTitle: `${cityName} шаарында офис принтерин кантип тандоо керек`,
+        summaryDescription:
+          "Басма көлөмүнө, ылдамдыкка, чыгымдалуучу материалга жана тейлөөгө көңүл буруңуз. Мектеп жана офис үчүн көбүнчө лазердик принтер же МФУ жакшы болот.",
+        countLabel: "Офис үчүн тандоолор",
+        catalogLabel: "Принтерлерди ачуу",
+        contactLabel: "Менеджерге жазуу",
+        cardLabel: "Категория",
+        itemCountLabel: "товар",
+        sectionTitle: `${cityName} шаарында офис принтерлери`,
+        sectionDescription:
+          `${cityName} шаарында документ, отчет жана окуу материалы үчүн ылайыктуу принтерлерди жана МФУларды карап чыгып, андан кийин WhatsApp аркылуу тез заказ кылыңыз.`,
+        highlights: [
+          `${cityName} шаарында офис принтерлери`,
+          "Лазердик принтерлер жана МФУ",
+          "Категорияларга жана каталогго тез өтүү",
+          "Чыгымдалуучу материал жана бар-жогу боюнча жардам",
+        ],
+        guideTitle: `${cityName} шаарында офис басмасы үчүн эмнени караш керек`,
+        guideParagraphs: [
+          `Эгер ${cityName} шаарында принтер дайыма документ чыгарууга колдонулса, тейлөөсү жеңил жана чыгымдалуучу материалдары жеткиликтүү лазердик модель жакшы чечим болот.`,
+          "Мектеп же чакан офис үчүн сканерлөө жана көчүрүү керек болсо, МФУ да ылайыктуу. Заказдан мурда WhatsApp аркылуу баасын жана бар-жогун тактап алса болот.",
+        ],
+        faqs: [
+          {
+            question: `${cityName} шаарында офис үчүн кайсы принтер жакшы?`,
+            answer:
+              "Офистик колдонууга көбүнчө лазердик принтер же МФУ жакшы келет, анткени алар документти көп басууга ыңгайлуу жана тейлөөсү жеңил.",
+          },
+          {
+            question: `Бул барак ${cityName} шаарындагы мектептер үчүн да пайдалуубу?`,
+            answer:
+              "Ооба. Мектеп үчүн ишенимдүүлүк, ылдамдык жана тейлөө жеңилдиги маанилүү, ал эми офис моделдери жана МФУ ошол талаптарга жакшы жооп берет.",
+          },
+          {
+            question: `${cityName} шаарында WhatsApp аркылуу заказ кылса болобу?`,
+            answer:
+              `Ооба. Менеджер менен баасын, бар-жогун жана картридждерин тактап, ${cityName} шаарынан жана Кыргызстандагы башка аймактардан заказ кылса болот.`,
+          },
+        ],
+        keywords: [
+          `офис принтери ${cityName}`,
+          `${cityName} шаарында офис принтери`,
+          `${cityName} шаарында принтер сатып алуу`,
+          `принтер үчүн ${cityName}`,
+          `${cityName} принтерлери`,
+        ],
+      });
+    case "ru":
+    default:
+      return mergeCityHubContent(base, {
+        metaTitle: `Офисный принтер ${cityIn} | TOMSTORE`,
+        metaDescription:
+          `Офисные принтеры ${cityIn}: лазерные, струйные и МФУ для школы, компании и дома, быстрый заказ через WhatsApp и помощь менеджера.`,
+        eyebrow: "TOMSTORE Принтеры",
+        introTitle: `Офисный принтер ${cityIn}`,
+        introDescription:
+          `Если нужен офисный принтер ${cityIn}, здесь можно быстро выбрать модель для документов, отчетов и учебных материалов. Страница помогает сравнить практичные варианты без лишнего поиска.`,
+        summaryTitle: `Как выбрать офисный принтер ${cityIn}`,
+        summaryDescription:
+          "Смотрите на объем печати, скорость, расходники и обслуживание. Для школы и офиса чаще всего удобнее лазерные модели или МФУ.",
+        countLabel: "Подборок для офиса",
+        catalogLabel: "Открыть принтеры",
+        contactLabel: "Связаться с менеджером",
+        cardLabel: "Категория",
+        itemCountLabel: "товаров",
+        sectionTitle: `Офисные принтеры ${cityIn}`,
+        sectionDescription:
+          `Смотрите принтеры и МФУ, которые подходят для документов, отчетов и учебных материалов ${cityIn}, а затем быстро переходите к заказу.`,
+        highlights: [
+          `Офисные принтеры ${cityIn}`,
+          "МФУ и лазерные модели",
+          "Быстрый переход к категориям и каталогу",
+          "Помощь менеджера с расходниками и наличием",
+        ],
+        guideTitle: `Что важно для офисной печати ${cityIn}`,
+        guideParagraphs: [
+          `Если принтер ${cityIn} нужен для регулярной печати документов, лучше выбирать лазерную модель с понятным обслуживанием и доступными расходниками.`,
+          "Для школы или небольшого офиса также подойдет МФУ, если кроме печати нужны сканирование и копирование. Перед заказом можно уточнить стоимость и наличие через WhatsApp.",
+        ],
+        faqs: [
+          {
+            question: `Какой принтер лучше для офиса ${cityIn}?`,
+            answer:
+              "Чаще всего для офиса берут лазерный принтер или МФУ, потому что они лучше подходят для регулярной печати документов и проще в обслуживании.",
+          },
+          {
+            question: `Подойдет ли эта страница для школы ${cityIn}?`,
+            answer:
+              "Да. Для школы особенно важны надежность, скорость и удобство обслуживания, а эти параметры есть у офисных моделей и МФУ.",
+          },
+          {
+            question: `Можно ли заказать принтер через WhatsApp ${cityIn}?`,
+            answer:
+              "Да. Можно уточнить цену, наличие, картриджи и быстро оформить заказ ${cityName} и по всему Кыргызстану.",
+          },
+        ],
+        keywords: [
+          `офисный принтер ${cityName}`,
+          `принтер для офиса ${cityName}`,
+          `принтер для школы ${cityName}`,
+          `купить принтер в ${cityName}`,
+          `${cityName} принтеры`,
+        ],
+      });
+  }
+};
+
+export const getStudentLaptopOshSeoContent = (locale: Locale) =>
+  buildStudentLaptopCityContent(locale, "osh");
+
+export const getStudentLaptopTalasSeoContent = (locale: Locale) =>
+  buildStudentLaptopCityContent(locale, "talas");
+
+export const getTeacherLaptopBishkekSeoContent = (locale: Locale) =>
+  buildTeacherLaptopCityContent(locale, "bishkek");
+
+export const getTeacherLaptopTalasSeoContent = (locale: Locale) =>
+  buildTeacherLaptopCityContent(locale, "talas");
+
+export const getOfficePrinterBishkekSeoContent = (locale: Locale) =>
+  buildOfficePrinterCityContent(locale, "bishkek");
+
+export const getOfficePrinterOshSeoContent = (locale: Locale) =>
+  buildOfficePrinterCityContent(locale, "osh");

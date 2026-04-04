@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CatalogHubSection from "@/components/Storefront/CatalogHubSection";
+import Link from "next/link";
 import { getElectronicsHubSeoContent } from "@/seo/content";
 import { buildSeoMetadata } from "@/seo/metadata";
 import { getRequestLocale } from "@/seo/request-locale";
@@ -8,6 +9,9 @@ import { makeQueryClient } from "@/tanstack-query/query-client";
 import { buildAbsoluteUrl } from "@/storefront/site";
 import {
   buildCategoryPath,
+  buildElectronicsBishkekPath,
+  buildElectronicsOshPath,
+  buildElectronicsTalasPath,
   buildElectronicsPath,
 } from "@/storefront/catalog-routing";
 
@@ -113,6 +117,45 @@ export default async function ElectronicsPage() {
         }}
       />
       <CatalogHubSection content={content} type="category" items={categories} />
+      <section className="mx-auto mt-8 max-w-[1170px] px-4 pb-8 sm:px-8 xl:px-0">
+        <div className="rounded-2xl border border-slate-200 bg-white px-5 py-5 shadow-[0_18px_48px_-42px_rgba(15,23,42,0.5)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue">
+            {locale === "en" ? "Cities" : locale === "ky" ? "Шаарлар" : "Города"}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={buildElectronicsBishkekPath()}
+              className="inline-flex rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue/20 hover:text-blue"
+            >
+              {locale === "en"
+                ? "Electronics in Bishkek"
+                : locale === "ky"
+                  ? "Бишкекте электроника"
+                  : "Электроника в Бишкеке"}
+            </Link>
+            <Link
+              href={buildElectronicsOshPath()}
+              className="inline-flex rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue/20 hover:text-blue"
+            >
+              {locale === "en"
+                ? "Electronics in Osh"
+                : locale === "ky"
+                  ? "Ошто электроника"
+                  : "Электроника в Оше"}
+            </Link>
+            <Link
+              href={buildElectronicsTalasPath()}
+              className="inline-flex rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue/20 hover:text-blue"
+            >
+              {locale === "en"
+                ? "Electronics in Talas"
+                : locale === "ky"
+                  ? "Таласта электроника"
+                  : "Электроника в Таласе"}
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
