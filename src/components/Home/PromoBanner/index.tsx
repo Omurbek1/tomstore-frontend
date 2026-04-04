@@ -1,11 +1,60 @@
-"use client";
-
-import React from "react";
 import Image from "next/image";
-import { useI18n } from "@/i18n/provider";
+import type { Locale } from "@/i18n/messages";
 
-const PromoBanner = () => {
-  const { t } = useI18n();
+const getPromoBannerCopy = (locale: Locale) => ({
+  featuredDrop:
+    locale === "en" ? "Featured Drop" : locale === "ky" ? "Атайын сунуш" : "Хит недели",
+  primaryTitle: "Apple iPhone 14 Plus",
+  primaryText:
+    locale === "en"
+      ? "Popular electronics with clear pricing and quick ordering across Kyrgyzstan."
+      : locale === "ky"
+        ? "Кыргызстан боюнча түшүнүктүү баа жана тез заказ менен популярдуу электроника."
+        : "Популярная электроника с понятной ценой и быстрым заказом по всему Кыргызстану.",
+  buyNow:
+    locale === "en" ? "Buy now" : locale === "ky" ? "Азыр алуу" : "Купить сейчас",
+  workoutSubtitle:
+    locale === "en"
+      ? "For active days"
+      : locale === "ky"
+        ? "Шаардык күндөр үчүн"
+        : "Для активного дня",
+  workoutTitle:
+    locale === "en"
+      ? "Smart deals for everyday use"
+      : locale === "ky"
+        ? "Күнүмдүк колдонууга ылайыктуу сунуштар"
+        : "Выгодные предложения на каждый день",
+  workoutDiscount:
+    locale === "en"
+      ? "Up to 15% off selected items"
+      : locale === "ky"
+        ? "Айрым товарларга 15% чейин арзандатуу"
+        : "Скидки до 15% на отдельные товары",
+  grabNow:
+    locale === "en" ? "Grab now" : locale === "ky" ? "Дароо алуу" : "Забрать сейчас",
+  watchSubtitle:
+    locale === "en"
+      ? "For work and viewing"
+      : locale === "ky"
+        ? "Иш жана көңүл ачуу үчүн"
+        : "Для работы и просмотра",
+  watchTitle:
+    locale === "en"
+      ? "Laptops and accessories"
+      : locale === "ky"
+        ? "Ноутбуктар жана аксессуарлар"
+        : "Ноутбуки и аксессуары",
+  watchText:
+    locale === "en"
+      ? "Useful picks for study, work and home."
+      : locale === "ky"
+        ? "Окуу, иш жана үй үчүн пайдалуу варианттар."
+        : "Полезные варианты для учебы, работы и дома.",
+});
+
+const PromoBanner = ({ locale }: { locale: Locale }) => {
+  const copy = getPromoBannerCopy(locale);
 
   return (
     <section className="overflow-hidden">
@@ -14,25 +63,25 @@ const PromoBanner = () => {
           <div className="section-shell-dark min-h-[380px] px-6 py-8 sm:px-8 lg:px-10 lg:py-10">
             <div className="relative z-10 max-w-[560px]">
               <span className="section-kicker-dark mb-5">
-                Featured Drop
+                {copy.featuredDrop}
               </span>
               <span className="mb-3 block text-xl font-medium text-white/72">
-              Apple iPhone 14 Plus
-            </span>
+                {copy.primaryTitle}
+              </span>
 
               <h2 className="mb-5 text-3xl font-semibold leading-tight text-white sm:text-4xl xl:text-[46px]">
-              {t("home.promoPrimaryTitle")}
-            </h2>
+                {copy.primaryTitle}
+              </h2>
 
               <p className="max-w-[520px] text-sm leading-7 text-white/70 sm:text-base">
-                {t("home.promoPrimaryText")}
+                {copy.primaryText}
               </p>
 
               <a
                 href="/shop-with-sidebar"
                 className="mt-8 inline-flex rounded-full bg-white px-7 py-3 text-sm font-medium text-dark transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue hover:text-white"
               >
-                {t("home.promoBuyNow")}
+                {copy.buyNow}
               </a>
             </div>
 
@@ -50,22 +99,22 @@ const PromoBanner = () => {
             <div className="section-shell min-h-[177px] px-6 py-7 sm:px-7.5">
               <div className="relative z-10 ml-auto max-w-[235px] text-right">
                 <span className="mb-1.5 block text-lg text-dark">
-                  {t("home.promoWorkoutSubtitle")}
+                  {copy.workoutSubtitle}
                 </span>
 
                 <h2 className="mb-2 text-2xl font-semibold leading-tight text-dark">
-                  {t("home.promoWorkoutTitle")}
+                  {copy.workoutTitle}
                 </h2>
 
                 <p className="text-custom-1 font-semibold text-teal">
-                  {t("home.promoWorkoutDiscount")}
+                  {copy.workoutDiscount}
                 </p>
 
                 <a
                   href="/shop-with-sidebar"
                   className="mt-7 inline-flex rounded-full bg-teal px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-teal-dark"
                 >
-                  {t("home.promoGrabNow")}
+                  {copy.grabNow}
                 </a>
               </div>
 
@@ -81,22 +130,22 @@ const PromoBanner = () => {
             <div className="section-shell min-h-[177px] px-6 py-7 sm:px-7.5">
               <div className="relative z-10 max-w-[240px]">
                 <span className="mb-1.5 block text-lg text-dark">
-                  {t("home.promoWatchSubtitle")}
+                  {copy.watchSubtitle}
                 </span>
 
                 <h2 className="mb-2 text-2xl font-semibold leading-tight text-dark">
-                  {t("home.promoWatchTitle")}
+                  {copy.watchTitle}
                 </h2>
 
                 <p className="max-w-[220px] text-sm leading-7 text-dark-4">
-                  {t("home.promoWatchText")}
+                  {copy.watchText}
                 </p>
 
                 <a
                   href="/shop-with-sidebar"
                   className="mt-6 inline-flex rounded-full bg-orange px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-dark"
                 >
-                  {t("home.promoBuyNow")}
+                  {copy.buyNow}
                 </a>
               </div>
 

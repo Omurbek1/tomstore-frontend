@@ -1,6 +1,5 @@
 import Home from "@/components/Home";
 import { Metadata } from "next";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import {
   storefrontBlogsQueryOptions,
   storefrontConfigQueryOptions,
@@ -46,6 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const queryClient = makeQueryClient();
+  const locale = await getRequestLocale();
   const [storefrontConfig, home] = await Promise.all([
     queryClient.fetchQuery(storefrontConfigQueryOptions()),
     queryClient.fetchQuery(storefrontHomeQueryOptions()),
@@ -124,9 +124,11 @@ export default async function HomePage() {
           __html: JSON.stringify(featuredProductsStructuredData),
         }}
       />
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <Home canShowBlogPreview={canShowBlogPreview} />
-      </HydrationBoundary>
+      <Home
+        locale={locale}
+        home={home}
+        canShowBlogPreview={canShowBlogPreview}
+      />
     </>
   );
 }

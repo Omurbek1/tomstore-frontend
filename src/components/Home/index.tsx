@@ -1,19 +1,13 @@
-"use client";
-
-import React from "react";
 import dynamic from "next/dynamic";
-import Hero from "./Hero";
-import Categories from "./Categories";
-import NewArrival from "./NewArrivals";
-import BestSeller from "./BestSeller";
-import QueryStatusCard from "@/components/Common/QueryStatusCard";
-import { useI18n } from "@/i18n/provider";
-import { useStorefrontHomeQuery } from "@/storefront/hooks";
 import {
   mapStorefrontCategoriesToCategories,
   mapStorefrontProductsToProducts,
 } from "@/storefront/mappers";
+import type { Locale } from "@/i18n/messages";
+import type { StorefrontHomeResponse } from "@/storefront/types";
+import Categories from "./Categories";
 import HomeSeoSection from "./HomeSeoSection";
+import PromoBanner from "./PromoBanner";
 
 const HomeSectionPlaceholder = ({
   minHeightClassName,
@@ -29,8 +23,16 @@ const HomeSectionPlaceholder = ({
   </section>
 );
 
-const PromoBanner = dynamic(() => import("./PromoBanner"), {
-  loading: () => <HomeSectionPlaceholder minHeightClassName="min-h-[380px]" />,
+const Hero = dynamic(() => import("./Hero"), {
+  loading: () => <HomeSectionPlaceholder minHeightClassName="min-h-[760px]" />,
+});
+
+const NewArrival = dynamic(() => import("./NewArrivals"), {
+  loading: () => <HomeSectionPlaceholder minHeightClassName="min-h-[480px]" />,
+});
+
+const BestSeller = dynamic(() => import("./BestSeller"), {
+  loading: () => <HomeSectionPlaceholder minHeightClassName="min-h-[480px]" />,
 });
 
 const CounDown = dynamic(() => import("./Countdown"), {
@@ -52,49 +54,14 @@ const Newsletter = dynamic(() => import("../Common/Newsletter"), {
 });
 
 const Home = ({
+  locale,
+  home,
   canShowBlogPreview = true,
 }: {
+  locale: Locale;
+  home: StorefrontHomeResponse;
   canShowBlogPreview?: boolean;
 }) => {
-  const { t } = useI18n();
-  const { data: home, isPending, isError, refetch } = useStorefrontHomeQuery();
-
-  if (isPending && !home) {
-    return (
-      <main className="pt-57.5 sm:pt-45 lg:pt-30 xl:pt-51.5">
-        <div className="mx-auto max-w-[1170px] px-4 sm:px-8 xl:px-0">
-          <QueryStatusCard
-            state="loading"
-            title={t("home.loading")}
-            description={t("common.loadingHint")}
-          />
-        </div>
-      </main>
-    );
-  }
-
-  if (isError && !home) {
-    return (
-      <main className="pt-57.5 sm:pt-45 lg:pt-30 xl:pt-51.5">
-        <div className="mx-auto max-w-[1170px] px-4 sm:px-8 xl:px-0">
-          <QueryStatusCard
-            state="error"
-            title={t("home.error")}
-            description={t("common.errorHint")}
-            actionLabel={t("common.retry")}
-            onAction={() => {
-              void refetch();
-            }}
-          />
-        </div>
-      </main>
-    );
-  }
-
-  if (!home) {
-    return null;
-  }
-
   const categories = mapStorefrontCategoriesToCategories(home.categories);
   const newProducts = mapStorefrontProductsToProducts(home.newProducts);
   const hitProducts = mapStorefrontProductsToProducts(home.hitProducts);
@@ -110,9 +77,9 @@ const Home = ({
       <div className="pointer-events-none absolute left-[18%] top-[58%] h-60 w-60 rounded-full bg-indigo-200/20 blur-3xl" />
       <Hero hero={home.hero} featuredProducts={recommendedProducts} />
       <div className="relative z-10 space-y-8 px-4 sm:space-y-10 sm:px-8 xl:space-y-12 xl:px-0">
-        <Categories categories={categories} />
+        <Categories categories={categories} locale={locale} />
         <NewArrival products={newProducts} />
-        <PromoBanner />
+        <PromoBanner locale={locale} />
         {hitProducts.length > 0 ? (
           <BestSeller
             products={hitProducts}
@@ -133,7 +100,7 @@ const Home = ({
         <Testimonials />
         <LatestBlogPosts enabled={canShowBlogPreview} />
         <Newsletter />
-        <HomeSeoSection />
+        <HomeSeoSection locale={locale} />
       </div>
     </main>
   );

@@ -6,6 +6,7 @@ import {
   buildCategoryPath,
   buildCategoriesHubPath,
   buildElectronicsPath,
+  buildRegionsPath,
   buildComputersLocationPath,
   buildComputersPath,
   buildLaptopsPath,
@@ -194,6 +195,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.92,
+    },
+    {
+      url: buildAbsoluteUrl(buildRegionsPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
     {
       url: buildAbsoluteUrl(buildLaptopsPath()),

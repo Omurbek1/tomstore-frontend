@@ -129,6 +129,8 @@ export const buildBrandsHubPath = () => "/brands";
 
 export const buildElectronicsPath = () => "/electronics";
 
+export const buildRegionsPath = () => "/regions";
+
 export const buildLaptopsPath = () => "/laptops";
 
 export const buildPrintersPath = () => "/printers";

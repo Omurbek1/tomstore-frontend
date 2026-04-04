@@ -1,20 +1,17 @@
 import type { Metadata } from "next";
 import { buildAbsoluteUrl, getSiteUrl } from "@/storefront/site";
+import { REGIONAL_LOCATION_ORDER, REGIONAL_LOCATIONS } from "@/seo/location-data";
 
 export const DEFAULT_SEO_TITLE = "TOMSTORE";
 export const DEFAULT_SEO_DESCRIPTION =
   "TOMSTORE — интернет-магазин электроники, ноутбуков, принтеров, компьютеров и аксессуаров с доставкой по Кыргызстану, включая Бишкек, Ош, Талас и другие регионы.";
 
 export const KYRGYZSTAN_GEO_KEYWORDS = [
-  "Бишкек Кыргызстан",
-  "Ош Кыргызстан",
-  "Джалал-Абад Кыргызстан",
-  "Талас Кыргызстан",
-  "Нарын Кыргызстан",
-  "Баткен Кыргызстан",
-  "Каракол Кыргызстан",
-  "Кара-Балта Кыргызстан",
-  "Токмок Кыргызстан",
+  "Кыргызстан",
+  "Kyrgyzstan",
+  ...REGIONAL_LOCATION_ORDER.map(
+    (location) => `${REGIONAL_LOCATIONS[location].name.ru} Кыргызстан`,
+  ),
 ];
 
 const DEFAULT_OG_IMAGE = buildAbsoluteUrl("/images/hero/hero-01.png");
