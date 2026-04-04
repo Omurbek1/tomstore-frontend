@@ -4,13 +4,19 @@ import Link from "next/link";
 import { useI18n } from "@/i18n/provider";
 import { getHomeSeoContent } from "@/seo/content";
 import {
+  buildElectronicsPath,
   buildBrandsHubPath,
   buildCategoriesHubPath,
+  buildComputersPath,
+  buildLaptopsPath,
+  buildPrintersPath,
 } from "@/storefront/catalog-routing";
 
 const HomeSeoSection = () => {
   const { locale, t } = useI18n();
   const content = getHomeSeoContent(locale);
+  const printerLabel =
+    locale === "en" ? "Printers" : locale === "ky" ? "Принтерлер" : "Принтеры";
 
   return (
     <section className="mx-auto max-w-[1170px]">
@@ -65,6 +71,12 @@ const HomeSeoSection = () => {
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
+                href={buildElectronicsPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {t("common.electronics")}
+              </Link>
+              <Link
                 href={buildCategoriesHubPath()}
                 className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
               >
@@ -75,6 +87,26 @@ const HomeSeoSection = () => {
                 className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
               >
                 {t("common.brands")}
+              </Link>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href={buildLaptopsPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {t("header.categoryLaptop")}
+              </Link>
+              <Link
+                href={buildPrintersPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {printerLabel}
+              </Link>
+              <Link
+                href={buildComputersPath()}
+                className="inline-flex rounded-full border border-white/15 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/78 transition hover:border-white/30 hover:text-white"
+              >
+                {t("header.categoryDesktop")}
               </Link>
             </div>
           </div>

@@ -13,6 +13,7 @@ import {
   mapStorefrontCategoriesToCategories,
   mapStorefrontProductsToProducts,
 } from "@/storefront/mappers";
+import HomeSeoSection from "./HomeSeoSection";
 
 const HomeSectionPlaceholder = ({
   minHeightClassName,
@@ -132,6 +133,7 @@ const Home = ({
         <Testimonials />
         <LatestBlogPosts enabled={canShowBlogPreview} />
         <Newsletter />
+        <HomeSeoSection />
       </div>
     </main>
   );

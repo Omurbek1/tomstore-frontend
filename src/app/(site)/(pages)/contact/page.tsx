@@ -17,9 +17,9 @@ import {
 } from "@/storefront/site";
 export const metadata: Metadata = {
   ...buildSeoMetadata({
-    title: "Контакты",
+    title: "Контакты по Кыргызстану",
     description:
-      "Контакты TOMSTORE: адрес магазина, телефоны и WhatsApp для заказа и консультации.",
+      "Контакты TOMSTORE: адрес магазина, телефоны и WhatsApp для заказа и консультации по всему Кыргызстану, включая Бишкек, Ош, Талас и другие регионы.",
     path: "/contact",
   }),
 };

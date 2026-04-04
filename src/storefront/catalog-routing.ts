@@ -127,6 +127,14 @@ export const buildCategoriesHubPath = () => "/categories";
 
 export const buildBrandsHubPath = () => "/brands";
 
+export const buildElectronicsPath = () => "/electronics";
+
+export const buildLaptopsPath = () => "/laptops";
+
+export const buildPrintersPath = () => "/printers";
+
+export const buildComputersPath = () => "/computers";
+
 export const buildLegacyCatalogPath = (query: StorefrontCatalogRouteQuery = {}) => {
   const searchParams = new URLSearchParams();
 

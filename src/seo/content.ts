@@ -57,117 +57,120 @@ export type BlogLandingSeoContent = CatalogLandingSeoContent;
 
 const HOME_SEO_CONTENT: Record<Locale, HomeSeoContent> = {
   ru: {
-    metaTitle: "Купить ноутбук, принтер и электронику в Бишкеке",
+    metaTitle: "Электроника, ноутбуки и принтеры для студентов, учителей и офиса в Кыргызстане",
     metaDescription:
-      "TOMSTORE - интернет-магазин ноутбуков, принтеров, компьютеров и электроники в Бишкеке. Актуальные модели, выгодные цены и быстрый заказ через WhatsApp.",
+      "TOMSTORE - интернет-магазин ноутбуков, принтеров, компьютеров и электроники в Кыргызстане. Подберем ноутбук для студентов и учителей, офисный принтер, модели для дома и бизнеса, быстрый заказ через WhatsApp из Бишкека, Оша, Таласа и других регионов.",
     introEyebrow: "TOMSTORE SEO",
-    introTitle: "Ноутбуки, принтеры и электроника в Бишкеке",
+    introTitle: "Электроника, ноутбуки и принтеры для студентов, учителей и офиса",
     introDescription:
-      "В TOMSTORE можно подобрать ноутбук для учебы и работы, офисный или домашний принтер, компьютеры, мониторы и другую электронику с быстрой консультацией менеджера и удобным заказом через WhatsApp.",
+      "В TOMSTORE можно подобрать ноутбук для студентов, учителей, учебы и работы, офисный или домашний принтер, компьютеры, мониторы и другую электронику с быстрой консультацией менеджера и удобным заказом через WhatsApp по Кыргызстану, включая Бишкек, Ош, Талас и другие регионы.",
     catalogLabel: "В каталог",
     contactLabel: "Контакты",
     highlights: [
-      "Каталог ноутбуков для учебы, бизнеса, дизайна и игр",
-      "Принтеры и офисная техника для дома, школы и компании",
+      "Интернет-магазин электроники для студентов, учителей, учебы и работы",
+      "Ноутбуки для студентов, учителей, учебы и работы",
+      "Офисные и домашние принтеры для школы, компании и дома",
       "Аксессуары, компьютеры и электроника с понятным выбором",
-      "Быстрая консультация, актуальные цены и помощь менеджера",
+      "Быстрая консультация, актуальные цены и помощь менеджера для всех регионов Кыргызстана",
     ],
     faqs: [
       {
-        question: "Как выбрать ноутбук для учебы и работы?",
+        question: "Как выбрать ноутбук для студента или учителя?",
         answer:
-          "Ориентируйтесь на задачи: для учебы и офиса подойдут легкие модели с SSD и 8-16 ГБ оперативной памяти, для дизайна и монтажа лучше выбирать более мощные ноутбуки с хорошим экраном.",
+          "Ориентируйтесь на задачи: для студентов и учителей подойдут легкие модели с SSD и 8-16 ГБ оперативной памяти, для дизайна и монтажа лучше выбирать более мощные ноутбуки с хорошим экраном.",
       },
       {
-        question: "Какой принтер лучше купить для дома или офиса?",
+        question: "Какой принтер лучше купить для офиса, школы или дома?",
         answer:
-          "Для дома чаще выбирают компактные струйные или лазерные модели, а для офиса - лазерные принтеры и МФУ с более высокой скоростью печати и удобной заправкой.",
+          "Для дома чаще выбирают компактные струйные или лазерные модели, а для офиса и школы - лазерные принтеры и МФУ с более высокой скоростью печати и удобной заправкой.",
       },
       {
         question: "Можно ли заказать технику через WhatsApp?",
         answer:
-          "Да, на сайте можно сразу перейти в WhatsApp, уточнить наличие, цену, комплектацию и быстро оформить заказ через менеджера.",
+          "Да, на сайте можно сразу перейти в WhatsApp, уточнить наличие, цену, комплектацию и быстро оформить заказ через менеджера из Бишкека, Оша, Таласа и других регионов Кыргызстана.",
       },
       {
-        question: "Есть ли в магазине электроника помимо ноутбуков и принтеров?",
+        question: "Есть ли в магазине техника для офиса и бизнеса помимо ноутбуков и принтеров?",
         answer:
-          "Да, в каталоге TOMSTORE есть компьютеры, мониторы, аксессуары и другая востребованная электроника для дома, учебы и бизнеса.",
+          "Да, в каталоге TOMSTORE есть компьютеры, мониторы, аксессуары и другая востребованная электроника для дома, учебы, офиса и бизнеса.",
       },
     ],
   },
   en: {
-    metaTitle: "Buy laptops, printers and electronics in Bishkek",
+    metaTitle: "Electronics, laptops and printers for students, teachers and offices in Kyrgyzstan",
     metaDescription:
-      "TOMSTORE is an electronics store in Bishkek with laptops, printers, computers and accessories, clear prices and fast ordering via WhatsApp.",
+      "TOMSTORE is an electronics store in Kyrgyzstan with laptops, printers, computers and accessories. We help choose laptops for students and teachers, office printers and more with fast WhatsApp ordering from Bishkek, Osh, Talas and other regions.",
     introEyebrow: "TOMSTORE SEO",
-    introTitle: "Laptops, printers and electronics in Bishkek",
+    introTitle: "Electronics, laptops and printers for students, teachers and offices in Kyrgyzstan",
     introDescription:
-      "TOMSTORE helps customers choose laptops for study and work, printers for home and office, computers, monitors and everyday electronics with quick manager support and easy WhatsApp ordering.",
+      "TOMSTORE helps customers across Kyrgyzstan choose laptops for students and teachers, printers for home, school and office, computers, monitors and everyday electronics with quick manager support and easy WhatsApp ordering from Bishkek, Osh, Talas and other regions.",
     catalogLabel: "Open catalog",
     contactLabel: "Contacts",
     highlights: [
-      "Laptops for study, office work, gaming and creative tasks",
+      "An electronics store for students, teachers, study and office work",
+      "Laptops for students, teachers, study and office work",
       "Printers and office equipment for home, school and business",
       "Computers, accessories and electronics in one catalog",
-      "Fast manager support, clear prices and quick ordering",
+      "Fast manager support, clear prices and quick ordering across Kyrgyzstan",
     ],
     faqs: [
       {
-        question: "How do I choose a laptop for study or work?",
+        question: "How do I choose a laptop for a student or teacher?",
         answer:
-          "Choose based on workload: light notebooks with SSD storage and 8-16 GB RAM fit study and office tasks, while design and editing need more powerful hardware and a better display.",
+          "Choose based on workload: light notebooks with SSD storage and 8-16 GB RAM fit student and teacher tasks, while design and editing need more powerful hardware and a better display.",
       },
       {
-        question: "Which printer is better for home or office?",
+        question: "Which printer is better for office, school or home?",
         answer:
-          "Home users usually prefer compact inkjet or laser models, while offices often need laser printers or multifunction devices with faster printing and easier maintenance.",
+          "Home users usually prefer compact inkjet or laser models, while offices and schools often need laser printers or multifunction devices with faster printing and easier maintenance.",
       },
       {
         question: "Can I place an order through WhatsApp?",
         answer:
-          "Yes. The storefront can send customers directly to WhatsApp, where they can confirm availability, price and configuration with a manager and place the order quickly.",
+          "Yes. The storefront can send customers directly to WhatsApp, where they can confirm availability, price and configuration with a manager and place the order quickly from Bishkek, Osh, Talas and other regions.",
       },
       {
-        question: "Do you sell more than laptops and printers?",
+        question: "Do you have office and business equipment as well?",
         answer:
-          "Yes. TOMSTORE also offers computers, monitors, accessories and other electronics for home, education and business needs.",
+          "Yes. TOMSTORE also offers computers, monitors, accessories and other electronics for home, education, office and business needs.",
       },
     ],
   },
   ky: {
-    metaTitle: "Бишкектен ноутбук, принтер жана электроника сатып алуу",
+    metaTitle: "Электроника, ноутбук жана принтер студенттер, мугалимдер жана офис үчүн Кыргызстанда",
     metaDescription:
-      "TOMSTORE - Бишкектеги ноутбук, принтер, компьютер жана электроника дүкөнү. Ыңгайлуу тандоо, актуалдуу баа жана WhatsApp аркылуу тез заказ.",
+      "TOMSTORE - Кыргызстандагы ноутбук, принтер, компьютер жана электроника дүкөнү. Студенттерге, мугалимдерге жана офиске ылайыктуу моделдер, ыңгайлуу тандоо жана WhatsApp аркылуу Бишкек, Ош, Талас жана башка аймактардан тез заказ.",
     introEyebrow: "TOMSTORE SEO",
-    introTitle: "Ноутбук, принтер жана электроника",
+    introTitle: "Электроника, ноутбук жана принтер студенттер, мугалимдер жана офис үчүн",
     introDescription:
-      "TOMSTORE окуу, иш, офис жана үй үчүн ноутбук, принтер, компьютер, монитор жана башка электрониканы тандап берүүгө жардам берет. Заказды WhatsApp аркылуу тез тактоого болот.",
+      "TOMSTORE окуу, иш, офис жана үй үчүн ноутбук, принтер, компьютер, монитор жана башка электрониканы Кыргызстан боюнча тандап берүүгө жардам берет. Студенттерге жана мугалимдерге да ыңгайлуу моделдер бар, Бишкек, Ош, Талас жана башка аймактардан заказды WhatsApp аркылуу тез тактоого болот.",
     catalogLabel: "Каталогго өтүү",
     contactLabel: "Байланыш",
     highlights: [
-      "Окуу, иш жана оюн үчүн ноутбуктар",
-      "Үйгө жана офиске принтерлер менен оргтехника",
+      "Студенттерге, мугалимдерге жана офиске арналган электроника дүкөнү",
+      "Студенттерге, мугалимдерге жана окууга ноутбуктар",
+      "Үйгө, мектепке жана офиске принтерлер менен оргтехника",
       "Компьютерлер, аксессуарлар жана керектүү электроника",
-      "Менеджерден тез кеңеш жана ыңгайлуу заказ",
+      "Менеджерден тез кеңеш жана Кыргызстан боюнча ыңгайлуу заказ",
     ],
     faqs: [
       {
-        question: "Окууга же ишке ноутбукту кантип тандаса болот?",
+        question: "Студент же мугалим үчүн ноутбукту кантип тандаса болот?",
         answer:
-          "Максатка жараша тандаңыз: окуу жана офис үчүн SSD жана 8-16 ГБ эс тутуму бар жеңил моделдер ылайыктуу, ал эми дизайн же монтаж үчүн кубаттуу ноутбук керек.",
+          "Максатка жараша тандаңыз: студенттер жана мугалимдер үчүн SSD жана 8-16 ГБ эс тутуму бар жеңил моделдер ылайыктуу, ал эми дизайн же монтаж үчүн кубаттуу ноутбук керек.",
       },
       {
-        question: "Үйгө же офиске кайсы принтер жакшы?",
+        question: "Үйгө, мектепке же офиске кайсы принтер жакшы?",
         answer:
-          "Үй үчүн көбүнчө компакттуу сыя же лазер принтерлер ылайыктуу, ал эми офис үчүн ылдамдыгы жогору лазер принтер же МФУ ыңгайлуу болот.",
+          "Үй үчүн көбүнчө компакттуу сыя же лазер принтерлер ылайыктуу, ал эми мектеп жана офис үчүн ылдамдыгы жогору лазер принтер же МФУ ыңгайлуу болот.",
       },
       {
         question: "Заказды WhatsApp аркылуу берсе болобу?",
         answer:
-          "Ооба, сайттан түз эле WhatsAppка өтүп, баасын, бар-жогун жана комплектин менеджер менен тактап, тез заказ кылса болот.",
+          "Ооба, сайттан түз эле WhatsAppка өтүп, баасын, бар-жогун жана комплектин менеджер менен тактап, Бишкек, Ош, Талас жана башка аймактардан тез заказ кылса болот.",
       },
       {
-        question: "Ноутбук менен принтерден башка электроника барбы?",
+        question: "Офис жана бизнес үчүн башка техника барбы?",
         answer:
           "Ооба, TOMSTORE каталогунда компьютерлер, мониторлор, аксессуарлар жана күнүмдүк суроо-талаптагы башка электроника да бар.",
       },
@@ -185,11 +188,11 @@ export const getCategorySeoContent = (
   switch (locale) {
     case "en":
       return {
-        metaTitle: `${categoryName} in Bishkek - TOMSTORE catalog`,
-        metaDescription: `Browse the ${categoryName} category at TOMSTORE with current availability, clear prices and quick ordering through WhatsApp in Bishkek.`,
+        metaTitle: `${categoryName} in Kyrgyzstan - TOMSTORE catalog`,
+        metaDescription: `Browse the ${categoryName} category at TOMSTORE with current availability, clear prices and quick ordering through WhatsApp across Kyrgyzstan.`,
         eyebrow: "TOMSTORE Category",
         introTitle: `${categoryName} in the TOMSTORE catalog`,
-        introDescription: `This page brings together products from the ${categoryName} category, making it easier to compare models, check availability and quickly choose the right option for home, study, office or business.`,
+        introDescription: `This page brings together products from the ${categoryName} category, making it easier to compare models, check availability and quickly choose the right option for students, teachers, home, study, office or business across Kyrgyzstan.`,
         summaryTitle: `${categoryName} collection`,
         summaryDescription: `The dedicated category page keeps the assortment focused, so customers can move through the ${categoryName} range faster and reach a decision without extra navigation.`,
         countLabel: "Products in collection",
@@ -203,7 +206,7 @@ export const getCategorySeoContent = (
         ],
         guideTitle: `How to choose products in ${categoryName}`,
         guideParagraphs: [
-          `Start with the main use case: everyday needs, study, office work or a more demanding business setup. This narrows the product set before comparing specific models in ${categoryName}.`,
+          `Start with the main use case: everyday needs, student work, teaching tasks, office work or a more demanding business setup. This narrows the product set before comparing specific models in ${categoryName}.`,
           `If you want a faster recommendation, use the catalog filters and then confirm availability, configuration and delivery details with the TOMSTORE manager before ordering.`,
         ],
         faqs: [
@@ -218,25 +221,28 @@ export const getCategorySeoContent = (
               "Yes. The page helps narrow the selection, and the manager can confirm current stock, price and configuration through WhatsApp before the order is placed.",
           },
           {
-            question: `Is this page useful for both retail and office purchases?`,
+            question: `Is this page useful for students, teachers and office purchases?`,
             answer:
-              "Yes. A dedicated category page works for single-item purchases as well as for faster selection of options for office, school or business needs.",
+              "Yes. A dedicated category page works for students, teachers and single-item purchases as well as for faster selection of options for office, school or business needs.",
           },
         ],
         keywords: [
           categoryName,
-          `${categoryName} Bishkek`,
+          `${categoryName} Kyrgyzstan`,
           `${categoryName} TOMSTORE`,
-          `buy ${categoryName}`,
+          `buy ${categoryName} in Kyrgyzstan`,
+          `${categoryName} for students`,
+          `${categoryName} for teachers`,
+          `${categoryName} office`,
         ],
       };
     case "ky":
       return {
-        metaTitle: `${categoryName} Бишкекте - TOMSTORE каталогу`,
-        metaDescription: `TOMSTORE дүкөнүндөгү «${categoryName}» категориясы: актуалдуу ассортимент, баалар, бар-жогу жана WhatsApp аркылуу тез заказ.`,
+        metaTitle: `${categoryName} Кыргызстанда - TOMSTORE каталогу`,
+        metaDescription: `TOMSTORE дүкөнүндөгү «${categoryName}» категориясы: актуалдуу ассортимент, баалар, бар-жогу жана WhatsApp аркылуу Кыргызстандын бардык аймагына тез заказ.`,
         eyebrow: "TOMSTORE Категориясы",
         introTitle: `TOMSTORE каталогунда ${categoryName}`,
-        introDescription: `Бул баракка «${categoryName}» категориясындагы товарлар чогултулган. Моделдерди салыштырып, бар-жогун текшерип, үйгө, окууга, офиске же бизнеске ылайыктуу вариантты тез табууга болот.`,
+        introDescription: `Бул баракка «${categoryName}» категориясындагы товарлар чогултулган. Моделдерди салыштырып, бар-жогун текшерип, студенттерге, мугалимдерге, үйгө, окууга, офиске же бизнеске ылайыктуу вариантты Кыргызстан боюнча тез табууга болот.`,
         summaryTitle: `«${categoryName}» боюнча өзүнчө подборка`,
         summaryDescription: `Өзүнчө категория барагы керектүү товарларды жалпы каталогдон издеп убара болбой, ошол эле бөлүмдүн ичинде ылдам карап чыгууга жардам берет.`,
         countLabel: "Подборкадагы товарлар",
@@ -250,7 +256,7 @@ export const getCategorySeoContent = (
         ],
         guideTitle: `«${categoryName}» категориясында кантип тандоо керек`,
         guideParagraphs: [
-          `Адегенде кайсы тапшырма үчүн товар керек экенин аныктаңыз: үй, окуу, офис же бизнес. Ошондо «${categoryName}» ичиндеги керектүү варианттарды бат бөлүп алууга болот.`,
+          `Адегенде кайсы тапшырма үчүн товар керек экенин аныктаңыз: студенттик иш, мугалимдик иш, үй, окуу, офис же бизнес. Ошондо «${categoryName}» ичиндеги керектүү варианттарды бат бөлүп алууга болот.`,
           `Эгер тез тандоо керек болсо, фильтрлерди колдонуп, андан кийин менеджер менен баасын, бар-жогун жана ылайыктуу комплектациясын тактап коюңуз.`,
         ],
         faqs: [
@@ -265,26 +271,29 @@ export const getCategorySeoContent = (
               "Ооба. Барак керектүү позицияларды тандап алууга жардам берет, андан кийин менеджер WhatsApp аркылуу актуалдуу бааны, бар-жогун жана комплектациясын тактап берет.",
           },
           {
-            question: `Бул барак жеке кардарларга да, офис үчүн алууга да ылайыктуубу?`,
+            question: `Бул барак студенттерге, мугалимдерге жана офис үчүн алууга да ылайыктуубу?`,
             answer:
-              "Ооба. Өзүнчө категория барагы бир даана товар тандаганда да, офис же бизнес үчүн бир нече вариантты ылдам салыштырганда да ыңгайлуу.",
+              "Ооба. Өзүнчө категория барагы студенттерге, мугалимдерге, бир даана товар тандаганда да, офис же бизнес үчүн бир нече вариантты ылдам салыштырганда да ыңгайлуу.",
           },
         ],
         keywords: [
           categoryName,
-          `${categoryName} Бишкек`,
+          `${categoryName} Кыргызстан`,
           `${categoryName} TOMSTORE`,
-          `${categoryName} сатып алуу`,
+          `${categoryName} сатып алуу Кыргызстанда`,
+          `${categoryName} студенттер үчүн`,
+          `${categoryName} мугалимдер үчүн`,
+          `${categoryName} офис үчүн`,
         ],
       };
     case "ru":
     default:
       return {
-        metaTitle: `${categoryName} в Бишкеке - купить в TOMSTORE`,
-        metaDescription: `Категория «${categoryName}» в TOMSTORE: актуальные модели, наличие, цены и быстрый заказ техники через WhatsApp в Бишкеке.`,
+        metaTitle: `${categoryName} в Кыргызстане - купить в TOMSTORE`,
+        metaDescription: `Категория «${categoryName}» в TOMSTORE: актуальные модели, наличие, цены и быстрый заказ техники через WhatsApp по всему Кыргызстану.`,
         eyebrow: "Категория TOMSTORE",
         introTitle: `${categoryName} в каталоге TOMSTORE`,
-        introDescription: `На этой странице собраны товары из категории «${categoryName}». Здесь удобно сравнить модели, проверить наличие и быстро подобрать подходящий вариант для дома, учебы, офиса или бизнеса.`,
+        introDescription: `На этой странице собраны товары из категории «${categoryName}». Здесь удобно сравнить модели, проверить наличие и быстро подобрать подходящий вариант для студентов, учителей, дома, учебы, офиса или бизнеса в Кыргызстане.`,
         summaryTitle: `Подборка категории «${categoryName}»`,
         summaryDescription: `Отдельная страница категории помогает быстрее пройти по ассортименту, увидеть актуальные позиции и не теряться внутри общего каталога.`,
         countLabel: "Товаров в подборке",
@@ -298,7 +307,7 @@ export const getCategorySeoContent = (
         ],
         guideTitle: `Как выбрать товары в категории «${categoryName}»`,
         guideParagraphs: [
-          `Сначала определите задачу: техника для дома, учебы, офиса или бизнеса. Так проще быстро отсечь лишние позиции и сравнивать только действительно подходящие товары в категории «${categoryName}».`,
+          `Сначала определите задачу: техника для студентов, учителей, дома, учебы, офиса или бизнеса. Так проще быстро отсечь лишние позиции и сравнивать только действительно подходящие товары в категории «${categoryName}».`,
           `Если нужен быстрый подбор, используйте фильтры каталога и затем уточните у менеджера TOMSTORE наличие, цену и комплектацию через WhatsApp перед оформлением заказа.`,
         ],
         faqs: [
@@ -313,16 +322,19 @@ export const getCategorySeoContent = (
               "Да. Страница помогает отобрать нужные позиции, а менеджер TOMSTORE может через WhatsApp подтвердить актуальную цену, наличие и подходящую комплектацию перед заказом.",
           },
           {
-            question: `Подходит ли эта страница для розничных и офисных закупок?`,
+            question: `Подходит ли эта страница для студентов, учителей и офисных закупок?`,
             answer:
-              "Да. Отдельная страница категории удобна как для выбора одного товара, так и для быстрого сравнения нескольких вариантов под офис, школу или бизнес-задачи.",
+              "Да. Отдельная страница категории удобна как для выбора одного товара для студентов и учителей, так и для быстрого сравнения нескольких вариантов под офис, школу или бизнес-задачи.",
           },
         ],
         keywords: [
           categoryName,
-          `${categoryName} Бишкек`,
+          `${categoryName} Кыргызстан`,
           `${categoryName} TOMSTORE`,
-          `купить ${categoryName}`,
+          `купить ${categoryName} в Кыргызстане`,
+          `${categoryName} для студентов`,
+          `${categoryName} для учителей`,
+          `${categoryName} офисный`,
         ],
       };
   }
@@ -335,11 +347,11 @@ export const getBrandSeoContent = (
   switch (locale) {
     case "en":
       return {
-        metaTitle: `${brandName} in TOMSTORE - brand catalog`,
-        metaDescription: `Explore the ${brandName} brand page at TOMSTORE with current models, clear prices, availability and fast ordering through WhatsApp.`,
+        metaTitle: `${brandName} in Kyrgyzstan - TOMSTORE brand catalog`,
+        metaDescription: `Explore the ${brandName} brand page at TOMSTORE with current models, clear prices, availability and fast ordering through WhatsApp across Kyrgyzstan.`,
         eyebrow: "TOMSTORE Brand",
         introTitle: `${brandName} in the TOMSTORE catalog`,
-        introDescription: `This page groups together products from the ${brandName} brand so customers can stay within one brand, compare available models and make a faster buying decision.`,
+        introDescription: `This page groups together products from the ${brandName} brand so customers across Kyrgyzstan can stay within one brand, compare available models and make a faster buying decision.`,
         summaryTitle: `Why use the ${brandName} brand page`,
         summaryDescription: `A dedicated brand page gives a cleaner path to the full ${brandName} assortment and reduces friction compared with browsing the entire catalog.`,
         countLabel: "Brand products",
@@ -375,18 +387,18 @@ export const getBrandSeoContent = (
         ],
         keywords: [
           brandName,
-          `${brandName} Bishkek`,
+          `${brandName} Kyrgyzstan`,
           `${brandName} TOMSTORE`,
           `${brandName} catalog`,
         ],
       };
     case "ky":
       return {
-        metaTitle: `${brandName} TOMSTORE каталогунда`,
-        metaDescription: `${brandName} брендинин барагы TOMSTORE дүкөнүндө: актуалдуу модельдер, баалар, бар-жогу жана WhatsApp аркылуу тез заказ.`,
+        metaTitle: `${brandName} Кыргызстанда - TOMSTORE каталогу`,
+        metaDescription: `${brandName} брендинин барагы TOMSTORE дүкөнүндө: актуалдуу модельдер, баалар, бар-жогу жана WhatsApp аркылуу Кыргызстандын бардык аймагына тез заказ.`,
         eyebrow: "TOMSTORE Бренди",
         introTitle: `TOMSTORE каталогунда ${brandName}`,
-        introDescription: `Бул баракка ${brandName} брендиндеги товарлар чогултулган. Бир бренддин ичинде моделдерди салыштырып, керектүүсүн тез табууга жана заказ алдында маалыматты тактоого ыңгайлуу.`,
+        introDescription: `Бул баракка ${brandName} брендиндеги товарлар чогултулган. Бир бренддин ичинде моделдерди салыштырып, керектүүсүн тез табууга жана заказ алдында маалыматты Кыргызстан боюнча тактоого ыңгайлуу.`,
         summaryTitle: `Эмне үчүн ${brandName} барагы пайдалуу`,
         summaryDescription: `Өзүнчө бренд барагы жалпы каталогду аралабай эле ${brandName} ассортиментинин баарын бир жерден көрүүгө мүмкүнчүлүк берет.`,
         countLabel: "Бренд товарлары",
@@ -422,19 +434,19 @@ export const getBrandSeoContent = (
         ],
         keywords: [
           brandName,
-          `${brandName} Бишкек`,
+          `${brandName} Кыргызстан`,
           `${brandName} TOMSTORE`,
-          `${brandName} каталогу`,
+          `${brandName} каталогу Кыргызстан`,
         ],
       };
     case "ru":
     default:
       return {
-        metaTitle: `${brandName} в TOMSTORE - каталог бренда`,
-        metaDescription: `Страница бренда ${brandName} в TOMSTORE: актуальные модели, цены, наличие и быстрый заказ техники через WhatsApp.`,
+        metaTitle: `${brandName} в Кыргызстане - каталог бренда TOMSTORE`,
+        metaDescription: `Страница бренда ${brandName} в TOMSTORE: актуальные модели, цены, наличие и быстрый заказ техники через WhatsApp по всему Кыргызстану.`,
         eyebrow: "Бренд TOMSTORE",
         introTitle: `${brandName} в каталоге TOMSTORE`,
-        introDescription: `На этой странице собрана техника бренда ${brandName}. Здесь удобно держать фокус на одном бренде, сравнивать доступные модели и быстрее принимать решение о покупке.`,
+        introDescription: `На этой странице собрана техника бренда ${brandName}. Здесь удобно держать фокус на одном бренде, сравнивать доступные модели и быстрее принимать решение о покупке в Кыргызстане.`,
         summaryTitle: `Почему удобна страница бренда ${brandName}`,
         summaryDescription: `Отдельный брендовый лендинг сокращает путь до нужного ассортимента и помогает быстрее пройти от выбора к заказу без лишних переходов по каталогу.`,
         countLabel: "Товаров бренда",
@@ -470,7 +482,7 @@ export const getBrandSeoContent = (
         ],
         keywords: [
           brandName,
-          `${brandName} Бишкек`,
+          `${brandName} Кыргызстан`,
           `${brandName} TOMSTORE`,
           `${brandName} каталог`,
         ],
@@ -484,13 +496,13 @@ export const getBlogsLandingSeoContent = (
   switch (locale) {
     case "en":
       return {
-        metaTitle: "TOMSTORE blog: electronics guides and buying tips",
+        metaTitle: "TOMSTORE blog: electronics guides for students, teachers and offices in Kyrgyzstan",
         metaDescription:
-          "Read the TOMSTORE blog with product guides, buying advice, comparisons and practical tips for laptops, printers, computers and electronics.",
+          "Read the TOMSTORE blog with product guides, buying advice, comparisons and practical tips for laptops, printers, computers and electronics for students, teachers and offices across Kyrgyzstan.",
         eyebrow: "TOMSTORE Blog",
-        introTitle: "TOMSTORE blog with reviews, guides and practical advice",
+        introTitle: "TOMSTORE blog with reviews, guides and practical advice for students, teachers and offices",
         introDescription:
-          "The blog collects helpful materials for customers who want to understand the difference between models, choose electronics faster and buy with fewer mistakes.",
+          "The blog collects helpful materials for customers across Kyrgyzstan who want to understand the difference between models, choose electronics faster and buy with fewer mistakes for students, teachers, home and office use.",
         summaryTitle: "Why the TOMSTORE blog is useful before buying",
         summaryDescription:
           "Articles help users move from broad demand to a clearer shortlist, which supports both SEO visibility and stronger internal linking between content and catalog pages.",
@@ -499,7 +511,7 @@ export const getBlogsLandingSeoContent = (
         contactLabel: "Talk to manager",
         highlights: [
           "Reviews and comparisons of popular electronics",
-          "Buying guides for laptops, printers and office equipment",
+          "Buying guides for laptops, printers and office equipment for students, teachers and teams",
           "Helpful materials for home, study, work and business needs",
           "Internal links from content to catalog and product pages",
         ],
@@ -512,12 +524,12 @@ export const getBlogsLandingSeoContent = (
           {
             question: "What kind of articles are published in the TOMSTORE blog?",
             answer:
-              "The blog focuses on product reviews, comparisons, selection advice and practical explanations related to laptops, printers, computers and popular electronics.",
+              "The blog focuses on product reviews, comparisons, selection advice and practical explanations related to laptops, printers, computers and popular electronics for students, teachers and office teams.",
           },
           {
             question: "Can the blog help before opening the catalog?",
             answer:
-              "Yes. Articles are designed to narrow the choice first, so visitors can move to the catalog with a clearer understanding of what type of device or configuration they need.",
+              "Yes. Articles are designed to narrow the choice first, so visitors can move to the catalog with a clearer understanding of what type of device or configuration they need for study, teaching or office work.",
           },
           {
             question: "Does the blog connect to product and category pages?",
@@ -527,20 +539,23 @@ export const getBlogsLandingSeoContent = (
         ],
         keywords: [
           "TOMSTORE blog",
-          "electronics blog Bishkek",
+          "electronics blog Kyrgyzstan",
           "laptop buying guide",
           "printer buying advice",
+          "laptop for students",
+          "laptop for teachers",
+          "office printer",
         ],
       };
     case "ky":
       return {
-        metaTitle: "TOMSTORE блогу: техника боюнча кеңештер жана материалдар",
+        metaTitle: "TOMSTORE блогу: студенттер, мугалимдер жана офис үчүн техника кеңештери",
         metaDescription:
-          "TOMSTORE блогунда ноутбук, принтер, компьютер жана электроника боюнча обзорлор, тандоо кеңештери жана пайдалуу материалдар жарыяланат.",
+          "TOMSTORE блогунда Кыргызстандагы кардарлар үчүн студенттерге, мугалимдерге жана офиске ылайыктуу ноутбук, принтер, компьютер жана электроника боюнча обзорлор, тандоо кеңештери жана пайдалуу материалдар жарыяланат.",
         eyebrow: "TOMSTORE Блогу",
-        introTitle: "TOMSTORE блогу: обзорлор, салыштыруулар жана кеңештер",
+        introTitle: "TOMSTORE блогу: обзорлор, салыштыруулар жана кеңештер студенттер менен мугалимдер үчүн",
         introDescription:
-          "Бул бөлүм керектүү техниканы түшүнүктүүрөөк тандап алууга жардам берген материалдарды чогултат: кайсы модель кимге ылайыктуу, эмнени салыштыруу керек жана сатып алууда эмнеге көңүл буруу маанилүү.",
+          "Бул бөлүм керектүү техниканы түшүнүктүүрөөк тандап алууга жардам берген материалдарды чогултат: кайсы модель студентке, мугалимге же офиске ылайыктуу, эмнени салыштыруу керек жана сатып алууда эмнеге көңүл буруу маанилүү.",
         summaryTitle: "Эмне үчүн TOMSTORE блогун окуу пайдалуу",
         summaryDescription:
           "Блог суроо-талапты тактоого жардам берет: окурман пайдалуу макаладан кийин туура категорияга, подборкага же конкреттүү товарга тез өтө алат.",
@@ -549,7 +564,7 @@ export const getBlogsLandingSeoContent = (
         contactLabel: "Менеджерге жазуу",
         highlights: [
           "Популярдуу техника боюнча обзорлор жана салыштыруулар",
-          "Ноутбук, принтер жана оргтехника тандоо боюнча кеңештер",
+          "Ноутбук, принтер жана оргтехника тандоо боюнча кеңештер студенттер менен мугалимдер үчүн",
           "Үйгө, окууга, ишке жана бизнеске ылайыктуу материалдар",
           "Макалалардан каталогго жана товар барактарына ички шилтемелер",
         ],
@@ -562,12 +577,12 @@ export const getBlogsLandingSeoContent = (
           {
             question: "TOMSTORE блогунда кандай макалалар чыгат?",
             answer:
-              "Негизинен техника боюнча обзорлор, салыштыруулар, тандоо кеңештери жана ноутбук, принтер, компьютер жана күнүмдүк электроника боюнча пайдалуу түшүндүрмөлөр чыгат.",
+              "Негизинен техника боюнча обзорлор, салыштыруулар, тандоо кеңештери жана ноутбук, принтер, компьютер жана күнүмдүк электроника боюнча студенттер, мугалимдер жана офис үчүн пайдалуу түшүндүрмөлөр чыгат.",
           },
           {
             question: "Блог каталогго кирерден мурун жардам бере алабы?",
             answer:
-              "Ооба. Макалалар алгач керектүү багытты тактоого жардам берет, андан кийин колдонуучу каталогго даяр суроо-талап менен өтөт.",
+              "Ооба. Макалалар алгач керектүү багытты тактоого жардам берет, андан кийин колдонуучу студенттик, мугалимдик же офистик суроо-талап менен каталогго өтөт.",
           },
           {
             question: "Блогдон категорияларга жана товарларга өтүүгө болобу?",
@@ -577,21 +592,24 @@ export const getBlogsLandingSeoContent = (
         ],
         keywords: [
           "TOMSTORE блогу",
-          "электроника блогу Бишкек",
+          "электроника блогу Кыргызстан",
           "ноутбук тандоо кеңеши",
           "принтер тандоо боюнча макала",
+          "студент үчүн ноутбук",
+          "мугалим үчүн ноутбук",
+          "офис принтери",
         ],
       };
     case "ru":
     default:
       return {
-        metaTitle: "Блог TOMSTORE: обзоры техники и советы по выбору",
+        metaTitle: "Блог TOMSTORE: обзоры техники и советы по выбору для студентов, учителей и офиса в Кыргызстане",
         metaDescription:
-          "Читайте блог TOMSTORE: обзоры техники, советы по выбору ноутбуков, принтеров и компьютеров, сравнения моделей и полезные материалы перед покупкой.",
+          "Читайте блог TOMSTORE: обзоры техники, советы по выбору ноутбуков, принтеров и компьютеров, сравнения моделей и полезные материалы для студентов, учителей и офисов по всему Кыргызстану.",
         eyebrow: "Блог TOMSTORE",
-        introTitle: "Блог TOMSTORE с обзорами, советами и полезными материалами",
+        introTitle: "Блог TOMSTORE с обзорами, советами и полезными материалами для студентов, учителей и офиса",
         introDescription:
-          "В блоге TOMSTORE собраны статьи, которые помогают быстрее разобраться в технике, сравнить варианты и перейти к покупке с более понятным запросом и коротким списком моделей.",
+          "В блоге TOMSTORE собраны статьи, которые помогают быстрее разобраться в технике, сравнить варианты и перейти к покупке с более понятным запросом и коротким списком моделей для студентов, учителей и офисов.",
         summaryTitle: "Чем полезен блог TOMSTORE перед покупкой",
         summaryDescription:
           "Контентный раздел усиливает SEO по информационным запросам и помогает переводить читателя из статьи в категорию, подборку или конкретный товар без лишних шагов.",
@@ -600,7 +618,7 @@ export const getBlogsLandingSeoContent = (
         contactLabel: "Связаться с менеджером",
         highlights: [
           "Обзоры и сравнения актуальной техники",
-          "Советы по выбору ноутбуков, принтеров и офисных решений",
+          "Советы по выбору ноутбуков, принтеров и офисных решений для студентов, учителей и бизнеса",
           "Полезные материалы для дома, учебы, работы и бизнеса",
           "Внутренняя перелинковка из контента в каталог и карточки товаров",
         ],
@@ -613,12 +631,12 @@ export const getBlogsLandingSeoContent = (
           {
             question: "Какие статьи публикуются в блоге TOMSTORE?",
             answer:
-              "В блоге выходят обзоры, сравнения, практические советы по выбору и полезные материалы по ноутбукам, принтерам, компьютерам и другой востребованной технике.",
+              "В блоге выходят обзоры, сравнения, практические советы по выбору и полезные материалы по ноутбукам, принтерам, компьютерам и другой востребованной технике для студентов, учителей и офисов.",
           },
           {
             question: "Помогает ли блог перед переходом в каталог?",
             answer:
-              "Да. Материалы помогают сначала сузить выбор и понять нужный сценарий использования, а уже потом переходить в каталог за конкретными моделями.",
+              "Да. Материалы помогают сначала сузить выбор и понять нужный сценарий использования для студентов, учителей или офиса, а уже потом переходить в каталог за конкретными моделями.",
           },
           {
             question: "Есть ли в блоге переходы на категории и товары?",
@@ -628,9 +646,12 @@ export const getBlogsLandingSeoContent = (
         ],
         keywords: [
           "блог TOMSTORE",
-          "обзоры техники Бишкек",
+          "обзоры техники Кыргызстан",
           "советы по выбору ноутбука",
           "как выбрать принтер",
+          "ноутбук для студента",
+          "ноутбук для учителя",
+          "офисный принтер",
         ],
       };
   }
@@ -792,19 +813,180 @@ export const getBlogCategorySeoContent = (
   }
 };
 
+export const getElectronicsHubSeoContent = (
+  locale: Locale,
+): CatalogHubSeoContent => {
+  switch (locale) {
+    case "en":
+      return {
+        metaTitle: "Electronics in Kyrgyzstan - TOMSTORE",
+        metaDescription:
+          "TOMSTORE electronics store in Kyrgyzstan with laptops, printers, computers, monitors and accessories. Start from one electronics hub and move to the right category fast.",
+        eyebrow: "TOMSTORE Electronics",
+        introTitle: "TOMSTORE electronics across Kyrgyzstan",
+        introDescription:
+          "If you are searching for electronics, start here. This hub collects the main product directions so you can move to the right category, brand or catalog page without extra navigation.",
+        countLabel: "Electronics categories",
+        cardLabel: "Category",
+        itemCountLabel: "products",
+        sectionTitle: "Choose an electronics direction and continue",
+        sectionDescription:
+          "From here it is easy to move into the right category, compare models and place an order through WhatsApp across Kyrgyzstan.",
+        catalogLabel: "Open catalog",
+        contactLabel: "Contacts",
+        highlights: [
+          "Electronics for home, study, work and business",
+          "Laptops, printers, computers, monitors and accessories",
+          "Fast access to categories and brands",
+          "Manager support and ordering across Kyrgyzstan",
+        ],
+        faqs: [
+          {
+            question: "What should I compare first when buying electronics?",
+            answer:
+              "Start with the task, budget and product type. After that, compare stock status, configuration and price inside the right category.",
+          },
+          {
+            question: "Can I order electronics through WhatsApp from any region?",
+            answer:
+              "Yes. You can confirm availability, price and configuration through WhatsApp and place an order from Bishkek, Osh, Talas and other regions of Kyrgyzstan.",
+          },
+          {
+            question: "Is this hub useful for students, teachers and office work?",
+            answer:
+              "Yes. It helps students, teachers and office teams move quickly to the most relevant electronics category instead of browsing the full catalog at once.",
+          },
+        ],
+        keywords: [
+          "electronics Kyrgyzstan",
+          "electronics store Kyrgyzstan",
+          "buy electronics in Kyrgyzstan",
+          "laptops Kyrgyzstan",
+          "printers Kyrgyzstan",
+          "computers Kyrgyzstan",
+          "monitors Kyrgyzstan",
+          "accessories Kyrgyzstan",
+        ],
+      };
+    case "ky":
+      return {
+        metaTitle: "Кыргызстандагы электроника - TOMSTORE",
+        metaDescription:
+          "TOMSTORE дүкөнүндөгү электроника: ноутбук, принтер, компьютер, монитор жана аксессуарлар. Бир хабдан баштап керектүү категорияга тез өтүңүз.",
+        eyebrow: "TOMSTORE Электроникасы",
+        introTitle: "TOMSTORE электроникасы Кыргызстан боюнча",
+        introDescription:
+          "Эгер сиз электроника издеп жатсаңыз, ушул жерден баштаңыз. Бул хаб негизги товар багыттарын топтоп, керектүү категорияга, брендге же каталог барагына ылдамыраак өтүүгө жардам берет.",
+        countLabel: "Электроника категориялары",
+        cardLabel: "Категория",
+        itemCountLabel: "товар",
+        sectionTitle: "Электроника багытын тандап, улантыңыз",
+        sectionDescription:
+          "Бул жерден туура категорияга өтүп, моделдерди салыштырып, WhatsApp аркылуу Кыргызстан боюнча заказ кылуу оңой.",
+        catalogLabel: "Каталогго өтүү",
+        contactLabel: "Байланыш",
+        highlights: [
+          "Үйгө, окууга, ишке жана бизнеске электроника",
+          "Ноутбуктар, принтерлер, компьютерлер, мониторлор жана аксессуарлар",
+          "Категорияларга жана бренддерге тез өтүү",
+          "Менеджердин жардамы жана Кыргызстан боюнча заказ",
+        ],
+        faqs: [
+          {
+            question: "Электроника алууда эмнени биринчи салыштыруу керек?",
+            answer:
+              "Алгач тапшырманы, бюджетти жана товар түрүн аныктаңыз. Андан кийин туура категориядагы бар-жогун, комплектациясын жана баасын салыштырыңыз.",
+          },
+          {
+            question: "Кыргызстандын кайсы аймагынан WhatsApp аркылуу заказ кылса болот?",
+            answer:
+              "Ооба. WhatsApp аркылуу баасын, бар-жогун жана комплектациясын тактап, Бишкек, Ош, Талас жана башка аймактардан заказ кылса болот.",
+          },
+          {
+            question: "Бул хаб студенттерге, мугалимдерге жана офиске ылайыктуубу?",
+            answer:
+              "Ооба. Бул барак студенттерге, мугалимдерге жана офис топторуна эң ылайыктуу электроника категориясына бат өтүүгө жардам берет.",
+          },
+        ],
+        keywords: [
+          "электроника Кыргызстан",
+          "электроника дүкөнү Кыргызстан",
+          "электроника сатып алуу Кыргызстанда",
+          "ноутбуктар Кыргызстан",
+          "принтерлер Кыргызстан",
+          "компьютерлер Кыргызстан",
+          "мониторлор Кыргызстан",
+          "аксессуарлар Кыргызстан",
+        ],
+      };
+    case "ru":
+    default:
+      return {
+        metaTitle: "Электроника в Кыргызстане - TOMSTORE",
+        metaDescription:
+          "Интернет-магазин электроники TOMSTORE в Кыргызстане: ноутбуки, принтеры, компьютеры, мониторы и аксессуары. Начните с одного хаба и перейдите к нужной категории.",
+        eyebrow: "Электроника TOMSTORE",
+        introTitle: "Электроника TOMSTORE по всему Кыргызстану",
+        introDescription:
+          "Если вы ищете электронику, начните отсюда. Этот хаб собирает основные направления ассортимента, чтобы вы быстрее перешли к нужной категории, бренду или каталогу без лишних шагов.",
+        countLabel: "Категорий электроники",
+        cardLabel: "Категория",
+        itemCountLabel: "товаров",
+        sectionTitle: "Выберите направление электроники и продолжите выбор",
+        sectionDescription:
+          "Отсюда удобно перейти в нужную категорию, сравнить модели и оформить заказ через WhatsApp по всему Кыргызстану.",
+        catalogLabel: "В каталог",
+        contactLabel: "Связаться с менеджером",
+        highlights: [
+          "Электроника для дома, учебы, работы и бизнеса",
+          "Ноутбуки, принтеры, компьютеры, мониторы и аксессуары",
+          "Быстрый переход к категориям и брендам",
+          "Заказ и консультация по всему Кыргызстану",
+        ],
+        faqs: [
+          {
+            question: "Что сравнивать в электронике в первую очередь?",
+            answer:
+              "Сначала определите задачу, бюджет и тип товара. Затем сравните наличие, комплектацию и цену в подходящей категории.",
+          },
+          {
+            question: "Можно ли заказать электронику через WhatsApp из любого региона?",
+            answer:
+              "Да. Вы можете уточнить наличие, цену и комплектацию через WhatsApp и оформить заказ из Бишкека, Оша, Таласа и других регионов Кыргызстана.",
+          },
+          {
+            question: "Подходит ли этот хаб для студентов, учителей и офиса?",
+            answer:
+              "Да. Он помогает студентам, учителям и офисным командам быстро перейти к нужной категории электроники вместо просмотра всего каталога.",
+          },
+        ],
+        keywords: [
+          "электроника Кыргызстан",
+          "интернет-магазин электроники",
+          "купить электронику в Кыргызстане",
+          "ноутбуки Кыргызстан",
+          "принтеры Кыргызстан",
+          "компьютеры Кыргызстан",
+          "мониторы Кыргызстан",
+          "аксессуары Кыргызстан",
+        ],
+      };
+  }
+};
+
 export const getCategoriesHubSeoContent = (
   locale: Locale,
 ): CatalogHubSeoContent => {
   switch (locale) {
     case "en":
       return {
-        metaTitle: "Product categories in TOMSTORE",
+        metaTitle: "TOMSTORE electronics categories in Kyrgyzstan",
         metaDescription:
-          "Browse all TOMSTORE product categories in one place and move to clean category pages with focused assortments, current availability and fast ordering.",
+          "Browse TOMSTORE electronics and product categories in one place and move to clean category pages with focused assortments, current availability and fast ordering across Kyrgyzstan.",
         eyebrow: "TOMSTORE Categories",
-        introTitle: "All product categories in one hub",
+        introTitle: "All product categories in one hub for Kyrgyzstan",
         introDescription:
-          "This page collects the core TOMSTORE categories and links each one to a dedicated landing page. It is the fastest route for users who want to start from a product group instead of the full catalog.",
+          "This page collects the core TOMSTORE categories across Kyrgyzstan and links each one to a dedicated landing page. It is the fastest route for users who want to start from a product group instead of the full catalog.",
         countLabel: "Available categories",
         cardLabel: "Category",
         itemCountLabel: "products",
@@ -838,16 +1020,16 @@ export const getCategoriesHubSeoContent = (
         ],
         keywords: [
           "TOMSTORE categories",
-          "electronics categories Bishkek",
+          "electronics categories Kyrgyzstan",
           "product categories TOMSTORE",
-          "buy electronics by category",
+          "buy electronics by category in Kyrgyzstan",
         ],
       };
     case "ky":
       return {
-        metaTitle: "TOMSTORE категориялары",
+        metaTitle: "TOMSTORE электроника жана товар категориялары Кыргызстанда",
         metaDescription:
-          "TOMSTORE дүкөнүнүн бардык товар категориялары бир жерде. Ар бир бөлүмдөн өзүнчө category landing page'ге өтүп, керектүү товарларды ылдам табууга болот.",
+          "TOMSTORE дүкөнүнүн электроника жана товар категориялары Кыргызстан боюнча бир жерде. Ар бир бөлүмдөн өзүнчө category landing page'ге өтүп, керектүү товарларды ылдам табууга болот.",
         eyebrow: "TOMSTORE Категориялары",
         introTitle: "Бардык товар категориялары бир хаб-баракта",
         introDescription:
@@ -885,17 +1067,17 @@ export const getCategoriesHubSeoContent = (
         ],
         keywords: [
           "TOMSTORE категориялары",
-          "электроника категориялары Бишкек",
+          "электроника категориялары Кыргызстан",
           "товар категориялары TOMSTORE",
-          "категория боюнча электроника сатып алуу",
+          "категория боюнча электроника сатып алуу Кыргызстанда",
         ],
       };
     case "ru":
     default:
       return {
-        metaTitle: "Категории товаров TOMSTORE",
+        metaTitle: "Категории электроники и товаров TOMSTORE в Кыргызстане",
         metaDescription:
-          "Все категории товаров TOMSTORE на одной странице. Переходите в отдельные category landing pages с чистыми URL, актуальными позициями и удобным выбором.",
+          "Все категории электроники и товаров TOMSTORE на одной странице. Переходите в отдельные category landing pages с чистыми URL, актуальными позициями и удобным выбором по всему Кыргызстану.",
         eyebrow: "Категории TOMSTORE",
         introTitle: "Все категории товаров в одном хабе",
         introDescription:
@@ -933,9 +1115,9 @@ export const getCategoriesHubSeoContent = (
         ],
         keywords: [
           "категории товаров TOMSTORE",
-          "категории электроники Бишкек",
+          "категории электроники Кыргызстан",
           "категории магазина техники",
-          "купить технику по категории",
+          "купить технику по категории в Кыргызстане",
         ],
       };
   }
@@ -947,13 +1129,13 @@ export const getBrandsHubSeoContent = (
   switch (locale) {
     case "en":
       return {
-        metaTitle: "Brands in TOMSTORE",
+        metaTitle: "TOMSTORE electronics brands in Kyrgyzstan",
         metaDescription:
-          "Browse TOMSTORE brands in one place and continue to focused brand pages with clean URLs, current assortments and faster brand-level navigation.",
+          "Browse TOMSTORE electronics brands in one place and continue to focused brand pages with clean URLs, current assortments and faster brand-level navigation across Kyrgyzstan.",
         eyebrow: "TOMSTORE Brands",
-        introTitle: "All brands collected in one brand hub",
+        introTitle: "All brands collected in one brand hub for Kyrgyzstan",
         introDescription:
-          "This page groups the brands available in TOMSTORE and links each one to a dedicated brand landing page. It is useful when users already know the brand and want to compare models inside that lineup.",
+          "This page groups the brands available in TOMSTORE and links each one to a dedicated brand landing page. It is useful when users already know the brand and want to compare models inside that lineup across Kyrgyzstan.",
         countLabel: "Available brands",
         cardLabel: "Brand",
         itemCountLabel: "products",
@@ -987,20 +1169,20 @@ export const getBrandsHubSeoContent = (
         ],
         keywords: [
           "TOMSTORE brands",
-          "electronics brands Bishkek",
+          "electronics brands Kyrgyzstan",
           "brand pages TOMSTORE",
           "shop by brand electronics",
         ],
       };
     case "ky":
       return {
-        metaTitle: "TOMSTORE бренддери",
+        metaTitle: "TOMSTORE электроника бренддери Кыргызстанда",
         metaDescription:
-          "TOMSTORE дүкөнүндөгү бренддер бир жерде. Ар бир брендден clean URL менен өзүнчө brand page'ге өтүп, ошол бренддин моделдерин ыңгайлуу салыштырууга болот.",
+          "TOMSTORE дүкөнүндөгү электроника бренддери Кыргызстан боюнча бир жерде. Ар бир брендден clean URL менен өзүнчө brand page'ге өтүп, ошол бренддин моделдерин ыңгайлуу салыштырууга болот.",
         eyebrow: "TOMSTORE Бренддери",
         introTitle: "Бардык бренддер бир бренд-хабда",
         introDescription:
-          "Бул барак TOMSTORE дүкөнүндө жеткиликтүү бренддерди топтойт жана ар бирин өзүнчө brand landing page'ге алып барат. Бренд белгилүү болуп, модель али тандала элек учурлар үчүн эң ыңгайлуу.",
+          "Бул барак TOMSTORE дүкөнүндө жеткиликтүү бренддерди топтойт жана ар бирин өзүнчө brand landing page'ге алып барат. Бренд белгилүү болуп, модель али тандала элек учурлар үчүн Кыргызстан боюнча эң ыңгайлуу.",
         countLabel: "Жеткиликтүү бренддер",
         cardLabel: "Бренд",
         itemCountLabel: "товар",
@@ -1034,7 +1216,7 @@ export const getBrandsHubSeoContent = (
         ],
         keywords: [
           "TOMSTORE бренддери",
-          "электроника бренддери Бишкек",
+          "электроника бренддери Кыргызстан",
           "TOMSTORE бренд барактары",
           "бренд боюнча техника тандоо",
         ],
@@ -1042,13 +1224,13 @@ export const getBrandsHubSeoContent = (
     case "ru":
     default:
       return {
-        metaTitle: "Бренды в TOMSTORE",
+        metaTitle: "Бренды электроники TOMSTORE в Кыргызстане",
         metaDescription:
-          "Все бренды TOMSTORE на одной странице. Переходите в отдельные brand landing pages с чистыми URL и быстрее выбирайте технику внутри нужного бренда.",
+          "Все бренды электроники TOMSTORE на одной странице. Переходите в отдельные brand landing pages с чистыми URL и быстрее выбирайте технику внутри нужного бренда по всему Кыргызстану.",
         eyebrow: "Бренды TOMSTORE",
         introTitle: "Все бренды собраны в одном бренд-хабе",
         introDescription:
-          "Эта страница собирает бренды, представленные в TOMSTORE, и ведёт на отдельные brand landing pages. Она особенно полезна, когда покупатель уже знает нужный бренд и хочет сравнить модели внутри его линейки.",
+          "Эта страница собирает бренды, представленные в TOMSTORE, и ведёт на отдельные brand landing pages. Она особенно полезна, когда покупатель уже знает нужный бренд и хочет сравнить модели внутри его линейки в Кыргызстане.",
         countLabel: "Доступных брендов",
         cardLabel: "Бренд",
         itemCountLabel: "товаров",
@@ -1082,7 +1264,7 @@ export const getBrandsHubSeoContent = (
         ],
         keywords: [
           "бренды TOMSTORE",
-          "бренды электроники Бишкек",
+          "бренды электроники Кыргызстан",
           "страницы брендов TOMSTORE",
           "купить технику по бренду",
         ],

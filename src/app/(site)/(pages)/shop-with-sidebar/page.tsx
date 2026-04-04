@@ -40,13 +40,13 @@ const resolveCatalogSeo = (
 
   if (isSimpleCategoryLanding(query) && categoryName) {
     return {
-      title: `${categoryName} - купить в Бишкеке`,
-      description: `${categoryName} в интернет-магазине TOMSTORE. Удобный выбор, актуальные цены и быстрый заказ через WhatsApp.`,
+      title: `${categoryName} - купить в Кыргызстане`,
+      description: `${categoryName} в интернет-магазине TOMSTORE. Удобный выбор, актуальные цены и быстрый заказ через WhatsApp по всему Кыргызстану.`,
       path: buildCategoryPath(query.category || ""),
       keywords: [
         categoryName,
-        `купить ${categoryName.toLowerCase()}`,
-        `${categoryName} Бишкек`,
+        `купить ${categoryName.toLowerCase()} в Кыргызстане`,
+        `${categoryName} Кыргызстан`,
       ],
       breadcrumbLabel: categoryName,
     };
@@ -54,25 +54,28 @@ const resolveCatalogSeo = (
 
   if (isSimpleBrandLanding(query) && brandName) {
     return {
-      title: `${brandName} - техника и электроника`,
-      description: `Техника ${brandName} в интернет-магазине TOMSTORE: ноутбуки, принтеры, компьютеры и аксессуары с удобным заказом через WhatsApp.`,
+      title: `${brandName} - техника и электроника в Кыргызстане`,
+      description: `Техника ${brandName} в интернет-магазине TOMSTORE: ноутбуки, принтеры, компьютеры и аксессуары с удобным заказом через WhatsApp по всему Кыргызстану.`,
       path: buildBrandPath(query.brand || ""),
-      keywords: [brandName, `${brandName} Бишкек`, `${brandName} Кыргызстан`],
+      keywords: [brandName, `${brandName} Кыргызстан`, `${brandName} техника Кыргызстан`],
       breadcrumbLabel: brandName,
     };
   }
 
   return {
-    title: "Каталог товаров",
+    title: "Каталог электроники и техники в Кыргызстане",
     description:
-      "Каталог ноутбуков, принтеров, компьютеров и аксессуаров TOMSTORE.",
+      "Каталог электроники, ноутбуков, принтеров, компьютеров и аксессуаров TOMSTORE по всему Кыргызстану.",
     path: buildLegacyCatalogPath(),
     keywords: [
-      "каталог техники",
-      "ноутбуки",
-      "принтеры",
-      "электроника",
-      "компьютеры",
+      "каталог электроники Кыргызстан",
+      "интернет-магазин электроники",
+      "купить электронику в Кыргызстане",
+      "каталог техники Кыргызстан",
+      "ноутбуки Кыргызстан",
+      "принтеры Кыргызстан",
+      "электроника Кыргызстан",
+      "компьютеры Кыргызстан",
     ],
     breadcrumbLabel: "Каталог",
   };

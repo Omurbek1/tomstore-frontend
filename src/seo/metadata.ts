@@ -3,7 +3,19 @@ import { buildAbsoluteUrl, getSiteUrl } from "@/storefront/site";
 
 export const DEFAULT_SEO_TITLE = "TOMSTORE";
 export const DEFAULT_SEO_DESCRIPTION =
-  "TOMSTORE — интернет-магазин ноутбуков, принтеров, компьютеров и аксессуаров с доставкой по Кыргызстану.";
+  "TOMSTORE — интернет-магазин электроники, ноутбуков, принтеров, компьютеров и аксессуаров с доставкой по Кыргызстану, включая Бишкек, Ош, Талас и другие регионы.";
+
+export const KYRGYZSTAN_GEO_KEYWORDS = [
+  "Бишкек Кыргызстан",
+  "Ош Кыргызстан",
+  "Джалал-Абад Кыргызстан",
+  "Талас Кыргызстан",
+  "Нарын Кыргызстан",
+  "Баткен Кыргызстан",
+  "Каракол Кыргызстан",
+  "Кара-Балта Кыргызстан",
+  "Токмок Кыргызстан",
+];
 
 const DEFAULT_OG_IMAGE = buildAbsoluteUrl("/images/hero/hero-01.png");
 
@@ -39,12 +51,15 @@ export const buildSeoMetadata = ({
   const canonicalUrl = path ? buildAbsoluteUrl(path) : getSiteUrl();
   const resolvedTitle = title || DEFAULT_SEO_TITLE;
   const resolvedImage = image || DEFAULT_OG_IMAGE;
+  const resolvedKeywords = Array.from(
+    new Set([...(keywords || []), ...KYRGYZSTAN_GEO_KEYWORDS]),
+  );
 
   return {
     metadataBase: getMetadataBase(),
     title: resolvedTitle,
     description,
-    keywords,
+    keywords: resolvedKeywords,
     alternates: {
       canonical: canonicalUrl,
     },

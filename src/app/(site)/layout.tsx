@@ -39,6 +39,7 @@ import {
 import { StorefrontContactProvider } from "@/storefront/contact-context";
 import {
   DEFAULT_SEO_DESCRIPTION,
+  KYRGYZSTAN_GEO_KEYWORDS,
   getMetadataBase,
 } from "@/seo/metadata";
 import LazyAppToaster from "@/components/Common/LazyAppToaster";
@@ -75,12 +76,16 @@ export async function generateMetadata(): Promise<Metadata> {
     keywords: [
       companyName,
       "интернет-магазин техники",
-      "ноутбуки",
-      "принтеры",
-      "компьютеры",
-      "аксессуары",
-      "Бишкек",
+      "интернет-магазин электроники",
+      "купить электронику",
+      "электроника Кыргызстан",
+      "ноутбуки Кыргызстан",
+      "принтеры Кыргызстан",
+      "компьютеры Кыргызстан",
+      "аксессуары Кыргызстан",
+      "электроника Кыргызстан",
       "Кыргызстан",
+      ...KYRGYZSTAN_GEO_KEYWORDS,
     ],
     robots: {
       index: true,

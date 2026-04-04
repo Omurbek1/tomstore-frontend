@@ -5,6 +5,10 @@ import {
   buildBrandsHubPath,
   buildCategoryPath,
   buildCategoriesHubPath,
+  buildElectronicsPath,
+  buildComputersPath,
+  buildLaptopsPath,
+  buildPrintersPath,
 } from "@/storefront/catalog-routing";
 import {
   buildBlogCategoryPath,
@@ -140,6 +144,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: buildAbsoluteUrl("/shop-with-sidebar"),
       lastModified: new Date(),
       changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: buildAbsoluteUrl(buildElectronicsPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.92,
+    },
+    {
+      url: buildAbsoluteUrl(buildLaptopsPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: buildAbsoluteUrl(buildPrintersPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: buildAbsoluteUrl(buildComputersPath()),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
       priority: 0.9,
     },
     {
