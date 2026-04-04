@@ -6,11 +6,15 @@ import {
   buildCategoryPath,
   buildCategoriesHubPath,
   buildElectronicsPath,
+  buildComputersLocationPath,
   buildComputersPath,
   buildLaptopsPath,
   buildPrintersPath,
+  buildLaptopStudentsLocationPath,
   buildLaptopStudentsPath,
+  buildLaptopTeachersLocationPath,
   buildLaptopTeachersPath,
+  buildOfficePrinterLocationPath,
   buildOfficePrinterPath,
   buildLaptopStudentsBishkekPath,
   buildLaptopTeachersOshPath,
@@ -27,6 +31,7 @@ import {
   buildElectronicsBishkekPath,
   buildElectronicsOshPath,
   buildElectronicsTalasPath,
+  buildElectronicsLocationPath,
 } from "@/storefront/catalog-routing";
 import {
   buildBlogCategoryPath,
@@ -37,6 +42,10 @@ import type {
   StorefrontBlogListResponse,
   StorefrontCatalogResponse,
 } from "@/storefront/types";
+import {
+  REGIONAL_LOCATION_ORDER,
+  STATIC_REGIONAL_LOCATION_KEYS,
+} from "@/seo/location-data";
 
 export const revalidate = 3600;
 
@@ -143,6 +152,22 @@ const fetchBlogEntries = async () => {
     })),
   };
 };
+
+const NON_STATIC_REGIONAL_LOCATION_KEYS = REGIONAL_LOCATION_ORDER.filter(
+  (location) => !STATIC_REGIONAL_LOCATION_KEYS.includes(location),
+);
+
+const buildDynamicRegionalEntries = (
+  buildPath: (location: string) => string,
+) =>
+  NON_STATIC_REGIONAL_LOCATION_KEYS.map((location) => ({
+    url: buildAbsoluteUrl(
+      buildPath(location),
+    ),
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.82,
+  }));
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [catalogEntries, catalogLandingEntries, blogEntries] = await Promise.all([
@@ -296,6 +321,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.83,
     },
+    ...buildDynamicRegionalEntries(buildLaptopStudentsLocationPath),
+    ...buildDynamicRegionalEntries(buildLaptopTeachersLocationPath),
+    ...buildDynamicRegionalEntries(buildOfficePrinterLocationPath),
+    ...buildDynamicRegionalEntries(buildComputersLocationPath),
+    ...buildDynamicRegionalEntries(buildElectronicsLocationPath),
     {
       url: buildAbsoluteUrl("/contact"),
       lastModified: new Date(),

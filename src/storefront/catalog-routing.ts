@@ -141,6 +141,15 @@ export const buildLaptopTeachersPath = () => "/laptops/teachers";
 
 export const buildOfficePrinterPath = () => "/printers/office";
 
+export const buildLaptopStudentsLocationPath = (location: string) =>
+  `/laptops/students/${encodeURIComponent(location)}`;
+
+export const buildLaptopTeachersLocationPath = (location: string) =>
+  `/laptops/teachers/${encodeURIComponent(location)}`;
+
+export const buildOfficePrinterLocationPath = (location: string) =>
+  `/printers/office/${encodeURIComponent(location)}`;
+
 export const buildLaptopStudentsBishkekPath = () => "/laptops/students/bishkek";
 
 export const buildLaptopTeachersOshPath = () => "/laptops/teachers/osh";
@@ -165,11 +174,17 @@ export const buildComputersOshPath = () => "/computers/osh";
 
 export const buildComputersTalasPath = () => "/computers/talas";
 
+export const buildComputersLocationPath = (location: string) =>
+  `/computers/${encodeURIComponent(location)}`;
+
 export const buildElectronicsBishkekPath = () => "/electronics/bishkek";
 
 export const buildElectronicsOshPath = () => "/electronics/osh";
 
 export const buildElectronicsTalasPath = () => "/electronics/talas";
+
+export const buildElectronicsLocationPath = (location: string) =>
+  `/electronics/${encodeURIComponent(location)}`;
 
 export const buildLegacyCatalogPath = (query: StorefrontCatalogRouteQuery = {}) => {
   const searchParams = new URLSearchParams();
