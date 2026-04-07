@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { StorefrontHeroSlide } from "@/storefront/types";
+import HeroSearchBar from "./HeroSearchBar";
 
 type HeroSlidePanelProps = {
   slide: StorefrontHeroSlide;
@@ -49,7 +50,7 @@ export default function HeroSlidePanel({
           </Link>
         </div>
 
-       
+        <HeroSearchBar />
       </div>
 
       <div className="relative z-10 flex justify-center lg:justify-end">
